@@ -1,0 +1,101 @@
+@startuml
+
+enum Color {
+  BLANCO
+  NEGRO
+}
+
+class Position <<Value Object>> {
+  - row: Int
+  - col: Int
+}
+
+interface Piece {
+  + color: Color
+  + isValidMovePattern(origin: Position, destination: Position) : Boolean
+}
+
+class Queen
+class Rook
+class Bishop
+
+interface Movement {
+  + checkTrajectory(origin: Position, destination: Position) : Boolean
+}
+
+class StraightMovement {
+  + checkTrajectory(origin: Position, destination: Position) : Boolean
+}
+
+class DiagonalMovement {
+  + checkTrajectory(origin: Position, destination: Position) : Boolean
+}
+
+interface Board {
+  + movePiece(origin: Position, destination: Position) : NormalBoard
+  + hasPieceAt(position: Position) : Boolean
+  + getPieceAt(position: Position) : Piece
+}
+
+class NormalBoard <<Immutable>> {
+  - positions: Map<Position, Piece>
+  + movePiece(origin: Position, destination: Position) : NormalBoard
+  + hasPieceAt(position: Position) : Boolean
+  + getPieceAt(position: Position) : Piece
+}
+
+interface ChessRule {
+  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
+}
+
+class CorrectTurnRule {
+  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
+}
+
+class PieceMovementRule {
+  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
+}
+
+class ClearPathRule {
+  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
+}
+
+class BoardLimitsRule {
+  - maxRow: Int
+  - maxColumn: Int
+  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
+}
+
+class Game <<Immutable>> {
+  - board: Board
+  - currentTurn: Color
+  - rules: List<ChessRule>
+  + playMove(origin: Position, destination: Position) : Game
+}
+
+' Relaciones de Herencia/Impl
+Piece <|.. Queen
+Piece <|.. Rook
+Piece <|.. Bishop
+
+Movement <|.. StraightMovement
+Movement <|.. DiagonalMovement
+
+Board <|.. NormalBoard
+
+ChessRule <|.. CorrectTurnRule
+ChessRule <|.. PieceMovementRule
+ChessRule <|.. ClearPathRule
+ChessRule <|.. BoardLimitsRule
+
+' Relaciones de Composición/Uso
+Piece --> Movement : usa >
+
+NormalBoard *-- Piece : asocia usando Map
+NormalBoard *-- Position : usa como clave
+
+Game *-- Board : contiene
+Game *-- ChessRule : evalúa
+
+
+@enduml

@@ -1,0 +1,59 @@
+@startuml
+autonumber
+actor User
+
+participant "currentGame: Game\n(Turno: BLANCO)" as Game1
+participant "currentBoard: NormalBoard" as Board1
+participant "rules: List<ChessRule>" as Rules
+
+'PRIMER MOVIMIENTO
+note over User, Board1: Movimiento 1: Blancas mueven de (1,0) a (3,0)
+
+User -> Game1 : playMove(origin: (1,0), dest: (3,0))
+activate Game1
+
+loop For each rule in rules
+    Game1 -> Rules : isValid(currentBoard, (1,0), (3,0), BLANCO)
+    activate Rules
+    Rules --> Game1 : true
+    deactivate Rules
+end
+
+Game1 -> Board1 : movePiece((1,0), (3,0))
+activate Board1
+create participant "board2: NormalBoard" as Board2
+Board1 -> Board2 : <create a> (newMap)
+Board1 --> Game1 : board2
+deactivate Board1
+
+create participant "game2: Game\n(Turno: NEGRO)" as Game2
+Game1 -> Game2 : <create a> (board2, NEGRO)
+Game1 --> User : game2
+deactivate Game1
+
+'SEGUNDO MOVIMIENTO---
+note over User, Game2: Movimiento 2: Negras mueven de (7,1) a (5,2)
+
+User -> Game2 : playMove(origin: (7,1), dest: (5,2))
+activate Game2
+
+loop For each rule in rules
+    Game2 -> Rules : isValid(board2, (7,1), (5,2), NEGRO)
+    activate Rules
+    Rules --> Game2 : true
+    deactivate Rules
+end
+
+Game2 -> Board2 : movePiece((7,1), (5,2))
+activate Board2
+create participant "board3: NormalBoard" as Board3
+Board2 -> Board3 : <create a> (newMap)
+Board2 --> Game2 : board3
+deactivate Board2
+
+create participant "game3: Game\n(Turno: BLANCO)" as Game3
+Game2 -> Game3 : <create a> (board3, BLANCO)
+Game2 --> User : game3
+deactivate Game2
+
+@enduml

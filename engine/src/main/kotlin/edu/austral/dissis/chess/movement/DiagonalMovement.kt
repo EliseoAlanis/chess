@@ -6,7 +6,6 @@ class DiagonalMovement : Movement {
         origin: Position,
         destination: Position,
     ): Boolean {
-        // En una diagonal la distancia recorrida en X es igual a la distancia en Y.
         val rowDiff = abs(origin.row - destination.row)
         val colDiff = abs(origin.col - destination.col)
 

@@ -2,7 +2,6 @@ package edu.austral.dissis.chess.rules
 
 import edu.austral.dissis.chess.board.Board
 import edu.austral.dissis.chess.movement.Position
-import java.awt.Color
 import kotlin.math.sign
 
 class ClearPathRule : ChessRule {
@@ -13,6 +12,8 @@ class ClearPathRule : ChessRule {
         currentTurn: edu.austral.dissis.chess.pieces.Color,
     ): Boolean {
         val piece = board.getPieceAt(origin)
+
+        if (piece.canJump) return true
 
         val path = getIntermediatePositions(origin, destination)
 

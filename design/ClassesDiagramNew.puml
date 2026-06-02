@@ -1,0 +1,122 @@
+
+@startuml
+
+enum Color {
+  BLANCO
+  NEGRO
+}
+
+class Position <<Value Object>> {
+  - row: Int
+  - col: Int
+}
+
+class Piece {
+  val id: String,
+  val color: Color,
+  private val movements: List<Movement>,
+  val canJump: Boolean = false,
+  val hasMoved: Boolean = false
+  + isValidMovePattern(origin: Position, destination: Position) : Boolean
+}
+
+interface  BoardInitializer {
+  + generateInitialPositions(): Map<Position, Piece>
+}
+
+class ClassicBoardInitializer {
+-getWhitePieces(): Map<Position, Piece>
+-getBlackPieces(): Map<Position, Piece>
+-getWhiteBackRank(): Map<Position, Piece>
+-getBlackBackRank(): Map<Position, Piece>
+}
+
+interface Movement {
+  + checkTrajectory(origin: Position, destination: Position) : Boolean
+}
+
+class MoveRecord{
+  - piece: Piece
+  - origin: Position
+  - destination: Position
+}
+
+class Position
+
+class StraightMovement {
+  + checkTrajectory(origin: Position, destination: Position) : Boolean
+}
+
+class DiagonalMovement {
+  + checkTrajectory(origin: Position, destination: Position) : Boolean
+}
+
+class LShapeMovement {
+  + checkTrajectory(origin: Position, destination: Position) : Boolean
+}
+
+class Board {
+    - positions: Map<Position, Piece> = mapOf(),
+    - size: BoardSize
+    + movePiece(origin: Position, destination: Position) : NormalBoard
+    + hasPieceAt(position: Position) : Boolean
+    + getPieceAt(position: Position) : Piece
+}
+
+interface ChessRule {
+  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
+}
+
+class CorrectTurnRule {
+  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
+}
+
+class PieceMovementRule {
+  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
+}
+
+class ClearPathRule {
+  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
+}
+
+class BoardLimitsRule {
+  - maxRow: Int
+  - maxColumn: Int
+  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
+}
+
+class Game <<Immutable>> {
+  - board: Board,
+  - rules: List<ChessRule>,
+  - turnManager: TurnManager,
+  - moveHistory: List<MoveRecord> = emptyList()
+  + playMove(origin: Position, destination: Position) : Game
+  - areAllRulesValid(origin: Position, destination: Position): Boolean
+}
+
+' Relaciones de Herencia/Impl
+Piece <|.. Queen
+Piece <|.. Rook
+Piece <|.. Bishop
+
+Movement <|.. StraightMovement
+Movement <|.. DiagonalMovement
+
+Board <|.. NormalBoard
+
+ChessRule <|.. CorrectTurnRule
+ChessRule <|.. PieceMovementRule
+ChessRule <|.. ClearPathRule
+ChessRule <|.. BoardLimitsRule
+
+' Relaciones de Composición/Uso
+Piece --> Movement : usa >
+
+NormalBoard *-- Piece : asocia usando Map
+NormalBoard *-- Position : usa como clave
+
+Game *-- Board : contiene
+Game *-- ChessRule : evalúa
+
+
+@enduml

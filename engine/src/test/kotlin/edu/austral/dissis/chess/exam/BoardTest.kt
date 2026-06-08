@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class BoardTest {
-
     @Test
     fun `should initialize board with classic setup`() {
         val size = BoardSize(8, 8)

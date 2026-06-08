@@ -8,24 +8,16 @@ import edu.austral.dissis.chess.test.game.TestMoveResult
 import edu.austral.dissis.chess.test.game.TestMoveSuccess
 
 class DummyTestGameRunner : TestGameRunner {
-    override fun executeMove(from: TestPosition, to: TestPosition): TestMoveResult {
-        return TestMoveSuccess(this)
-    }
+    override fun executeMove(
+        from: TestPosition,
+        to: TestPosition,
+    ): TestMoveResult = TestMoveSuccess(this)
 
-    override fun getBoard(): TestBoard {
-        return TestBoard(TestSize(8, 8), emptyMap())
-    }
+    override fun getBoard(): TestBoard = TestBoard(TestSize(8, 8), emptyMap())
 
-    override fun redo(): TestMoveResult {
-        return TestMoveSuccess(this)
-    }
+    override fun redo(): TestMoveResult = TestMoveSuccess(this)
 
-    override fun undo(): TestMoveResult {
-        return TestMoveSuccess(this)
-    }
+    override fun undo(): TestMoveResult = TestMoveSuccess(this)
 
-    override fun withBoard(board: TestBoard): TestGameRunner {
-        return this
-    }
-
+    override fun withBoard(board: TestBoard): TestGameRunner = this
 }

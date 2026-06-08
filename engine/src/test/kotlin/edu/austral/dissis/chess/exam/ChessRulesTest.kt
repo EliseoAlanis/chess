@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class ChessRulesTest {
-
     private val boardSize = BoardSize(8, 8)
 
     @Test
@@ -32,10 +31,11 @@ class ChessRulesTest {
     @Test
     fun `CorrectTurnRule should only allow moving pieces of current turn color`() {
         val rule = CorrectTurnRule()
-        val positions = mapOf(
-            Position(0, 0) to PieceFactory.createRook("r1", Color.BLANCO),
-            Position(7, 0) to PieceFactory.createRook("r2", Color.NEGRO)
-        )
+        val positions =
+            mapOf(
+                Position(0, 0) to PieceFactory.createRook("r1", Color.BLANCO),
+                Position(7, 0) to PieceFactory.createRook("r2", Color.NEGRO),
+            )
         val board = Board(positions, boardSize)
 
         // Turno Blanco intenta mover pieza blanca -> OK
@@ -48,9 +48,10 @@ class ChessRulesTest {
     @Test
     fun `PieceMovementRule should validate geometric trajectories`() {
         val rule = PieceMovementRule()
-        val positions = mapOf(
-            Position(2, 2) to PieceFactory.createBishop("b1", Color.BLANCO)
-        )
+        val positions =
+            mapOf(
+                Position(2, 2) to PieceFactory.createBishop("b1", Color.BLANCO),
+            )
         val board = Board(positions, boardSize)
 
         // Alfil moviéndose en diagonal -> OK
@@ -65,10 +66,11 @@ class ChessRulesTest {
         val rule = ClearPathRule()
 
         // Colocamos una torre blanca en (0,0) y un obstáculo en (0,2)
-        val positions = mapOf(
-            Position(0, 0) to PieceFactory.createRook("r1", Color.BLANCO),
-            Position(0, 2) to PieceFactory.createBishop("obstaculo", Color.NEGRO)
-        )
+        val positions =
+            mapOf(
+                Position(0, 0) to PieceFactory.createRook("r1", Color.BLANCO),
+                Position(0, 2) to PieceFactory.createBishop("obstaculo", Color.NEGRO),
+            )
         val board = Board(positions, boardSize)
 
         // Trayectoria libre hasta (0,1) -> OK
@@ -83,10 +85,11 @@ class ChessRulesTest {
         val rule = ClearPathRule()
 
         // Caballo en (0,1) y obstáculo directo en la fila de al lado
-        val positions = mapOf(
-            Position(0, 1) to PieceFactory.createKnight("n1", Color.BLANCO),
-            Position(1, 1) to PieceFactory.createRook("obstaculo", Color.BLANCO)
-        )
+        val positions =
+            mapOf(
+                Position(0, 1) to PieceFactory.createKnight("n1", Color.BLANCO),
+                Position(1, 1) to PieceFactory.createRook("obstaculo", Color.BLANCO),
+            )
         val board = Board(positions, boardSize)
 
         // El caballo salta el obstáculo sin problemas hacia (2,2)

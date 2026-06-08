@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class GameTest {
-
     @Test
     fun `should play a valid move successfully`() {
         val size = BoardSize(8, 8)

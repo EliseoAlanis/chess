@@ -1,122 +1,146 @@
-
 @startuml
 
-enum Color {
-  BLANCO
-  NEGRO
+package "chess.game" {
+    class Game <<(D, lightblue) data class>> {
+        + board: Board
+        + rules: List<ChessRule>
+        + turnManager: TurnManager
+        + moveHistory: List<MoveRecord>
+        + playMove(origin: Position, destination: Position): Game
+        - areAllRulesValid(origin: Position, destination: Position): Boolean
+    }
+
+
+package "chess.board" {
+    class Board <<(D, lightblue) data class>> {
+        + positions: Map<Position, Piece>
+        + size: BoardSize
+        + movePiece(origin: Position, destination: Position): Board
+        + hasPieceAt(position: Position): Boolean
+        + getPieceAt(position: Position): Piece
+    }
+
+    class BoardSize <<(D, lightblue) data class>> {
+        + columns: Int
+        + rows: Int
+    }
+
+    interface BoardInitializer {
+        + generateInitialPositions(): Map<Position, Piece>
+    }
+
+    class ClassicBoardInitializer {
+        + generateInitialPositions(): Map<Position, Piece>
+        - getWhitePieces(): Map<Position, Piece>
+        - getBlackPieces(): Map<Position, Piece>
+        - getWhiteBackRank(): Map<Position, Piece>
+        - getBlackBackRank(): Map<Position, Piece>
+    }
 }
 
-class Position <<Value Object>> {
-  - row: Int
-  - col: Int
+package "chess.movement" {
+    class Position <<(D, lightblue) data class>> {
+        + row: Int
+        + col: Int
+    }
+
+    class MoveRecord <<(D, lightblue) data class>> {
+        + piece: Piece
+        + origin: Position
+        + destination: Position
+    }
+
+    interface Movement {
+        + checkTrajectory(origin: Position, destination: Position): Boolean
+    }
+
+    class DiagonalMovement
+    class StraightMovement
+    class LShapeMovement
 }
 
-class Piece {
-  val id: String,
-  val color: Color,
-  private val movements: List<Movement>,
-  val canJump: Boolean = false,
-  val hasMoved: Boolean = false
-  + isValidMovePattern(origin: Position, destination: Position) : Boolean
+package "chess.rules" {
+    interface ChessRule {
+        + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color): Boolean
+    }
+
+    class PieceMovementRule
+    class CorrectTurnRule
+    class ClearPathRule
+    class BoardLimitsRule
 }
 
-interface  BoardInitializer {
-  + generateInitialPositions(): Map<Position, Piece>
+package "chess.turn" {
+    interface TurnManager {
+        + currentTurn: Color
+        + advance(): TurnManager
+    }
+
+    class StandardTurnManager <<(D, lightblue) data class>> {
+        + currentTurn: Color
+        + advance(): TurnManager
+    }
 }
 
-class ClassicBoardInitializer {
--getWhitePieces(): Map<Position, Piece>
--getBlackPieces(): Map<Position, Piece>
--getWhiteBackRank(): Map<Position, Piece>
--getBlackBackRank(): Map<Position, Piece>
+package "chess.pieces" {
+    interface Piece {
+        + color: Color
+        + hasMoved: Boolean
+        + canJump: Boolean
+        + isValidMovePattern(origin: Position, destination: Position): Boolean
+        + copy(hasMoved: Boolean): Piece
+    }
+
+    enum Color {
+        BLANCO
+        NEGRO
+    }
+
+    class PieceFactory {
+        + {static} createRook(id: String, color: Color): Piece
+        + {static} createKnight(id: String, color: Color): Piece
+        + {static} createBishop(id: String, color: Color): Piece
+        + {static} createQueen(id: String, color: Color): Piece
+    }
 }
 
-interface Movement {
-  + checkTrajectory(origin: Position, destination: Position) : Boolean
-}
+' Relaciones de Game
+Game --> Board
+Game --> TurnManager
+Game o-- ChessRule
+Game o-- MoveRecord
 
-class MoveRecord{
-  - piece: Piece
-  - origin: Position
-  - destination: Position
-}
+' Relaciones de Board
+Board --> BoardSize
+Board o-- Position
+Board o-- Piece
 
-class Position
+' Relaciones de Inicialización
+BoardInitializer <|.. ClassicBoardInitializer
+ClassicBoardInitializer ..> Position : crea
+ClassicBoardInitializer ..> PieceFactory : usa
 
-class StraightMovement {
-  + checkTrajectory(origin: Position, destination: Position) : Boolean
-}
+' Relaciones de Turnos
+TurnManager <|.. StandardTurnManager
+TurnManager --> Color
 
-class DiagonalMovement {
-  + checkTrajectory(origin: Position, destination: Position) : Boolean
-}
-
-class LShapeMovement {
-  + checkTrajectory(origin: Position, destination: Position) : Boolean
-}
-
-class Board {
-    - positions: Map<Position, Piece> = mapOf(),
-    - size: BoardSize
-    + movePiece(origin: Position, destination: Position) : NormalBoard
-    + hasPieceAt(position: Position) : Boolean
-    + getPieceAt(position: Position) : Piece
-}
-
-interface ChessRule {
-  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
-}
-
-class CorrectTurnRule {
-  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
-}
-
-class PieceMovementRule {
-  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
-}
-
-class ClearPathRule {
-  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
-}
-
-class BoardLimitsRule {
-  - maxRow: Int
-  - maxColumn: Int
-  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color) : Boolean
-}
-
-class Game <<Immutable>> {
-  - board: Board,
-  - rules: List<ChessRule>,
-  - turnManager: TurnManager,
-  - moveHistory: List<MoveRecord> = emptyList()
-  + playMove(origin: Position, destination: Position) : Game
-  - areAllRulesValid(origin: Position, destination: Position): Boolean
-}
-
-' Relaciones de Herencia/Impl
-Piece <|.. Queen
-Piece <|.. Rook
-Piece <|.. Bishop
-
-Movement <|.. StraightMovement
-Movement <|.. DiagonalMovement
-
-Board <|.. NormalBoard
-
-ChessRule <|.. CorrectTurnRule
+' Relaciones de Reglas
 ChessRule <|.. PieceMovementRule
+ChessRule <|.. CorrectTurnRule
 ChessRule <|.. ClearPathRule
 ChessRule <|.. BoardLimitsRule
 
-' Relaciones de Composición/Uso
-Piece --> Movement : usa >
+' Relaciones de Movimiento
+Movement <|.. DiagonalMovement
+Movement <|.. StraightMovement
+Movement <|.. LShapeMovement
+MoveRecord --> Position
+MoveRecord --> Piece
 
-NormalBoard *-- Piece : asocia usando Map
-NormalBoard *-- Position : usa como clave
-
-Game *-- Board : contiene
-Game *-- ChessRule : evalúa
-
+' Dependencias cruzadas implícitas
+Piece --> Color
+ChessRule ..> Board : evalúa
+ChessRule ..> Position : evalúa
+Piece ..> Position : valida
 
 @enduml

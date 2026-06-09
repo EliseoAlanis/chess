@@ -1,10 +1,10 @@
-package edu.austral.dissis.chess.rules
+package edu.austral.dissis.chess.rules.basic
 
 import edu.austral.dissis.chess.board.Board
 import edu.austral.dissis.chess.movement.Position
 import edu.austral.dissis.chess.pieces.Color
 
-class PieceMovementRule : ChessRule {
+class CorrectTurnRule : BasicRule {
     override fun isValid(
         board: Board,
         origin: Position,
@@ -13,6 +13,6 @@ class PieceMovementRule : ChessRule {
     ): Boolean {
         val pieceToMove = board.getPieceAt(origin)
 
-        return pieceToMove.isValidMovePattern(origin, destination)
+        return pieceToMove.color == currentTurn
     }
 }

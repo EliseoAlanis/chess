@@ -3,24 +3,24 @@ package edu.austral.dissis.chess.game
 import edu.austral.dissis.chess.board.Board
 import edu.austral.dissis.chess.movement.MoveRecord
 import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.pieces.Color
-import edu.austral.dissis.chess.rules.ChessRule
+import edu.austral.dissis.chess.movement.validator.MoveValidator
+import edu.austral.dissis.chess.rules.basic.BasicRule
 import edu.austral.dissis.chess.turn.TurnManager
 
 data class Game(
     val board: Board,
-    val rules: List<ChessRule>,
+    val rules: List<BasicRule>,
     val turnManager: TurnManager,
     val moveHistory: List<MoveRecord> = emptyList(),
+    val moveValidator: MoveValidator,
 ) {
     fun playMove(
         origin: Position,
         destination: Position,
-    ): Game {
-        val isValidMove = board.hasPieceAt(origin) && areAllRulesValid(origin, destination)
-
-        if (!isValidMove) return this
-
+    ): MoveResult {
+        if (!moveValidator.canMove(board, turnManager.currentTurn, origin, destination, moveHistory)) {
+            return MoveResult.Failure("Movimiento inválido según las reglas.", this)
+        }
         val pieceToMove = board.getPieceAt(origin)
 
         val nextBoard = board.movePiece(origin, destination)
@@ -28,19 +28,10 @@ data class Game(
         val nextTurnManager = turnManager.advance()
 
         val moveRecord = MoveRecord(pieceToMove, origin, destination)
-        val nexHistory = moveHistory + moveRecord
+        val nextHistory = moveHistory + moveRecord
 
-        return this.copy(board = nextBoard, turnManager = nextTurnManager, moveHistory = nexHistory)
-    }
+        val nextGameState = this.copy(board = nextBoard, turnManager = nextTurnManager, moveHistory = nextHistory)
 
-    private fun areAllRulesValid(
-        origin: Position,
-        destination: Position,
-    ): Boolean {
-        val actualColor = turnManager.currentTurn
-
-        return rules.all { rule ->
-            rule.isValid(board, origin, destination, actualColor)
-        }
+        return MoveResult.Success(nextGameState)
     }
 }

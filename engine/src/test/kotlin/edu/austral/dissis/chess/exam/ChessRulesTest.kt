@@ -4,10 +4,10 @@ import edu.austral.dissis.chess.board.BoardSize
 import edu.austral.dissis.chess.movement.Position
 import edu.austral.dissis.chess.pieces.Color
 import edu.austral.dissis.chess.pieces.PieceFactory
-import edu.austral.dissis.chess.rules.BoardLimitsRule
-import edu.austral.dissis.chess.rules.ClearPathRule
-import edu.austral.dissis.chess.rules.CorrectTurnRule
-import edu.austral.dissis.chess.rules.PieceMovementRule
+import edu.austral.dissis.chess.rules.basic.BoardLimitsRule
+import edu.austral.dissis.chess.rules.basic.ClearPathRule
+import edu.austral.dissis.chess.rules.basic.CorrectTurnRule
+import edu.austral.dissis.chess.rules.basic.PieceMovementRule
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

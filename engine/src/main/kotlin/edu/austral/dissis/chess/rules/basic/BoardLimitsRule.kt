@@ -1,10 +1,10 @@
-package edu.austral.dissis.chess.rules
+package edu.austral.dissis.chess.rules.basic
 
 import edu.austral.dissis.chess.board.Board
 import edu.austral.dissis.chess.movement.Position
 import edu.austral.dissis.chess.pieces.Color
 
-class BoardLimitsRule : ChessRule {
+class BoardLimitsRule : BasicRule {
     override fun isValid(
         board: Board,
         origin: Position,

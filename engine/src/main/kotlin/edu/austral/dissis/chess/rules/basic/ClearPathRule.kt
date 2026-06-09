@@ -1,15 +1,16 @@
-package edu.austral.dissis.chess.rules
+package edu.austral.dissis.chess.rules.basic
 
 import edu.austral.dissis.chess.board.Board
 import edu.austral.dissis.chess.movement.Position
+import edu.austral.dissis.chess.pieces.Color
 import kotlin.math.sign
 
-class ClearPathRule : ChessRule {
+class ClearPathRule : BasicRule {
     override fun isValid(
         board: Board,
         origin: Position,
         destination: Position,
-        currentTurn: edu.austral.dissis.chess.pieces.Color,
+        currentTurn: Color,
     ): Boolean {
         val piece = board.getPieceAt(origin)
 

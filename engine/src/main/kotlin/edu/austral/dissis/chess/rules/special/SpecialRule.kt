@@ -1,14 +1,15 @@
-package edu.austral.dissis.chess.rules
+package edu.austral.dissis.chess.rules.special
 
 import edu.austral.dissis.chess.board.Board
+import edu.austral.dissis.chess.movement.MoveRecord
 import edu.austral.dissis.chess.movement.Position
 import edu.austral.dissis.chess.pieces.Color
 
-interface ChessRule {
-    fun isValid(
+interface SpecialRule {
+    fun canExecute(
         board: Board,
         origin: Position,
         destination: Position,
-        currentTurn: Color,
+        moveHistory: List<MoveRecord>,
     ): Boolean
 }

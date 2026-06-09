@@ -3,12 +3,14 @@ import edu.austral.dissis.chess.board.Board
 import edu.austral.dissis.chess.board.BoardSize
 import edu.austral.dissis.chess.board.ClassicBoardInitializer
 import edu.austral.dissis.chess.game.Game
+import edu.austral.dissis.chess.movement.MoveRecord
 import edu.austral.dissis.chess.movement.Position
+import edu.austral.dissis.chess.movement.validator.MoveValidator
 import edu.austral.dissis.chess.pieces.Color
-import edu.austral.dissis.chess.rules.BoardLimitsRule
-import edu.austral.dissis.chess.rules.ClearPathRule
-import edu.austral.dissis.chess.rules.CorrectTurnRule
-import edu.austral.dissis.chess.rules.PieceMovementRule
+import edu.austral.dissis.chess.rules.basic.BoardLimitsRule
+import edu.austral.dissis.chess.rules.basic.ClearPathRule
+import edu.austral.dissis.chess.rules.basic.CorrectTurnRule
+import edu.austral.dissis.chess.rules.basic.PieceMovementRule
 import edu.austral.dissis.chess.turn.StandardTurnManager
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
@@ -21,8 +23,15 @@ class GameTest {
     fun `should play a valid move successfully`() {
         val size = BoardSize(8, 8)
         val board = Board(ClassicBoardInitializer().generateInitialPositions(), size)
-        val rules = listOf(BoardLimitsRule(), CorrectTurnRule(), PieceMovementRule(), ClearPathRule())
-        val game = Game(board, rules, StandardTurnManager())
+        val globalRules = listOf(BoardLimitsRule(), CorrectTurnRule(), PieceMovementRule(), ClearPathRule())
+        val moveValidator = MoveValidator(globalRules, specialRules = emptyList())
+        val game =
+            Game(
+                board = board,
+                turnManager = StandardTurnManager(),
+                moveValidator = moveValidator,
+                rules = globalRules,
+            )
 
         // El caballo blanco en (0,1) salta a (2,2)
         val origin = Position(0, 1)
@@ -45,10 +54,13 @@ class GameTest {
 
     @Test
     fun `should reject illegal move and preserve game state`() {
+        val moveHistory = emptyList<MoveRecord>()
+        val globalRules = listOf(BoardLimitsRule(), CorrectTurnRule(), PieceMovementRule(), ClearPathRule())
+        val moveValidator = MoveValidator(globalRules, specialRules = emptyList())
         val size = BoardSize(8, 8)
         val board = Board(ClassicBoardInitializer().generateInitialPositions(), size)
         val rules = listOf(BoardLimitsRule(), CorrectTurnRule(), PieceMovementRule(), ClearPathRule())
-        val game = Game(board, rules, StandardTurnManager())
+        val game = Game(board, rules, StandardTurnManager(), moveHistory, moveValidator)
 
         // Intentar mover la Torre Blanca (0,0) saltando al caballo (0,1) -> Inválido por ClearPathRule
         val origin = Position(0, 0)

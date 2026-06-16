@@ -32,6 +32,6 @@ class ClearPathRule : BasicRule {
 
         return generateSequence(startPos) { pos ->
             Position(pos.row + rowStep, pos.col + colStep)
-        }.takeWhile { it != dest }.toList()
+        }.takeWhile { it != dest && it.row in 0..100 && it.col in 0..100 }.toList()
     }
 }

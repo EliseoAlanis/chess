@@ -30,7 +30,7 @@ class CanCastleRule : SpecialRule {
         origin: Position,
         destination: Position,
     ): Boolean {
-        val isKing = piece.id.lowercase().contains("king")
+        val isKing = piece.pieceType == edu.austral.dissis.chess.pieces.PieceType.KING
         val isHorizontalTwoSteps = origin.row == destination.row && Math.abs(destination.col - origin.col) == 2
 
         return isKing && isHorizontalTwoSteps

@@ -19,5 +19,4 @@ object MovementFactory {
     fun createKnightMovement(): Movement = LShapeMovement(2, 1)
 
     fun createKingMovement(): Movement = CompositeMovement(listOf(StraightMovement(1), DiagonalMovement(1)))
-
 }

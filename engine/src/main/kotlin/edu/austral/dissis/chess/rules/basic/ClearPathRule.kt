@@ -30,8 +30,11 @@ class ClearPathRule : BasicRule {
 
         val startPos = Position(origin.row + rowStep, origin.col + colStep)
 
+        val beginning = 1
+        val end = 100
+
         return generateSequence(startPos) { pos ->
             Position(pos.row + rowStep, pos.col + colStep)
-        }.takeWhile { it != dest && it.row in 0..100 && it.col in 0..100 }.toList()
+        }.takeWhile { it != dest && it.row in beginning..end && it.col in beginning..end }.toList()
     }
 }

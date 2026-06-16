@@ -11,7 +11,7 @@ class PawnInitialDoubleMovementRule : SpecialRule {
         board: Board,
         origin: Position,
         destination: Position,
-        moveHistory: List<MoveRecord>
+        moveHistory: List<MoveRecord>,
     ): Boolean {
         val piece = board.getPieceAt(origin)
 
@@ -26,4 +26,3 @@ class PawnInitialDoubleMovementRule : SpecialRule {
         return !board.hasPieceAt(destination) && !board.hasPieceAt(intermediatePos)
     }
 }
-

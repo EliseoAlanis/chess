@@ -17,7 +17,8 @@ fun Color.toUIColor(): PlayerColor = when (this) {
 
 fun DomainPosition.toUIPosition(): UIPosition = UIPosition(this.row + 1, this.col + 1)
 
-fun UIPosition.toDomainPosition(): DomainPosition = DomainPosition(this.row - 1, this.column - 1)fun Board.toUIPieces(): List<ChessPiece> {
+fun UIPosition.toDomainPosition(): DomainPosition = DomainPosition(this.row - 1, this.column - 1)
+fun Board.toUIPieces(): List<ChessPiece> {
     return this.positions.map { (domainPos, piece) ->
         val pieceName = piece.pieceType.name.lowercase()
         // La clase ChessPiece de la UI guarda la posición internamente

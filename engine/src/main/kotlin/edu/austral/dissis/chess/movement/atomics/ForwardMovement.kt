@@ -4,9 +4,12 @@ import edu.austral.dissis.chess.movement.Movement
 import edu.austral.dissis.chess.movement.Position
 
 class ForwardMovement(
-    private val direction: Int
+    private val direction: Int,
 ) : Movement {
-    override fun checkTrajectory(origin: Position, destination: Position): Boolean {
+    override fun checkTrajectory(
+        origin: Position,
+        destination: Position,
+    ): Boolean {
         val rowDiff = destination.row - origin.row
         val colDiff = destination.col - origin.col
 

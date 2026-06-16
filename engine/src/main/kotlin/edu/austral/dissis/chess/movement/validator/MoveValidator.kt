@@ -24,12 +24,17 @@ class MoveValidator(
 
         val piece = board.getPieceAt(origin)
 
-        val isCapture = board.hasPieceAt(destination)
+        val targetPiece = board.positions[destination]
+        if (targetPiece != null && targetPiece.color == turn) {
+            return false
+        }
+        val isCapture = targetPiece != null
         val isStandardMove = piece.isValidMovePattern(origin, destination, isCapture)
 
-        val isSpecialMove = specialRules.any { specialRule ->
-            specialRule.canExecute(board, origin, destination, history)
-        }
+        val isSpecialMove =
+            specialRules.any { specialRule ->
+                specialRule.canExecute(board, origin, destination, history)
+            }
 
         return isStandardMove || isSpecialMove
     }

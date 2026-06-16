@@ -30,7 +30,10 @@ object PieceFactory {
         color: Color,
     ): Piece = Piece(id, color, PieceType.KNIGHT, movements = MovementFactory.createKnightMovement(), canJump = true)
 
-    fun createPawn(id: String, color: Color): Piece {
+    fun createPawn(
+        id: String,
+        color: Color,
+    ): Piece {
         val direction = if (color == Color.BLANCO) -1 else 1
 
         return Piece(
@@ -39,7 +42,7 @@ object PieceFactory {
             pieceType = PieceType.PAWN,
             movements = ForwardMovement(direction),
             captureMovements = ForwardDiagonalMovement(direction),
-            canJump = false
+            canJump = false,
         )
     }
 

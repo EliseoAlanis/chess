@@ -5,9 +5,12 @@ import edu.austral.dissis.chess.movement.Position
 import kotlin.math.abs
 
 class ForwardDiagonalMovement(
-    private val direction: Int
+    private val direction: Int,
 ) : Movement {
-    override fun checkTrajectory(origin: Position, destination: Position): Boolean {
+    override fun checkTrajectory(
+        origin: Position,
+        destination: Position,
+    ): Boolean {
         val rowDiff = destination.row - origin.row
         val colDiff = abs(destination.col - origin.col)
 

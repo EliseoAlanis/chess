@@ -27,11 +27,10 @@ class BoardTest {
 
         val whiteRook = board.getPieceAt(Position(0, 0))
         assertEquals(Color.BLANCO, whiteRook.color)
-        assertFalse(whiteRook.hasMoved)
     }
 
     @Test
-    fun `should move piece correctly and update hasMoved flag`() {
+    fun `should move piece correctly`() {
         val size = BoardSize(8, 8)
         val initializer = ClassicBoardInitializer()
         var board = Board(initializer.generateInitialPositions(), size)
@@ -48,9 +47,6 @@ class BoardTest {
         // Verificar nuevo estado
         assertFalse(board.hasPieceAt(origin))
         assertTrue(board.hasPieceAt(destination))
-
-        val movedPiece = board.getPieceAt(destination)
-        assertTrue(movedPiece.hasMoved) // El flag debe ser verdadero ahora
     }
 
     @Test

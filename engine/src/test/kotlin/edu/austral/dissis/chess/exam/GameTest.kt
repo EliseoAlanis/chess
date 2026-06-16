@@ -37,7 +37,9 @@ class GameTest {
         val origin = Position(0, 1)
         val destination = Position(2, 2)
 
-        val nextGame = game.playMove(origin, destination)
+        val result = game.playMove(origin, destination)
+        assertTrue(result is edu.austral.dissis.chess.game.MoveResult.Success)
+        val nextGame = (result as edu.austral.dissis.chess.game.MoveResult.Success).newGameState
 
         // 1. El tablero debió cambiar
         assertNotEquals(game.board, nextGame.board)
@@ -66,7 +68,9 @@ class GameTest {
         val origin = Position(0, 0)
         val destination = Position(0, 2)
 
-        val contextAfterMove = game.playMove(origin, destination)
+        val result = game.playMove(origin, destination)
+        assertTrue(result is edu.austral.dissis.chess.game.MoveResult.Failure)
+        val contextAfterMove = (result as edu.austral.dissis.chess.game.MoveResult.Failure).previousState
 
         // Todo se tiene que quedar igual (Inmutabilidad)
         assertSame(game, contextAfterMove)

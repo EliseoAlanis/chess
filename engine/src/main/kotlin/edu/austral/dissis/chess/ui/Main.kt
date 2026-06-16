@@ -6,9 +6,11 @@ import edu.austral.dissis.chess.board.ClassicBoardInitializer
 import edu.austral.dissis.chess.game.Game
 import edu.austral.dissis.chess.movement.validator.MoveValidator
 import edu.austral.dissis.chess.rules.basic.*
-import edu.austral.dissis.chess.rules.special.PawnInitialDoubleMoveRule
+import edu.austral.dissis.chess.rules.special.PawnInitialDoubleMovementRule
+import edu.austral.dissis.chess.rules.special.EnPassantRule
 import edu.austral.dissis.chess.turn.StandardTurnManager
 import edu.austral.dissis.chess.gui.*
+import edu.austral.dissis.chess.pieces.Color
 import edu.austral.dissis.chess.rules.special.CanCastleRule
 import javafx.application.Application
 import javafx.application.Application.launch
@@ -35,13 +37,13 @@ class ChessGameApplication : Application() {
         // 1. Configuramos las reglas del dominio
         val basicRules = listOf(BoardLimitsRule(), CorrectTurnRule(), ClearPathRule(), FriendlyFireRule(),
             NoSelfCheckRule())
-        val specialRules = listOf(PawnInitialDoubleMoveRule(), CanCastleRule())
+        val specialRules = listOf(PawnInitialDoubleMovementRule(), CanCastleRule(), EnPassantRule())
         val validator = MoveValidator(basicRules, specialRules)
 
         // 2. Inicializamos el estado del juego
         val size = DomainBoardSize(8, 8)
         val initialBoard = Board(ClassicBoardInitializer().generateInitialPositions(), size)
-        val domainGame = Game(initialBoard, basicRules, StandardTurnManager(), emptyList(), validator)
+        val domainGame = Game(initialBoard, basicRules, StandardTurnManager(currentTurn = Color.NEGRO), emptyList(), validator)
 
         // 3. Envolvemos el juego en el Adapter
         val adapter = ChessEngineAdapter(domainGame)

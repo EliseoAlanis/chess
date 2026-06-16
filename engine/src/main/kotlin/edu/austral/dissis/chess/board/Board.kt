@@ -13,9 +13,7 @@ data class Board(
     ): Board {
         val pieceToMove = positions[origin] ?: return this
 
-        val updatedPiece = pieceToMove.copy(hasMoved = true)
-
-        val nextPositions = positions - origin + (destination to updatedPiece)
+        val nextPositions = positions - origin + (destination to pieceToMove)
 
         return this.copy(positions = nextPositions)
     }

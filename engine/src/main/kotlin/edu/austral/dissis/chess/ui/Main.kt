@@ -18,6 +18,7 @@ import edu.austral.dissis.chess.game.condition.CheckmateCondition
 import edu.austral.dissis.chess.gui.CachedImageResolver
 import edu.austral.dissis.chess.gui.DefaultImageResolver
 import edu.austral.dissis.chess.movement.applier.MoveApplier
+import edu.austral.dissis.chess.movement.validator.AttackDetector
 import edu.austral.dissis.chess.rules.basic.BoardLimitsRule
 import edu.austral.dissis.chess.rules.basic.ClearPathRule
 import edu.austral.dissis.chess.rules.basic.CorrectTurnRule
@@ -37,29 +38,13 @@ fun main() {
 
 class ChessGameApplication : Application() {
     private val imageResolver = CachedImageResolver(DefaultImageResolver())
-
     companion object {
         const val GAME_TITLE = "Chess"
     }
 
     override fun start(primaryStage: Stage) {
         primaryStage.title = GAME_TITLE
-
-        // 1. Configuramos las reglas del dominio
-        val basicRules = listOf(
-            BoardLimitsRule(), CorrectTurnRule(), ClearPathRule(), FriendlyFireRule(),
-            NoSelfCheckRule()
-        )
-        val specialRules = listOf(PawnInitialDoubleMovementRule(), CanCastleRule(), EnPassantRule())
-        val validator = MoveValidator(basicRules, specialRules)
-
-        // 2. Inicializamos el estado del juego y los orquestadores
-        val size = DomainBoardSize(8, 8)
-        val initialBoard = Board(ClassicBoardInitializer().generateInitialPositions(), size)
-        val globalPostMoveEffects = listOf(PromotionEffect())
-        val winConditions = listOf(CheckmateCondition(validator))
-        val moveApplier = edu.austral.dissis.chess.movement.applier.MoveApplier(validator, globalPostMoveEffects, winConditions)
-        val domainGame = Game(initialBoard, StandardTurnManager(currentTurn = Color.BLANCO), moveApplier)
+        val (domainGame, _) = edu.austral.dissis.chess.game.ChessGameFactory.createDefaultGameAndApplier()
 
         // 3. Envolvemos el juego en el Adapter
         val adapter = ChessEngineAdapter(domainGame)

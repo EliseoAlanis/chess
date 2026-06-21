@@ -18,18 +18,6 @@ import edu.austral.dissis.chess.test.game.TestMoveResult
 import edu.austral.dissis.chess.test.game.TestMoveSuccess
 import edu.austral.dissis.chess.board.BoardSize
 import edu.austral.dissis.chess.turn.StandardTurnManager
-import edu.austral.dissis.chess.movement.validator.MoveValidator
-import edu.austral.dissis.chess.board.ClassicBoardInitializer
-import edu.austral.dissis.chess.movement.effect.CastlingEffect
-import edu.austral.dissis.chess.movement.effect.EnPassantCaptureEffect
-import edu.austral.dissis.chess.movement.effect.PromotionEffect
-import edu.austral.dissis.chess.rules.basic.BoardLimitsRule
-import edu.austral.dissis.chess.rules.basic.ClearPathRule
-import edu.austral.dissis.chess.rules.basic.CorrectTurnRule
-import edu.austral.dissis.chess.rules.basic.NoSelfCheckRule
-import edu.austral.dissis.chess.rules.special.CanCastleRule
-import edu.austral.dissis.chess.rules.special.EnPassantRule
-import edu.austral.dissis.chess.rules.special.PawnInitialDoubleMovementRule
 import edu.austral.dissis.chess.movement.applier.MoveApplier
 
 
@@ -55,16 +43,7 @@ class DummyTestGameRunner(
     }
 
     private fun createDefaultGameAndApplier(): Pair<Game, MoveApplier> {
-        val size = BoardSize(8, 8)
-        val initialBoard = Board(ClassicBoardInitializer().generateInitialPositions(), size)
-        val basicRules = listOf(BoardLimitsRule(), CorrectTurnRule(), ClearPathRule(), NoSelfCheckRule())
-        val specialRules = listOf(PawnInitialDoubleMovementRule(), CanCastleRule(), EnPassantRule())
-        val validator = MoveValidator(basicRules, specialRules)
-        val globalPostMoveEffects = listOf(PromotionEffect())
-        val winConditions = listOf(edu.austral.dissis.chess.game.condition.CheckmateCondition(validator))
-        val applier = MoveApplier(validator, globalPostMoveEffects, winConditions)
-        val game = Game(initialBoard, StandardTurnManager(currentTurn = Color.BLANCO), applier)
-        return Pair(game, applier)
+        return edu.austral.dissis.chess.game.ChessGameFactory.createDefaultGameAndApplier()
     }
 
     override fun executeMove(

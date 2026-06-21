@@ -16,7 +16,7 @@ class ClearPathRule : BasicRule {
 
         if (piece.canJump) return true
 
-        val path = getIntermediatePositions(origin, destination)
+        val path = getIntermediatePositions(origin, destination, board)
 
         return path.none { pos -> board.hasPieceAt(pos) }
     }
@@ -24,6 +24,7 @@ class ClearPathRule : BasicRule {
     private fun getIntermediatePositions(
         origin: Position,
         dest: Position,
+        board: Board,
     ): List<Position> {
         val rowStep = (dest.row - origin.row).sign
         val colStep = (dest.col - origin.col).sign
@@ -31,7 +32,7 @@ class ClearPathRule : BasicRule {
         val startPos = Position(origin.row + rowStep, origin.col + colStep)
 
         val beginning = 1
-        val end = 100
+        val end = board.size.rows / board.size.columns
 
         return generateSequence(startPos) { pos ->
             Position(pos.row + rowStep, pos.col + colStep)

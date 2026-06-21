@@ -11,6 +11,6 @@ class BoardLimitsRule : BasicRule {
         destination: Position,
         currentTurn: Color,
     ): Boolean =
-        destination.row in 0..<board.size.rows &&
-            destination.col in 0..<board.size.columns
+        destination.row in 1..board.size.rows &&
+            destination.col in 1..board.size.columns
 }

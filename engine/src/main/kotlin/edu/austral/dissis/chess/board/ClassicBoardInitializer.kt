@@ -8,49 +8,31 @@ import edu.austral.dissis.chess.pieces.PieceFactory
 private const val BLACK_BACK_RANK = 8
 private const val BLACK_PAWN_RANK = 7
 private const val WHITE_PAWN_RANK = 2
-private const val WHITE_BACK_RANK = 1
+private const val backRank = 1
 
 @Suppress("MagicNumber")
 class ClassicBoardInitializer : BoardInitializer {
-    override fun generateInitialPositions(): Map<Position, Piece> = getWhitePieces() + getBlackPieces()
+    override fun generateInitialPositions(): Map<Position, Piece> =
+        getPiecesForColor(Color.BLANCO, backRank, WHITE_PAWN_RANK) +
+        getPiecesForColor(Color.NEGRO, BLACK_BACK_RANK, BLACK_PAWN_RANK)
 
-    private fun getWhitePieces(): Map<Position, Piece> {
+    private fun getPiecesForColor(color: Color, rank: Int, pawnRank: Int): Map<Position, Piece> {
         val pieces = mutableMapOf<Position, Piece>()
+        val suffix = if (color == Color.BLANCO) "w" else "b"
 
         // Piezas Mayores
-        pieces[Position(WHITE_BACK_RANK, 1)] = PieceFactory.createRook("r_w_1", Color.BLANCO)
-        pieces[Position(WHITE_BACK_RANK, 2)] = PieceFactory.createKnight("n_w_1", Color.BLANCO)
-        pieces[Position(WHITE_BACK_RANK, 3)] = PieceFactory.createBishop("b_w_1", Color.BLANCO)
-        pieces[Position(WHITE_BACK_RANK, 4)] = PieceFactory.createQueen("q_w", Color.BLANCO)
-        pieces[Position(WHITE_BACK_RANK, 5)] = PieceFactory.createKing("k_w", Color.BLANCO)
-        pieces[Position(WHITE_BACK_RANK, 6)] = PieceFactory.createBishop("b_w_2", Color.BLANCO)
-        pieces[Position(WHITE_BACK_RANK, 7)] = PieceFactory.createKnight("n_w_2", Color.BLANCO)
-        pieces[Position(WHITE_BACK_RANK, 8)] = PieceFactory.createRook("r_w_2", Color.BLANCO)
+        pieces[Position(rank, 1)] = PieceFactory.createRook("r_${suffix}_1", color)
+        pieces[Position(rank, 2)] = PieceFactory.createKnight("n_${suffix}_1", color)
+        pieces[Position(rank, 3)] = PieceFactory.createBishop("b_${suffix}_1", color)
+        pieces[Position(rank, 4)] = PieceFactory.createQueen("q_$suffix", color)
+        pieces[Position(rank, 5)] = PieceFactory.createKing("k_$suffix", color)
+        pieces[Position(rank, 6)] = PieceFactory.createBishop("b_${suffix}_2", color)
+        pieces[Position(rank, 7)] = PieceFactory.createKnight("n_${suffix}_2", color)
+        pieces[Position(rank, 8)] = PieceFactory.createRook("r_${suffix}_2", color)
 
-        // Peones Blancos
+        // Peones
         for (col in 1..8) {
-            pieces[Position(WHITE_PAWN_RANK, col)] = PieceFactory.createPawn("p_w_$col", Color.BLANCO)
-        }
-
-        return pieces
-    }
-
-    private fun getBlackPieces(): Map<Position, Piece> {
-        val pieces = mutableMapOf<Position, Piece>()
-
-        // Piezas Mayores
-        pieces[Position(BLACK_BACK_RANK, 1)] = PieceFactory.createRook("r_b_1", Color.NEGRO)
-        pieces[Position(BLACK_BACK_RANK, 2)] = PieceFactory.createKnight("n_b_1", Color.NEGRO)
-        pieces[Position(BLACK_BACK_RANK, 3)] = PieceFactory.createBishop("b_b_1", Color.NEGRO)
-        pieces[Position(BLACK_BACK_RANK, 4)] = PieceFactory.createQueen("q_b", Color.NEGRO)
-        pieces[Position(BLACK_BACK_RANK, 5)] = PieceFactory.createKing("k_b", Color.NEGRO)
-        pieces[Position(BLACK_BACK_RANK, 6)] = PieceFactory.createBishop("b_b_2", Color.NEGRO)
-        pieces[Position(BLACK_BACK_RANK, 7)] = PieceFactory.createKnight("n_b_2", Color.NEGRO)
-        pieces[Position(BLACK_BACK_RANK, 8)] = PieceFactory.createRook("r_b_2", Color.NEGRO)
-
-        // Peones Negros
-        for (col in 1..8) {
-            pieces[Position(BLACK_PAWN_RANK, col)] = PieceFactory.createPawn("p_b_$col", Color.NEGRO)
+            pieces[Position(pawnRank, col)] = PieceFactory.createPawn("p_${suffix}_$col", color)
         }
 
         return pieces

@@ -32,7 +32,7 @@ class ClearPathRule : BasicRule {
         val startPos = Position(origin.row + rowStep, origin.col + colStep)
 
         val beginning = 1
-        val end = board.size.rows / board.size.columns
+        val end = maxOf(board.size.rows, board.size.columns)
 
         return generateSequence(startPos) { pos ->
             Position(pos.row + rowStep, pos.col + colStep)

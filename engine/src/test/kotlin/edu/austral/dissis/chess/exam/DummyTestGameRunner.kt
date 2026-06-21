@@ -102,10 +102,6 @@ class DummyTestGameRunner(
     }
 
     override fun withBoard(board: TestBoard): TestGameRunner {
-        println("=== withBoard CALLED ===")
-        board.pieces.forEach { (pos, piece) ->
-            println("Injected: Pos(${pos.row}, ${pos.col}) -> Piece(${piece.playerColorSymbol}, ${piece.pieceTypeSymbol})")
-        }
         val (cols, rows) = board.size
         val domainPositions = board.pieces.map { (testPos, testPiece) ->
             Position(testPos.row, testPos.col) to toDomainPiece(testPiece)

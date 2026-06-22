@@ -1,12 +1,10 @@
 package edu.austral.dissis.chess.pieces
 
-import edu.austral.dissis.chess.movement.Movement
-import edu.austral.dissis.chess.movement.atomics.DiagonalMovement
+import edu.austral.dissis.common.pieces.Piece
+import edu.austral.dissis.common.pieces.Color
+
 import edu.austral.dissis.chess.movement.atomics.ForwardDiagonalMovement
 import edu.austral.dissis.chess.movement.atomics.ForwardMovement
-import edu.austral.dissis.chess.movement.atomics.LShapeMovement
-import edu.austral.dissis.chess.movement.atomics.StraightMovement
-import edu.austral.dissis.chess.movement.composite.CompositeMovement
 import edu.austral.dissis.chess.movement.factory.MovementFactory
 
 object PieceFactory {
@@ -34,7 +32,7 @@ object PieceFactory {
         id: String,
         color: Color,
     ): Piece {
-        val direction = if (color == Color.BLANCO) -1 else 1
+        val direction = if (color == Color.WHITE) -1 else 1
 
         return Piece(
             id = id,
@@ -51,3 +49,5 @@ object PieceFactory {
         color: Color,
     ): Piece = Piece(id, color, PieceType.KING, movements = MovementFactory.createKingMovement(), canJump = false)
 }
+
+

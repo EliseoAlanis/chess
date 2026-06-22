@@ -1,7 +1,5 @@
 package edu.austral.dissis.common.pieces
 
-import edu.austral.dissis.chess.pieces.PieceType
-
 
 import edu.austral.dissis.common.movement.Movement
 import edu.austral.dissis.common.movement.Position
@@ -9,7 +7,7 @@ import edu.austral.dissis.common.movement.Position
 data class Piece(
     val id: String,
     val color: Color,
-    val pieceType: PieceType,
+    val pieceType: String,
     private val movements: Movement,
     private val captureMovements: Movement = movements,
     val canJump: Boolean = false,

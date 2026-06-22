@@ -1,7 +1,7 @@
-package edu.austral.dissis.chess.board
+package edu.austral.dissis.common.board
 
-import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.pieces.Piece
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.pieces.Piece
 
 data class Board(
     val positions: Map<Position, Piece> = mapOf(),

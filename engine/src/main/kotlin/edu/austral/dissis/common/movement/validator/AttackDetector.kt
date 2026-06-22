@@ -1,10 +1,14 @@
-package edu.austral.dissis.chess.movement.validator
+package edu.austral.dissis.common.movement.validator
 
-import edu.austral.dissis.chess.board.Board
-import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.pieces.Color
 import edu.austral.dissis.chess.pieces.PieceType
-import edu.austral.dissis.chess.rules.basic.BasicRule
+
+
+
+
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.pieces.Color
+import edu.austral.dissis.common.rules.BasicRule
 import edu.austral.dissis.chess.rules.basic.ClearPathRule
 
 class AttackDetector (
@@ -45,3 +49,6 @@ class AttackDetector (
         return false
     }
 }
+
+
+

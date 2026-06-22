@@ -1,7 +1,10 @@
-package edu.austral.dissis.chess.pieces
+package edu.austral.dissis.common.pieces
 
-import edu.austral.dissis.chess.movement.Movement
-import edu.austral.dissis.chess.movement.Position
+import edu.austral.dissis.chess.pieces.PieceType
+
+
+import edu.austral.dissis.common.movement.Movement
+import edu.austral.dissis.common.movement.Position
 
 data class Piece(
     val id: String,
@@ -20,3 +23,5 @@ data class Piece(
         return movementToUse.checkTrajectory(origin, destination)
     }
 }
+
+

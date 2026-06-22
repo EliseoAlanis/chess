@@ -1,4 +1,4 @@
-package edu.austral.dissis.chess.game
+package edu.austral.dissis.common.game
 
 sealed interface MoveResult {
     data class Success(

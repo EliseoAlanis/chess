@@ -1,4 +1,4 @@
-package edu.austral.dissis.chess.pieces
+package edu.austral.dissis.common.pieces
 
 enum class Color {
     BLANCO,

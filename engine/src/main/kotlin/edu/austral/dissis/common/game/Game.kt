@@ -1,13 +1,13 @@
-package edu.austral.dissis.chess.game
+package edu.austral.dissis.common.game
 
-import edu.austral.dissis.chess.board.Board
-import edu.austral.dissis.chess.movement.MoveRecord
-import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.movement.validator.MoveValidator
-import edu.austral.dissis.chess.rules.basic.BasicRule
-import edu.austral.dissis.chess.turn.TurnManager
-import edu.austral.dissis.chess.movement.effect.PostMoveEffect
-import edu.austral.dissis.chess.game.condition.WinCondition
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.MoveRecord
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.validator.MoveValidator
+import edu.austral.dissis.common.rules.BasicRule
+import edu.austral.dissis.common.turn.TurnManager
+import edu.austral.dissis.common.movement.effect.PostMoveEffect
+import edu.austral.dissis.common.game.condition.WinCondition
 
 data class Game(
     val board: Board,
@@ -24,7 +24,7 @@ data class Game(
         destination: Position,
     ): MoveResult {
         if (!moveValidator.canMove(board, turnManager.currentTurn, origin, destination, moveHistory)) {
-            return MoveResult.Failure("Movimiento inválido según las reglas.", this)
+            return MoveResult.Failure("Movimiento invÃ¡lido segÃºn las reglas.", this)
         }
         val pieceToMove = board.getPieceAt(origin)
 

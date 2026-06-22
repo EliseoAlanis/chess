@@ -1,6 +1,6 @@
-package edu.austral.dissis.chess.turn
+package edu.austral.dissis.common.turn
 
-import edu.austral.dissis.chess.pieces.Color
+import edu.austral.dissis.common.pieces.Color
 
 interface TurnManager {
     val currentTurn: Color

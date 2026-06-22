@@ -1,6 +1,6 @@
-package edu.austral.dissis.chess.movement
+package edu.austral.dissis.common.movement
 
-import edu.austral.dissis.chess.pieces.Piece
+import edu.austral.dissis.common.pieces.Piece
 
 data class MoveRecord(
     val piece: Piece,

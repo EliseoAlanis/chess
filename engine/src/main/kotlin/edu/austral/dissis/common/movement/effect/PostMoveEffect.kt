@@ -1,7 +1,7 @@
-package edu.austral.dissis.chess.movement.effect
+package edu.austral.dissis.common.movement.effect
 
-import edu.austral.dissis.chess.board.Board
-import edu.austral.dissis.chess.movement.Position
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.Position
 
 interface PostMoveEffect {
     fun apply(

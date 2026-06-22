@@ -1,18 +1,19 @@
 package edu.austral.dissis.chess.movement.validator
 
-import edu.austral.dissis.chess.board.Board
-import edu.austral.dissis.chess.movement.MoveRecord
-import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.pieces.Color
-import edu.austral.dissis.chess.rules.basic.BasicRule
-import edu.austral.dissis.chess.rules.special.RuleResult
-import edu.austral.dissis.chess.rules.special.SpecialRule
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.MoveRecord
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.validator.MoveValidator
+import edu.austral.dissis.common.pieces.Color
+import edu.austral.dissis.common.rules.BasicRule
+import edu.austral.dissis.common.rules.RuleResult
+import edu.austral.dissis.common.rules.SpecialRule
 
-class MoveValidator(
+class DefaultMoveValidator(
     private val basicRules: List<BasicRule>,
     private val specialRules: List<SpecialRule> = emptyList(),
-) {
-    fun validateMove(
+) : MoveValidator {
+    override fun validateMove(
         board: Board,
         turn: Color,
         origin: Position,
@@ -32,16 +33,15 @@ class MoveValidator(
         }
 
         for (rule in specialRules) {
-            val result = rule.evaluate(board, origin, destination, history)
-            if (result is RuleResult.Valid) {
-                return result
+            if (rule.canExecute(board, origin, destination, history)) {
+                return RuleResult.Valid()
             }
         }
 
         return RuleResult.Invalid
     }
 
-    fun canMove(
+    override fun canMove(
         board: Board,
         turn: Color,
         origin: Position,

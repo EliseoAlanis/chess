@@ -56,8 +56,12 @@ class DefaultMoveApplier(
 
     private fun evaluateWinConditions(gameState: Game): Game {
         for (winCondition in winConditions) {
-            val newStatus = winCondition.checkStatus(gameState)
-            if (newStatus != null) {
+            val newStatus = winCondition.checkStatus(
+                board = gameState.board,
+                currentTurn = gameState.turnManager.currentTurn,
+                moveHistory = gameState.moveHistory
+            )
+            if (newStatus != edu.austral.dissis.common.game.GameStatus.IN_PROGRESS) {
                 return gameState.copy(status = newStatus)
             }
         }

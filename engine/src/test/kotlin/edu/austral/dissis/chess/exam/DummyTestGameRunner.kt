@@ -33,7 +33,7 @@ class DummyTestGameRunner(
 
     init {
         if (game == null || moveApplier == null) {
-            val (defaultGame, defaultApplier) = edu.austral.dissis.chess.game.ChessGameFactory.createDefaultGameAndApplier()
+            val (defaultGame, defaultApplier) = edu.austral.dissis.chess.game.ClassicChessFactory().createGame()
             this.currentGame = game ?: defaultGame
             this.currentApplier = moveApplier ?: defaultApplier
         } else {
@@ -43,7 +43,7 @@ class DummyTestGameRunner(
     }
 
     override fun executeMove(from: TestPosition, to: TestPosition): TestMoveResult {
-        val result = currentApplier.executeMove(currentGame, Position(from.row, from.col), Position(to.row, to.col))
+        val result = currentApplier.executeMove(currentGame, edu.austral.dissis.common.movement.Path(Position(from.row, from.col), Position(to.row, to.col)))
         return if (result is MoveResult.Success) handleMoveSuccess(result) else TestMoveFailure(getBoard())
     }
 

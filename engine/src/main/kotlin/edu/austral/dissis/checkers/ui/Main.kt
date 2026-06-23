@@ -1,6 +1,6 @@
 package edu.austral.dissis.checkers.ui
 
-import edu.austral.dissis.checkers.adapter.CheckersEngineAdapter
+import edu.austral.dissis.common.adapter.EngineAdapter
 import edu.austral.dissis.common.game.Game
 import edu.austral.dissis.common.game.GameEngine
 import edu.austral.dissis.chess.gui.GameViewFactory
@@ -39,11 +39,17 @@ class CheckersGameApplication : Application() {
         return GameEngine(applier, game)
     }
 
-    private fun setupAdapter(engine: GameEngine): CheckersEngineAdapter {
-        return CheckersEngineAdapter(engine)
+    private fun setupAdapter(engine: GameEngine): EngineAdapter {
+        return EngineAdapter(engine) { pieceType ->
+            when (pieceType) {
+                "man" -> "pawn"
+                "king" -> "queen"
+                else -> pieceType
+            }
+        }
     }
 
-    private fun setupUI(adapter: CheckersEngineAdapter): GameView {
+    private fun setupUI(adapter: EngineAdapter): GameView {
         val view = GameViewFactory.create(imageResolver)
         
         adapter.process(view.inputEvents())

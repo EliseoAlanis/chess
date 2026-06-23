@@ -1,18 +1,31 @@
-package edu.austral.dissis.chess.adapter
+package edu.austral.dissis.common.adapter
 
-import edu.austral.dissis.common.game.Game
 import edu.austral.dissis.common.game.GameEngine
 import edu.austral.dissis.common.game.MoveResult
+import edu.austral.dissis.common.pieces.Color
+import edu.austral.dissis.common.movement.Position as DomainPosition
+
 import edu.austral.dissis.chess.gui.GameInputEvent
 import edu.austral.dissis.chess.gui.GameState
 import edu.austral.dissis.chess.gui.Move
-import io.reactivex.rxjava3.core.Observable
+import edu.austral.dissis.chess.gui.ChessPiece
+import edu.austral.dissis.chess.gui.PlayerColor
+import edu.austral.dissis.chess.gui.Position as UIPosition
 import edu.austral.dissis.chess.gui.BoardSize as UIBoardSize
+import io.reactivex.rxjava3.core.Observable
 
-class ChessEngineAdapter(
-    private var engine: GameEngine
+fun Color.toUIColor(): PlayerColor = when (this) {
+    Color.WHITE -> PlayerColor.WHITE
+    Color.BLACK -> PlayerColor.BLACK
+}
+
+fun DomainPosition.toUIPosition(): UIPosition = UIPosition(this.row, this.col)
+fun UIPosition.toDomainPosition(): DomainPosition = DomainPosition(this.row, this.column)
+
+class EngineAdapter(
+    private var engine: GameEngine,
+    private val pieceNameMapper: (String) -> String
 ) {
-    // Transforma el flujo de eventos de la UI en un flujo de estados del juego
     fun process(inputs: Observable<GameInputEvent>): Observable<GameState> =
         inputs.map { event ->
             when (event) {
@@ -61,7 +74,14 @@ class ChessEngineAdapter(
         val board = game.board
         return GameState.Playing(
             boardSize = UIBoardSize(board.size.columns, board.size.rows),
-            pieces = board.toUIPieces(),
+            pieces = board.positions.map { (domainPos, piece) ->
+                ChessPiece(
+                    id = piece.id,
+                    color = piece.color.toUIColor(),
+                    position = domainPos.toUIPosition(),
+                    pieceId = pieceNameMapper(piece.pieceType.lowercase())
+                )
+            },
             currentPlayer = game.turnManager.currentTurn.toUIColor(),
             canUndo = engine.canUndo(),
             canRedo = engine.canRedo(),

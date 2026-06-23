@@ -1,6 +1,6 @@
 package edu.austral.dissis.chess.ui
 
-import edu.austral.dissis.chess.adapter.ChessEngineAdapter
+import edu.austral.dissis.common.adapter.EngineAdapter
 import edu.austral.dissis.common.game.Game
 import edu.austral.dissis.chess.gui.GameViewFactory
 import edu.austral.dissis.chess.gui.GameView
@@ -25,7 +25,8 @@ class ChessGameApplication : Application() {
         primaryStage.title = GAME_TITLE
         
         val (game, applier) = setupGameAndApplier()
-        val adapter = setupAdapter(game, applier)
+        val engine = edu.austral.dissis.common.game.GameEngine(applier, game)
+        val adapter = setupAdapter(engine)
         val view = setupUI(adapter)
 
         primaryStage.scene = Scene(view.pane())
@@ -37,12 +38,17 @@ class ChessGameApplication : Application() {
         return factory.createGame()
     }
 
-    private fun setupAdapter(game: Game, applier: edu.austral.dissis.common.movement.applier.MoveApplier): ChessEngineAdapter {
-        val engine = edu.austral.dissis.common.game.GameEngine(applier, game)
-        return ChessEngineAdapter(engine)
+    private fun setupAdapter(engine: edu.austral.dissis.common.game.GameEngine): EngineAdapter {
+        return EngineAdapter(engine) { pieceType ->
+            when (pieceType) {
+                "chancellor" -> "queen"
+                "archbishop" -> "knight"
+                else -> pieceType
+            }
+        }
     }
 
-    private fun setupUI(adapter: ChessEngineAdapter): GameView {
+    private fun setupUI(adapter: EngineAdapter): GameView {
         val view = GameViewFactory.create(imageResolver)
         
         adapter.process(view.inputEvents())

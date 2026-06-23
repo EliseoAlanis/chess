@@ -10,4 +10,9 @@ class CompositeMovement(
     override fun checkTrajectory(
         path: Path,
     ): Boolean = movements.any { it.checkTrajectory(path) }
+
+    override fun getIntermediatePositions(path: Path): List<Position> {
+        val matchingMovement = movements.find { it.checkTrajectory(path) }
+        return matchingMovement?.getIntermediatePositions(path) ?: emptyList()
+    }
 }

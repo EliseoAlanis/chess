@@ -11,7 +11,6 @@ data class Piece(
     val pieceType: String,
     val movements: Movement,
     val captureMovements: Movement = movements,
-    val canJump: Boolean = false, //mandar a la mierda
 ) {
     fun isValidMovePattern(
         path: Path,

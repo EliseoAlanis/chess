@@ -11,22 +11,22 @@ object PieceFactory {
     fun createRook(
         id: String,
         color: Color,
-    ): Piece = Piece(id, color, PieceType.ROOK, movements = MovementFactory.createRookMovement(), canJump = false)
+    ): Piece = Piece(id, color, PieceType.ROOK, movements = MovementFactory.createRookMovement())
 
     fun createBishop(
         id: String,
         color: Color,
-    ): Piece = Piece(id, color, PieceType.BISHOP, movements = MovementFactory.createBishopMovement(), canJump = false)
+    ): Piece = Piece(id, color, PieceType.BISHOP, movements = MovementFactory.createBishopMovement())
 
     fun createQueen(
         id: String,
         color: Color,
-    ): Piece = Piece(id, color, PieceType.QUEEN, movements = MovementFactory.createQueenMovement(), canJump = false)
+    ): Piece = Piece(id, color, PieceType.QUEEN, movements = MovementFactory.createQueenMovement())
 
     fun createKnight(
         id: String,
         color: Color,
-    ): Piece = Piece(id, color, PieceType.KNIGHT, movements = MovementFactory.createKnightMovement(), canJump = true)
+    ): Piece = Piece(id, color, PieceType.KNIGHT, movements = MovementFactory.createKnightMovement())
 
     fun createPawn(
         id: String,
@@ -40,14 +40,11 @@ object PieceFactory {
             pieceType = PieceType.PAWN,
             movements = ForwardMovement(direction),
             captureMovements = ForwardDiagonalMovement(direction),
-            canJump = false,
         )
     }
 
     fun createKing(
         id: String,
         color: Color,
-    ): Piece = Piece(id, color, PieceType.KING, movements = MovementFactory.createKingMovement(), canJump = false)
+    ): Piece = Piece(id, color, PieceType.KING, movements = MovementFactory.createKingMovement())
 }
-
-

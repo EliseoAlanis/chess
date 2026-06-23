@@ -20,4 +20,6 @@ class LShapeMovement(
 
         return isVerticalL || isHorizontalL
     }
+
+    override fun getIntermediatePositions(path: Path): List<Position> = emptyList()
 }

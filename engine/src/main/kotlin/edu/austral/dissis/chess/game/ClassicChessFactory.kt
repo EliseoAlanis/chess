@@ -44,11 +44,7 @@ class ClassicChessFactory(
 
         val game = Game(
             board = initialBoard,
-            rules = basicRules,
             turnManager = StandardTurnManager(currentTurn = Color.WHITE),
-            moveValidator = validator,
-            postMoveEffects = globalPostMoveEffects,
-            winConditions = winConditions
         )
 
         return Pair(game, moveApplier)

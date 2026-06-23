@@ -5,6 +5,7 @@ import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.rules.BasicRule
+import edu.austral.dissis.chess.pieces.PieceType
 
 class NoSelfCheckRule(
     private val attackDetector: AttackDetector,
@@ -16,7 +17,7 @@ class NoSelfCheckRule(
     ): Boolean {
         val simulatedBoard = board.movePiece(path)
 
-        val myKingPos = attackDetector.findKingPosition(simulatedBoard, currentTurn) ?: return true
+        val myKingPos = attackDetector.findPiecePosition(simulatedBoard, PieceType.KING, currentTurn) ?: return true
 
         return !attackDetector.isSquareAttackedByEnemy(simulatedBoard, myKingPos, currentTurn)
     }

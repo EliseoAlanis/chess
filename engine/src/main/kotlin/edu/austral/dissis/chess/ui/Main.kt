@@ -15,7 +15,7 @@ import javafx.stage.Stage
 
 object NetworkConfig {
     // CAMBIAR A FALSE para arrancar solo como cliente remoto
-    const val IS_SERVER = true
+    const val IS_SERVER = false
     const val SERVER_IP = "localhost"
     const val SERVER_PORT = 8080
 }
@@ -56,7 +56,7 @@ class ChessGameApplication : Application() {
     private fun setupGameAndApplier(): Pair<Game, edu.austral.dissis.common.movement.applier.MoveApplier> {
         val factory: edu.austral.dissis.common.game.GameFactory =
             edu.austral.dissis.chess.game
-                .ProgressiveChessFactory()
+                .ClassicChessFactory()
         return factory.createGame()
     }
 

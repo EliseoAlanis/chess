@@ -1,6 +1,5 @@
 package edu.austral.dissis.chess.movement.validator
 
-import edu.austral.dissis.chess.pieces.PieceType
 import edu.austral.dissis.chess.rules.basic.ClearPathRule
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.Path
@@ -10,21 +9,23 @@ import edu.austral.dissis.common.pieces.Color
 class AttackDetector {
     private val clearPathRule = ClearPathRule()
 
-    fun isKingAttacked(
+    fun isPieceAttacked(
         board: Board,
+        pieceType: String,
         myColor: Color,
     ): Boolean {
-        val myKingPos = findKingPosition(board, myColor) ?: return false
-        return isSquareAttackedByEnemy(board, myKingPos, myColor)
+        val piecePos = findPiecePosition(board, pieceType, myColor) ?: return false
+        return isSquareAttackedByEnemy(board, piecePos, myColor)
     }
 
-    fun findKingPosition(
+    fun findPiecePosition(
         board: Board,
+        pieceType: String,
         color: Color,
     ): Position? =
         board.positions.entries
             .find { (_, piece) ->
-                piece.pieceType == PieceType.KING && piece.color == color
+                piece.pieceType == pieceType && piece.color == color
             }?.key
 
     fun isSquareAttackedByEnemy(

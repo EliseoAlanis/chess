@@ -28,7 +28,6 @@ object CheckersJumpAnalyzer {
         val piece = board.getPieceAt(origin)
         val jumps = mutableListOf<Position>()
 
-        // A jump moves 2 squares in row/col. We test all 4 possible diagonal jumps.
         val directions =
             listOf(
                 Pair(2, 2),
@@ -42,18 +41,14 @@ object CheckersJumpAnalyzer {
             val destCol = origin.col + colStep
             val destPos = Position(destRow, destCol)
 
-            // Check boundaries
             if (destRow !in 1..board.size.rows || destCol !in 1..board.size.columns) continue
 
             val path = Path(origin, destPos)
 
-            // Destination must be empty
             if (board.hasPieceAt(destPos)) continue
 
-            // Must match capture pattern
             if (!piece.isValidMovePattern(path, isCapture = true)) continue
 
-            // Intermediate must have enemy
             val intermediateRow = origin.row + (rowStep / 2)
             val intermediateCol = origin.col + (colStep / 2)
             val intermediatePos = Position(intermediateRow, intermediateCol)

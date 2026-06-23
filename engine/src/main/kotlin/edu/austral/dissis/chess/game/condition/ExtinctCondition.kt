@@ -31,7 +31,6 @@ class ExtinctionCondition : WinCondition {
         moveHistory: List<MoveRecord>
     ): GameStatus {
 
-        // 1. Agarramos todos los tipos de piezas que le quedan vivas a currentTurn
         val aliveTypes = board.positions.values
             .filter { it.color == currentTurn }
             .map { it.pieceType }

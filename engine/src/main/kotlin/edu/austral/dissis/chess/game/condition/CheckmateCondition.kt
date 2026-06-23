@@ -9,6 +9,7 @@ import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.validator.MoveValidator
 import edu.austral.dissis.common.pieces.Color
+import edu.austral.dissis.chess.pieces.PieceType
 
 class CheckmateCondition(
     private val moveValidator: MoveValidator,
@@ -21,7 +22,7 @@ class CheckmateCondition(
     ): GameStatus {
         if (hasAnyValidMove(board, currentTurn, moveHistory)) return GameStatus.IN_PROGRESS
 
-        val isKingAttacked = attackDetector.isKingAttacked(board, currentTurn)
+        val isKingAttacked = attackDetector.isPieceAttacked(board, PieceType.KING, currentTurn)
 
         return if (isKingAttacked) {
             if (currentTurn == Color.WHITE) GameStatus.BLACK_WINS else GameStatus.WHITE_WINS

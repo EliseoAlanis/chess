@@ -16,6 +16,8 @@ import edu.austral.dissis.chess.turn.StandardTurnManager
 import edu.austral.dissis.common.game.GameFactory
 import edu.austral.dissis.common.board.BoardFactory
 import edu.austral.dissis.chess.board.ClassicBoardFactory
+import edu.austral.dissis.chess.movement.effect.CastlingEffect
+import edu.austral.dissis.chess.movement.effect.EnPassantCaptureEffect
 
 class ClassicChessFactory(
     private val boardFactory: BoardFactory = ClassicBoardFactory()
@@ -24,28 +26,16 @@ class ClassicChessFactory(
         val initialBoard = boardFactory.createBoard()
         val attackDetector = AttackDetector()
 
-        val basicRules = listOf(
-            BoardLimitsRule(),
-            CorrectTurnRule(),
-            ClearPathRule(),
-            FriendlyFireRule(),
-            NoSelfCheckRule(attackDetector)
+        val basicRules = listOf(BoardLimitsRule(), CorrectTurnRule(),
+            ClearPathRule(), FriendlyFireRule(), NoSelfCheckRule(attackDetector)
         )
-        val specialRules = listOf(
-            PawnInitialDoubleMovementRule(),
-            CanCastleRule(),
-            EnPassantRule()
-        )
+        val specialRules = listOf(PawnInitialDoubleMovementRule(), CanCastleRule(), EnPassantRule())
         val validator = edu.austral.dissis.chess.movement.validator.DefaultMoveValidator(basicRules, specialRules)
 
         val globalPostMoveEffects = listOf(PromotionEffect())
         val winConditions = listOf(CheckmateCondition(validator, attackDetector))
         val moveApplier = DefaultMoveApplier(validator, globalPostMoveEffects, winConditions)
-
-        val game = Game(
-            board = initialBoard,
-            turnManager = StandardTurnManager(currentTurn = Color.WHITE),
-        )
+        val game = Game(board = initialBoard, turnManager = StandardTurnManager(currentTurn = Color.WHITE),)
 
         return Pair(game, moveApplier)
     }

@@ -1,26 +1,35 @@
 package edu.austral.dissis.chess.rules.special
 
-import edu.austral.dissis.chess.board.Board
-import edu.austral.dissis.chess.movement.MoveRecord
-import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.pieces.Color
-import edu.austral.dissis.chess.pieces.Piece
+import edu.austral.dissis.common.rules.SpecialRule
+import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.chess.pieces.PieceType
+import edu.austral.dissis.chess.movement.effect.EnPassantCaptureEffect
+
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.MoveRecord
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.pieces.Color
+import edu.austral.dissis.common.pieces.Piece
 import kotlin.math.abs
 
 class EnPassantRule : SpecialRule {
-    override fun canExecute(
+    override fun tryExecute(
         board: Board,
         origin: Position,
         destination: Position,
         moveHistory: List<MoveRecord>,
-    ): Boolean {
-        if (moveHistory.isEmpty() || !isPawnAndEmptyDestination(board, origin, destination)) return false
+    ): RuleResult {
+        if (moveHistory.isEmpty() || !isPawnAndEmptyDestination(board, origin, destination)) return RuleResult.Invalid
 
         val piece = board.getPieceAt(origin)
-        if (!isValidDiagonalMove(piece, origin, destination)) return false
+        if (!isValidDiagonalMove(piece, origin, destination)) return RuleResult.Invalid
 
-        return isValidEnemyPawnMove(moveHistory.last(), piece, origin, destination)
+        val isValid = isValidEnemyPawnMove(moveHistory.last(), piece, origin, destination)
+        
+        if (!isValid) return RuleResult.Invalid
+        
+        val capturedPawnPosition = Position(origin.row, destination.col)
+        return RuleResult.Valid(listOf(EnPassantCaptureEffect(capturedPawnPosition)))
     }
 
     private fun isPawnAndEmptyDestination(
@@ -37,7 +46,7 @@ class EnPassantRule : SpecialRule {
         origin: Position,
         destination: Position,
     ): Boolean {
-        val direction = if (piece.color == Color.BLANCO) -1 else 1
+        val direction = if (piece.color == Color.WHITE) 1 else -1
         return destination.row == origin.row + direction && abs(destination.col - origin.col) == 1
     }
 

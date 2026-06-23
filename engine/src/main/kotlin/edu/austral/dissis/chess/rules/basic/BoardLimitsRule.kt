@@ -1,8 +1,11 @@
 package edu.austral.dissis.chess.rules.basic
 
-import edu.austral.dissis.chess.board.Board
-import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.pieces.Color
+import edu.austral.dissis.common.rules.BasicRule
+
+
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.pieces.Color
 
 class BoardLimitsRule : BasicRule {
     override fun isValid(
@@ -14,3 +17,5 @@ class BoardLimitsRule : BasicRule {
         destination.row in 1..board.size.rows &&
             destination.col in 1..board.size.columns
 }
+
+

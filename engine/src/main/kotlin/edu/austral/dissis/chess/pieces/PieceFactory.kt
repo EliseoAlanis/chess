@@ -32,7 +32,7 @@ object PieceFactory {
         id: String,
         color: Color,
     ): Piece {
-        val direction = if (color == Color.WHITE) -1 else 1
+        val direction = if (color == Color.WHITE) 1 else -1
 
         return Piece(
             id = id,

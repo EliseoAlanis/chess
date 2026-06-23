@@ -1,8 +1,11 @@
 package edu.austral.dissis.chess.rules.basic
 
-import edu.austral.dissis.chess.board.Board
-import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.pieces.Color
+import edu.austral.dissis.common.rules.BasicRule
+
+
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.pieces.Color
 import kotlin.math.sign
 
 class ClearPathRule : BasicRule {
@@ -39,3 +42,5 @@ class ClearPathRule : BasicRule {
         }.takeWhile { it != dest && it.row in beginning..end && it.col in beginning..end }.toList()
     }
 }
+
+

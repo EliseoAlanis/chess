@@ -1,10 +1,10 @@
 package edu.austral.dissis.chess.rules.basic
 
-import edu.austral.dissis.chess.board.Board
-import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.movement.validator.AttackDetector
-import edu.austral.dissis.chess.pieces.Color
-import edu.austral.dissis.chess.pieces.PieceType
+import edu.austral.dissis.common.rules.BasicRule
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.validator.AttackDetector
+import edu.austral.dissis.common.pieces.Color
 
 class NoSelfCheckRule(
     private val attackDetector: AttackDetector
@@ -23,3 +23,6 @@ class NoSelfCheckRule(
         return !attackDetector.isSquareAttackedByEnemy(simulatedBoard, myKingPos, currentTurn)
     }
 }
+
+
+

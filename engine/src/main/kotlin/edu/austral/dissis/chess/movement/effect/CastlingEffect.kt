@@ -1,38 +1,22 @@
 package edu.austral.dissis.chess.movement.effect
 
-import edu.austral.dissis.chess.board.Board
-import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.pieces.PieceType
-import kotlin.math.abs
+import edu.austral.dissis.common.movement.effect.PostMoveEffect
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.Position
 
-class CastlingEffect : PostMoveEffect {
+class CastlingEffect(
+    private val rookOrigin: Position,
+    private val rookDestination: Position
+) : PostMoveEffect {
     override fun apply(
         previousBoard: Board,
         currentBoard: Board,
         origin: Position,
         destination: Position,
     ): Board {
-        val piece = currentBoard.getPieceAt(destination)
-
-        if (piece.pieceType != PieceType.KING) return currentBoard
-
-        val isCastling = abs(destination.col - origin.col) == 2
-
-        if (isCastling) {
-            val isKingSide = destination.col > origin.col
-            val rookOriginCol = if (isKingSide) currentBoard.size.columns - 1 else 0
-            val rookDestinationCol = if (isKingSide) destination.col - 1 else destination.col + 1
-
-            val rookOrigin = Position(origin.row, rookOriginCol)
-            val rookDestination = Position(origin.row, rookDestinationCol)
-
-            if (currentBoard.hasPieceAt(rookOrigin)) {
-                val rook = currentBoard.getPieceAt(rookOrigin)
-                val newPositions = currentBoard.positions - rookOrigin + (rookDestination to rook)
-                return currentBoard.copy(positions = newPositions)
-            }
-        }
-
-        return currentBoard
+        if (!currentBoard.hasPieceAt(rookOrigin)) return currentBoard
+        val rook = currentBoard.getPieceAt(rookOrigin)
+        val newPositions = currentBoard.getPositions() - rookOrigin + (rookDestination to rook)
+        return currentBoard.copy(positions = newPositions)
     }
 }

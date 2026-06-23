@@ -1,10 +1,13 @@
 package edu.austral.dissis.chess.movement.effect
 
-import edu.austral.dissis.chess.board.Board
-import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.pieces.Color
 import edu.austral.dissis.chess.pieces.PieceFactory
 import edu.austral.dissis.chess.pieces.PieceType
+
+import edu.austral.dissis.common.movement.effect.PostMoveEffect
+
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.pieces.Color
 
 class PromotionEffect : PostMoveEffect {
     override fun apply(
@@ -18,15 +21,15 @@ class PromotionEffect : PostMoveEffect {
         val piece = currentBoard.getPieceAt(destination)
         if (piece.pieceType != PieceType.PAWN) return currentBoard
 
-        // Check if pawn reached the end of the board
-        val promotionRow = if (piece.color == Color.BLANCO) 0 else currentBoard.size.rows - 1
+        val promotionRow = if (piece.color == Color.WHITE) currentBoard.size.rows else 1
 
         if (destination.row == promotionRow) {
             val promotedPiece = PieceFactory.createQueen(piece.id, piece.color)
-            val newPositions = currentBoard.positions + (destination to promotedPiece)
+            val newPositions = currentBoard.getPositions() + (destination to promotedPiece)
             return currentBoard.copy(positions = newPositions)
         }
 
         return currentBoard
     }
 }
+

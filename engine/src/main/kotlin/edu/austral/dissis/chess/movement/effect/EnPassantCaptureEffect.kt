@@ -1,29 +1,19 @@
 package edu.austral.dissis.chess.movement.effect
 
-import edu.austral.dissis.chess.board.Board
-import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.pieces.PieceType
+import edu.austral.dissis.common.movement.effect.PostMoveEffect
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.Position
 
-class EnPassantCaptureEffect : PostMoveEffect {
+class EnPassantCaptureEffect(
+    private val capturedPawnPosition: Position
+) : PostMoveEffect {
     override fun apply(
         previousBoard: Board,
         currentBoard: Board,
         origin: Position,
         destination: Position,
     ): Board {
-        val piece = currentBoard.getPieceAt(destination)
-
-        if (piece.pieceType != PieceType.PAWN) return currentBoard
-
-        val isDiagonalMove = origin.col != destination.col
-        val destinationWasEmpty = !previousBoard.hasPieceAt(destination)
-
-        if (isDiagonalMove && destinationWasEmpty) {
-            val capturedPawnPosition = Position(origin.row, destination.col)
-            val newPositions = currentBoard.positions - capturedPawnPosition
-            return currentBoard.copy(positions = newPositions)
-        }
-
-        return currentBoard
+        val newPositions = currentBoard.getPositions() - capturedPawnPosition
+        return currentBoard.copy(positions = newPositions)
     }
 }

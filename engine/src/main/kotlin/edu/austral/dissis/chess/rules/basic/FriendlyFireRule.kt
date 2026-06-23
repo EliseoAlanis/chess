@@ -1,8 +1,9 @@
 package edu.austral.dissis.chess.rules.basic
 
-import edu.austral.dissis.chess.board.Board
-import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.pieces.Color
+import edu.austral.dissis.common.rules.BasicRule
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.pieces.Color
 
 class FriendlyFireRule : BasicRule {
     override fun isValid(
@@ -15,3 +16,4 @@ class FriendlyFireRule : BasicRule {
         return board.getPieceAt(destination).color != currentTurn
     }
 }
+

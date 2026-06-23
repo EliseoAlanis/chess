@@ -72,7 +72,7 @@ class ChessEngineAdapter(
 
     private fun toPlayingState(): GameState.Playing =
         GameState.Playing(
-            boardSize = UIBoardSize(domainGame.board.size.columns, domainGame.board.size.rows),
+            boardSize = UIBoardSize(domainGame.board.getSize().columns, domainGame.board.getSize().rows),
             pieces = domainGame.board.toUIPieces(),
             currentPlayer = domainGame.turnManager.currentTurn.toUIColor(),
             canUndo = pastGames.isNotEmpty(),

@@ -1,28 +1,35 @@
 package edu.austral.dissis.chess.rules.special
 
-import edu.austral.dissis.chess.board.Board
-import edu.austral.dissis.chess.movement.MoveRecord
-import edu.austral.dissis.chess.movement.Position
-import edu.austral.dissis.chess.pieces.Color
-import edu.austral.dissis.chess.pieces.Piece
+import edu.austral.dissis.common.rules.SpecialRule
+import edu.austral.dissis.common.rules.RuleResult
+import edu.austral.dissis.chess.movement.effect.CastlingEffect
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.MoveRecord
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.pieces.Piece
 
 class CanCastleRule : SpecialRule {
-    override fun canExecute(
+    override fun tryExecute(
         board: Board,
         origin: Position,
         destination: Position,
         moveHistory: List<MoveRecord>,
-    ): Boolean {
+    ): RuleResult {
         val piece = board.getPieceAt(origin)
 
         val isValidKing = isCastlingAttempt(piece, origin, destination) && !hasPieceMoved(piece.id, moveHistory)
 
-        return isValidKing &&
-            isRookAvailableAndNotMoved(
-                board,
-                getRookPosition(origin, destination, board.size.columns),
-                moveHistory,
-            )
+        val rookOrigin = getRookPosition(origin, destination, board.size.columns)
+        
+        val canCastle = isValidKing && isRookAvailableAndNotMoved(board, rookOrigin, moveHistory)
+
+        if (!canCastle) return RuleResult.Invalid
+
+        val isKingSide = destination.col > origin.col
+        val rookDestinationCol = if (isKingSide) destination.col - 1 else destination.col + 1
+        val rookDestination = Position(origin.row, rookDestinationCol)
+
+        return RuleResult.Valid(listOf(CastlingEffect(rookOrigin, rookDestination)))
     }
 
     private fun isCastlingAttempt(
@@ -41,14 +48,13 @@ class CanCastleRule : SpecialRule {
         moveHistory: List<MoveRecord>,
     ): Boolean = moveHistory.any { it.piece.id == pieceId }
 
-    // un problema que si se mueve la torre por otro regla no funca
     private fun getRookPosition(
         origin: Position,
         destination: Position,
         totalColumns: Int,
     ): Position {
         val isKingSide = destination.col > origin.col
-        val rookCol = if (isKingSide) totalColumns - 1 else 0
+        val rookCol = if (isKingSide) totalColumns else 1
         return Position(origin.row, rookCol)
     }
 

@@ -1,6 +1,6 @@
 package edu.austral.dissis.chess.movement.factory
 
-import edu.austral.dissis.chess.movement.Movement
+import edu.austral.dissis.common.movement.Movement
 import edu.austral.dissis.chess.movement.atomics.DiagonalMovement
 import edu.austral.dissis.chess.movement.atomics.LShapeMovement
 import edu.austral.dissis.chess.movement.atomics.StraightMovement

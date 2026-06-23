@@ -1,7 +1,7 @@
 package edu.austral.dissis.chess.movement.atomics
 
-import edu.austral.dissis.chess.movement.Movement
-import edu.austral.dissis.chess.movement.Position
+import edu.austral.dissis.common.movement.Movement
+import edu.austral.dissis.common.movement.Position
 import kotlin.math.abs
 
 class ForwardDiagonalMovement(

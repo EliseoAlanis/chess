@@ -8,7 +8,6 @@ import edu.austral.dissis.chess.pieces.PieceType
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Color
-import edu.austral.dissis.common.rules.BasicRule
 import edu.austral.dissis.chess.rules.basic.ClearPathRule
 
 class AttackDetector (
@@ -27,7 +26,7 @@ class AttackDetector (
         board: Board,
         color: Color,
     ): Position? =
-        board.positions.entries
+        board.getPositions().entries
             .find { (_, piece) ->
                 piece.pieceType == PieceType.KING && piece.color == color
             }?.key
@@ -37,7 +36,7 @@ class AttackDetector (
         targetPos: Position,
         myColor: Color,
     ): Boolean {
-        val enemyPositions = board.positions.filterValues { it.color != myColor }
+        val enemyPositions = board.getPositions().filterValues { it.color != myColor }
 
         for ((enemyPos, enemyPiece) in enemyPositions) {
             if (enemyPiece.isValidMovePattern(enemyPos, targetPos, isCapture = true)) {

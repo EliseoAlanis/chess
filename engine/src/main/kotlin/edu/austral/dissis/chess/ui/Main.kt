@@ -33,7 +33,8 @@ class ChessGameApplication : Application() {
     }
 
     private fun setupGameAndApplier(): Pair<Game, edu.austral.dissis.common.movement.applier.MoveApplier> {
-        return edu.austral.dissis.chess.game.ChessGameFactory.createDefaultGameAndApplier()
+        val factory: edu.austral.dissis.common.game.GameFactory = edu.austral.dissis.chess.game.ClassicChessFactory()
+        return factory.createGame()
     }
 
     private fun setupAdapter(game: Game, applier: edu.austral.dissis.common.movement.applier.MoveApplier): ChessEngineAdapter {

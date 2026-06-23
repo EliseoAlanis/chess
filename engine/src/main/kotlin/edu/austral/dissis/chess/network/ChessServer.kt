@@ -72,6 +72,8 @@ class ChessServer(
         return GameStatePayload(
             pieces = pieces,
             currentPlayer = engine.currentGame.turnManager.currentTurn.name,
+            boardCols = engine.currentGame.board.size.columns,
+            boardRows = engine.currentGame.board.size.rows,
         )
     }
 

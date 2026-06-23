@@ -67,8 +67,8 @@ class EngineAdapter(
     }
 
     private fun checkForGameOver(status: edu.austral.dissis.common.game.GameStatus): GameState? {
-        val uiWhite = edu.austral.dissis.chess.gui.PlayerColor.WHITE
-        val uiBlack = edu.austral.dissis.chess.gui.PlayerColor.BLACK
+        val uiWhite = PlayerColor.WHITE
+        val uiBlack = PlayerColor.BLACK
         return when (status) {
             edu.austral.dissis.common.game.GameStatus.WHITE_WINS -> GameState.GameOver(uiWhite)
             edu.austral.dissis.common.game.GameStatus.BLACK_WINS -> GameState.GameOver(uiBlack)

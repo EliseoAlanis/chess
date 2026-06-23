@@ -48,7 +48,7 @@ class NetworkAdapter(
             return GameState.GameOver(winner)
         }
 
-        val boardSize = BoardSize(8, 8)
+        val boardSize = BoardSize(payload.boardCols, payload.boardRows)
         val pieces = payload.pieces.map { p ->
             ChessPiece(
                 id = p.id,

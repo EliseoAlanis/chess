@@ -20,6 +20,8 @@ data class GameStatePayload(
     var currentPlayer: String = "",
     var isGameOver: Boolean = false,
     var winnerColor: String? = null,
+    var boardCols: Int = 8,
+    var boardRows: Int = 8,
 )
 
 data class InitialConnectionPayload(

@@ -7,7 +7,11 @@ import edu.austral.dissis.chess.movement.applier.DefaultMoveApplier
 import edu.austral.dissis.chess.movement.effect.PromotionEffect
 import edu.austral.dissis.chess.movement.validator.AttackDetector
 import edu.austral.dissis.common.pieces.Color
-import edu.austral.dissis.chess.rules.basic.*
+import edu.austral.dissis.chess.rules.basic.BoardLimitsRule
+import edu.austral.dissis.chess.rules.basic.ClearPathRule
+import edu.austral.dissis.chess.rules.basic.CorrectTurnRule
+import edu.austral.dissis.chess.rules.basic.FriendlyFireRule
+import edu.austral.dissis.chess.rules.basic.NoSelfCheckRule
 import edu.austral.dissis.chess.rules.special.CanCastleRule
 import edu.austral.dissis.chess.rules.special.EnPassantRule
 import edu.austral.dissis.chess.rules.special.PawnInitialDoubleMovementRule
@@ -16,8 +20,6 @@ import edu.austral.dissis.chess.turn.StandardTurnManager
 import edu.austral.dissis.common.game.GameFactory
 import edu.austral.dissis.common.board.BoardFactory
 import edu.austral.dissis.chess.board.ClassicBoardFactory
-import edu.austral.dissis.chess.movement.effect.CastlingEffect
-import edu.austral.dissis.chess.movement.effect.EnPassantCaptureEffect
 
 class ClassicChessFactory(
     private val boardFactory: BoardFactory = ClassicBoardFactory()

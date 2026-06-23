@@ -28,14 +28,7 @@ class ChessServer(
                             println("Cliente conectado al server: \$clientId")
                             clients.add(clientId)
 
-                            // Lógica para asignar colores:
-                            // 1er cliente conectado a Netty: NEGRAS (el servidor como app juega de BLANCAS, pero el server de Netty no distingue esto).
-                            // Asumiremos que la UI del servidor levanta el Server y luego levanta un Client local.
-                            // El 1er cliente (local) -> BLANCAS
-                            // El 2do cliente (remoto) -> NEGRAS
-                            // Resto -> SPECTATOR
-
-                            broadcastState() // Enviar estado al conectarse
+                            broadcastState()
                         }
 
                         override fun handleClientConnectionClosed(clientId: String) {
@@ -43,7 +36,8 @@ class ChessServer(
                             clients.remove(clientId)
                         }
                     },
-                ).addMessageListener("move", object : TypeReference<Message<MovePayload>>() {}, MoveListener())
+                ).addMessageListener("move",
+                    object : TypeReference<Message<MovePayload>>() {}, MoveListener())
                 .build()
     }
 

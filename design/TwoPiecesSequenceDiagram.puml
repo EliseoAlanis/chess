@@ -1,0 +1,87 @@
+@startuml
+autonumber
+actor User
+
+participant "Adapter : EngineAdapter" as Adapter
+participant "Engine : GameEngine" as Engine
+participant "Applier : BaseMoveApplier" as Applier
+participant "Validator : MoveValidator" as Validator
+participant "Board : Board" as Board
+participant "Rook : Piece" as Rook
+participant "Knight : Piece" as Knight
+
+== Movimiento 1: Torre en Línea Recta ==
+User -> Adapter : handleMove(Move(a1 -> a4))
+activate Adapter
+
+Adapter -> Engine : applyMove(Path(a1, a4))
+activate Engine
+
+Engine -> Applier : executeMove(currentGame, Path(a1, a4))
+activate Applier
+
+Applier -> Validator : validateMove(board, WHITE, history, Path(a1, a4))
+activate Validator
+
+Validator -> Board : getPieceAt(a1)
+Board --> Validator : Rook
+
+Validator -> Rook : isValidMovePattern(Path(a1, a4))
+Rook --> Validator : true (StraightMovement checkea trayectoria)
+
+Validator --> Applier : RuleResult.Valid(effects)
+deactivate Validator
+
+Applier -> Board : movePiece(Path(a1, a4))
+activate Board
+Board --> Applier : newBoard
+deactivate Board
+
+Applier -> Applier : advanceTurnManager()
+Applier --> Engine : MoveResult.Success(newGame)
+deactivate Applier
+
+Engine --> Adapter : Pair(nextEngine, Success)
+deactivate Engine
+
+Adapter --> User : GameState.Playing (Turno: NEGRO)
+deactivate Adapter
+
+== Movimiento 2: Caballo saltando (Forma de L) ==
+User -> Adapter : handleMove(Move(b8 -> c6))
+activate Adapter
+
+Adapter -> Engine : applyMove(Path(b8, c6))
+activate Engine
+
+Engine -> Applier : executeMove(currentGame, Path(b8, c6))
+activate Applier
+
+Applier -> Validator : validateMove(board, BLACK, history, Path(b8, c6))
+activate Validator
+
+Validator -> Board : getPieceAt(b8)
+Board --> Validator : Knight
+
+Validator -> Knight : isValidMovePattern(Path(b8, c6))
+Knight --> Validator : true (LShapeMovement checkea trayectoria)
+
+Validator --> Applier : RuleResult.Valid(effects)
+deactivate Validator
+
+Applier -> Board : movePiece(Path(b8, c6))
+activate Board
+Board --> Applier : newBoard
+deactivate Board
+
+Applier -> Applier : advanceTurnManager()
+Applier --> Engine : MoveResult.Success(newGame)
+deactivate Applier
+
+Engine --> Adapter : Pair(nextEngine, Success)
+deactivate Engine
+
+Adapter --> User : GameState.Playing (Turno: BLANCO)
+deactivate Adapter
+
+@enduml

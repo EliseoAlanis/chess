@@ -1,0 +1,191 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package "game" {
+class Game {
+  - board: Board
+  - basicRules: List<BasicRule>
+  - turnManager: TurnManager
+  - moveHistory: List<MoveRecord>
+  - moveValidator: MoveValidator
+  - postMoveEffects: List<PostMoveEffect>
+  - winConditions: List<WinCondition>
+  - status: GameStatus
+  + playMove(origin: Position, destination: Position): MoveResult
+}
+
+enum GameStatus {
+  WHITE_WINS
+  BLACK_WINS
+  DRAW
+}
+
+interface MoveResult
+class Success implements MoveResult {
+  + newGameState: Game
+}
+class Failure implements MoveResult {
+  + reason: String
+}
+
+interface WinCondition {
+  + checkStatus(game: Game): GameStatus?
+}
+class CheckmateCondition implements WinCondition
+}
+
+package "board" {
+class Board {
+  - positions: Map<Position, Piece>
+  - size: BoardSize
+  + getPieceAt(pos: Position): Piece
+  + hasPieceAt(pos: Position): Boolean
+}
+
+class BoardSize {
+  + columns: Int
+  + rows: Int
+}
+
+interface BoardInitializer {
+  + generateInitialPositions(): Map<Position, Piece>
+}
+class ClassicBoardInitializer implements BoardInitializer
+}
+
+package "pieces" {
+class Piece {
+  + id: String
+  + color: Color
+  + pieceType: PieceType
+  + movements: Movement
+  + captureMovements: Movement
+  + canJump: Boolean
+  + isValidMovePattern(origin, dest, isCapture): Boolean
+}
+
+enum PieceType {
+  PAWN
+  ROOK
+  KNIGHT
+  BISHOP
+  QUEEN
+  KING
+}
+
+enum Color {
+  BLANCO
+  NEGRO
+}
+
+class PieceFactory {
+  {static} + createPawn(id, color): Piece
+  {static} + createRook(id, color): Piece
+  {static} + createKnight(id, color): Piece
+  {static} + createBishop(id, color): Piece
+  {static} + createQueen(id, color): Piece
+  {static} + createKing(id, color): Piece
+}
+}
+
+package "movement" {
+class Position {
+  + row: Int
+  + col: Int
+}
+
+class MoveRecord {
+  + piece: Piece
+  + origin: Position
+  + destination: Position
+}
+
+interface Movement {
+  + checkTrajectory(origin: Position, destination: Position): Boolean
+}
+
+package "atomics" {
+   class ForwardMovement implements Movement
+   class DiagonalMovement implements Movement
+   class StraightMovement implements Movement
+   class LShapeMovement implements Movement
+   class ForwardDiagonalMovement implements Movement
+}
+
+package "composite" {
+   class CompositeMovement implements Movement {
+       - movements: List<Movement>
+   }
+}
+
+package "effect" {
+   interface PostMoveEffect {
+       + apply(prevBoard: Board, currentBoard: Board, origin: Position, destination: Position): Board
+   }
+   class PromotionEffect implements PostMoveEffect
+   class CastlingEffect implements PostMoveEffect
+   class EnPassantCaptureEffect implements PostMoveEffect
+}
+
+package "validator" {
+   class MoveValidator {
+       - basicRules: List<BasicRule>
+       - specialRules: List<SpecialRule>
+       + canMove(board, color, origin, dest, history): Boolean
+   }
+}
+}
+
+package "rules" {
+interface BasicRule {
+  + isValid(board: Board, origin: Position, destination: Position, currentTurn: Color): Boolean
+}
+
+interface SpecialRule {
+  + canExecute(board: Board, origin: Position, destination: Position, moveHistory: List<MoveRecord>): Boolean
+}
+
+package "basic" {
+   class BoardLimitsRule implements BasicRule
+   class ClearPathRule implements BasicRule
+   class CorrectTurnRule implements BasicRule
+   class FriendlyFireRule implements BasicRule
+   class NoSelfCheckRule implements BasicRule
+}
+
+package "special" {
+   class CanCastleRule implements SpecialRule
+   class EnPassantRule implements SpecialRule
+   class PawnInitialDoubleMovementRule implements SpecialRule
+}
+}
+
+package "turn" {
+interface TurnManager {
+  + currentTurn: Color
+  + nextTurn(): TurnManager
+}
+
+class StandardTurnManager implements TurnManager
+}
+
+Game *-- Board
+Game *-- MoveValidator
+Game *-- TurnManager
+Game *-- GameStatus
+Game o-- MoveRecord
+Game o-- PostMoveEffect
+Game o-- WinCondition
+
+Board *-- BoardSize
+Board o-- Position
+Board o-- Piece
+
+Piece *-- PieceType
+Piece *-- Color
+Piece *-- Movement
+
+MoveValidator o-- BasicRule
+MoveValidator o-- SpecialRule
+
+@enduml

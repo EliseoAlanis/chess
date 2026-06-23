@@ -37,7 +37,8 @@ class CanCastleRule : SpecialRule {
         path: Path,
     ): Boolean {
         val isKing = piece.pieceType == edu.austral.dissis.chess.pieces.PieceType.KING
-        val isHorizontalTwoSteps = path.origin.row == path.destination.row && Math.abs(path.destination.col - path.origin.col) == 2
+        val isHorizontalTwoSteps = path.origin.row == path.destination.row
+                && Math.abs(path.destination.col - path.origin.col) == 2
 
         return isKing && isHorizontalTwoSteps
     }

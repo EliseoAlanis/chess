@@ -7,4 +7,6 @@ object PieceType {
     const val BISHOP = "bishop"
     const val QUEEN = "queen"
     const val KING = "king"
+    const val CHANCELLOR = "chancellor"
+    const val ARCHBISHOP = "archbishop"
 }

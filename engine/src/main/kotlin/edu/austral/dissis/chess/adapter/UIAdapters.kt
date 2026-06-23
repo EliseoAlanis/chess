@@ -18,7 +18,11 @@ fun DomainPosition.toUIPosition(): UIPosition = UIPosition(this.row, this.col)
 fun UIPosition.toDomainPosition(): DomainPosition = DomainPosition(this.row, this.column)
 fun Board.toUIPieces(): List<ChessPiece> {
     return this.positions.map { (domainPos, piece) ->
-        val pieceName = piece.pieceType.lowercase()
+        val pieceName = when (piece.pieceType.lowercase()) {
+            "chancellor" -> "queen"
+            "archbishop" -> "knight"
+            else -> piece.pieceType.lowercase()
+        }
         // La clase ChessPiece de la UI guarda la posiciÃ³n internamente
         ChessPiece(
             id = piece.id,

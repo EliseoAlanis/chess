@@ -47,4 +47,14 @@ object PieceFactory {
         id: String,
         color: Color,
     ): Piece = Piece(id, color, PieceType.KING, movements = MovementFactory.createKingMovement())
+
+    fun createChancellor(
+        id: String,
+        color: Color,
+    ): Piece = Piece(id, color, PieceType.CHANCELLOR, movements = MovementFactory.createChancellorMovement())
+
+    fun createArchbishop(
+        id: String,
+        color: Color,
+    ): Piece = Piece(id,color, PieceType.ARCHBISHOP, movements = MovementFactory.createArchbishopMovement())
 }

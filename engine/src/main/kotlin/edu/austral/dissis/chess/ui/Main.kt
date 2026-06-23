@@ -38,7 +38,8 @@ class ChessGameApplication : Application() {
     }
 
     private fun setupAdapter(game: Game, applier: edu.austral.dissis.common.movement.applier.MoveApplier): ChessEngineAdapter {
-        return ChessEngineAdapter(game, applier)
+        val engine = edu.austral.dissis.common.game.GameEngine(applier, game)
+        return ChessEngineAdapter(engine)
     }
 
     private fun setupUI(adapter: ChessEngineAdapter): GameView {

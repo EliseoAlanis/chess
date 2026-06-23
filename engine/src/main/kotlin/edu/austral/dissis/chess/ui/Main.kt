@@ -9,6 +9,16 @@ import edu.austral.dissis.chess.gui.DefaultImageResolver
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.stage.Stage
+import edu.austral.dissis.chess.network.ChessServer
+import edu.austral.dissis.chess.network.ChessClient
+import edu.austral.dissis.chess.network.NetworkAdapter
+
+object NetworkConfig {
+    // CAMBIAR A FALSE para arrancar solo como cliente remoto
+    const val IS_SERVER = true
+    const val SERVER_IP = "localhost"
+    const val SERVER_PORT = 8080
+}
 
 fun main() {
     Application.launch(ChessGameApplication::class.java)
@@ -24,13 +34,21 @@ class ChessGameApplication : Application() {
     override fun start(primaryStage: Stage) {
         primaryStage.title = GAME_TITLE
         
-        val (game, applier) = setupGameAndApplier()
-        val engine = edu.austral.dissis.common.game.GameEngine(applier, game)
-        val adapter = setupAdapter(engine)
+        if (NetworkConfig.IS_SERVER) {
+            val (game, applier) = setupGameAndApplier()
+            val engine = edu.austral.dissis.common.game.GameEngine(applier, game)
+            val server = ChessServer(engine)
+            server.start()
+        }
+
+        val client = ChessClient(NetworkConfig.SERVER_IP, NetworkConfig.SERVER_PORT)
+        val adapter = setupNetworkAdapter(client)
         val view = setupUI(adapter)
 
         primaryStage.scene = Scene(view.pane())
         primaryStage.show()
+
+        client.connect()
     }
 
     private fun setupGameAndApplier(): Pair<Game, edu.austral.dissis.common.movement.applier.MoveApplier> {
@@ -38,8 +56,8 @@ class ChessGameApplication : Application() {
         return factory.createGame()
     }
 
-    private fun setupAdapter(engine: edu.austral.dissis.common.game.GameEngine): EngineAdapter {
-        return EngineAdapter(engine) { pieceType ->
+    private fun setupNetworkAdapter(client: ChessClient): NetworkAdapter {
+        return NetworkAdapter(client) { pieceType ->
             when (pieceType) {
                 "chancellor" -> "queen"
                 "archbishop" -> "knight"
@@ -48,7 +66,7 @@ class ChessGameApplication : Application() {
         }
     }
 
-    private fun setupUI(adapter: EngineAdapter): GameView {
+    private fun setupUI(adapter: NetworkAdapter): GameView {
         val view = GameViewFactory.create(imageResolver)
         
         adapter.process(view.inputEvents())

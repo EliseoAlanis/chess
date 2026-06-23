@@ -3,12 +3,12 @@ package edu.austral.dissis.common.rules
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.MoveRecord
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.Path
 
 interface SpecialRule {
     fun tryExecute(
         board: Board,
-        origin: Position,
-        destination: Position,
+        path: Path,
         moveHistory: List<MoveRecord>,
     ): RuleResult
 }

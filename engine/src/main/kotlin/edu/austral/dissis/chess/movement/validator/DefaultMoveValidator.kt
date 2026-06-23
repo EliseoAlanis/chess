@@ -2,6 +2,7 @@ package edu.austral.dissis.chess.movement.validator
 
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.MoveRecord
+import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.validator.MoveValidator
 import edu.austral.dissis.common.pieces.Color
@@ -17,41 +18,39 @@ class DefaultMoveValidator(
     override fun validateMove(
         board: Board,
         turn: Color,
-        origin: Position,
-        destination: Position,
         history: List<MoveRecord>,
+        path: Path,
     ): RuleResult {
-        if (!isBasicValidationPassed(board, origin, destination, turn)) return RuleResult.Invalid
-        if (isValidStandardMove(board, origin, destination)) return RuleResult.Valid()
+        if (!isBasicValidationPassed(board, path, turn)) return RuleResult.Invalid
+        if (isValidStandardMove(board, path)) return RuleResult.Valid()
         
-        return trySpecialRules(board, origin, destination, history)
+        return trySpecialRules(board, path, history)
     }
 
     override fun canMove(
         board: Board,
         turn: Color,
-        origin: Position,
-        destination: Position,
+        path: Path,
         history: List<MoveRecord>,
     ): Boolean {
-        return validateMove(board, turn, origin, destination, history) is RuleResult.Valid
+        return validateMove(board, turn, history, path) is RuleResult.Valid
     }
 
-    private fun isBasicValidationPassed(board: Board, origin: Position, destination: Position, turn: Color): Boolean {
-        return board.hasPieceAt(origin) && basicRules.all { rule -> 
-            rule.isValid(board, origin, destination, turn) 
+    private fun isBasicValidationPassed(board: Board, path: Path, turn: Color): Boolean {
+        return board.hasPieceAt(path.origin) && basicRules.all { rule ->
+            rule.isValid(board, path, turn)
         }
     }
 
-    private fun isValidStandardMove(board: Board, origin: Position, destination: Position): Boolean {
-        val piece = board.getPieceAt(origin)
-        val isCapture = board.hasPieceAt(destination)
-        return piece.isValidMovePattern(origin, destination, isCapture)
+    private fun isValidStandardMove(board: Board, path: Path): Boolean {
+        val piece = board.getPieceAt(path.origin)
+        val isCapture = board.hasPieceAt(path.destination)
+        return piece.isValidMovePattern(path, isCapture)
     }
 
-    private fun trySpecialRules(board: Board, origin: Position, destination: Position, history: List<MoveRecord>): RuleResult {
+    private fun trySpecialRules(board: Board, path: Path, history: List<MoveRecord>): RuleResult {
         for (rule in specialRules) {
-            val result = rule.tryExecute(board, origin, destination, history)
+            val result = rule.tryExecute(board, path, history)
             if (result is RuleResult.Valid) {
                 return result
             }

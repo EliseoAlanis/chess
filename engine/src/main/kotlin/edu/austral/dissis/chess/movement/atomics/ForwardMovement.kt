@@ -2,16 +2,16 @@ package edu.austral.dissis.chess.movement.atomics
 
 import edu.austral.dissis.common.movement.Movement
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.Path
 
 class ForwardMovement(
     private val direction: Int,
 ) : Movement {
     override fun checkTrajectory(
-        origin: Position,
-        destination: Position,
+        path: Path,
     ): Boolean {
-        val rowDiff = destination.row - origin.row
-        val colDiff = destination.col - origin.col
+        val rowDiff = path.destination.row - path.origin.row
+        val colDiff = path.destination.col - path.origin.col
 
         return colDiff == 0 && rowDiff == direction
     }

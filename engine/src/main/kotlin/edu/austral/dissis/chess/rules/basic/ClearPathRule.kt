@@ -2,26 +2,25 @@ package edu.austral.dissis.chess.rules.basic
 
 import edu.austral.dissis.common.rules.BasicRule
 
-
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.pieces.Color
 import kotlin.math.sign
 
 class ClearPathRule : BasicRule {
     override fun isValid(
         board: Board,
-        origin: Position,
-        destination: Position,
+        path: Path,
         currentTurn: Color,
     ): Boolean {
-        val piece = board.getPieceAt(origin)
+        val piece = board.getPieceAt(path.origin)
 
         if (piece.canJump) return true
 
-        val path = getIntermediatePositions(origin, destination, board)
+        val intermediate = getIntermediatePositions(path.origin, path.destination, board)
 
-        return path.none { pos -> board.hasPieceAt(pos) }
+        return intermediate.none { pos -> board.hasPieceAt(pos) }
     }
 
     private fun getIntermediatePositions(
@@ -42,5 +41,3 @@ class ClearPathRule : BasicRule {
         }.takeWhile { it != dest && it.row in beginning..end && it.col in beginning..end }.toList()
     }
 }
-
-

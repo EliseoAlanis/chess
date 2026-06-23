@@ -6,39 +6,38 @@ import edu.austral.dissis.chess.movement.effect.CastlingEffect
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.MoveRecord
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.pieces.Piece
 
 class CanCastleRule : SpecialRule {
     override fun tryExecute(
         board: Board,
-        origin: Position,
-        destination: Position,
+        path: Path,
         moveHistory: List<MoveRecord>,
     ): RuleResult {
-        val piece = board.getPieceAt(origin)
+        val piece = board.getPieceAt(path.origin)
 
-        val isValidKing = isCastlingAttempt(piece, origin, destination) && !hasPieceMoved(piece.id, moveHistory)
+        val isValidKing = isCastlingAttempt(piece, path) && !hasPieceMoved(piece.id, moveHistory)
 
-        val rookOrigin = getRookPosition(origin, destination, board.size.columns)
+        val rookOrigin = getRookPosition(path, board.size.columns)
         
         val canCastle = isValidKing && isRookAvailableAndNotMoved(board, rookOrigin, moveHistory)
 
         if (!canCastle) return RuleResult.Invalid
 
-        val isKingSide = destination.col > origin.col
-        val rookDestinationCol = if (isKingSide) destination.col - 1 else destination.col + 1
-        val rookDestination = Position(origin.row, rookDestinationCol)
+        val isKingSide = path.destination.col > path.origin.col
+        val rookDestinationCol = if (isKingSide) path.destination.col - 1 else path.destination.col + 1
+        val rookDestination = Position(path.origin.row, rookDestinationCol)
 
         return RuleResult.Valid(listOf(CastlingEffect(rookOrigin, rookDestination)))
     }
 
     private fun isCastlingAttempt(
         piece: Piece,
-        origin: Position,
-        destination: Position,
+        path: Path,
     ): Boolean {
         val isKing = piece.pieceType == edu.austral.dissis.chess.pieces.PieceType.KING
-        val isHorizontalTwoSteps = origin.row == destination.row && Math.abs(destination.col - origin.col) == 2
+        val isHorizontalTwoSteps = path.origin.row == path.destination.row && Math.abs(path.destination.col - path.origin.col) == 2
 
         return isKing && isHorizontalTwoSteps
     }
@@ -49,13 +48,12 @@ class CanCastleRule : SpecialRule {
     ): Boolean = moveHistory.any { it.piece.id == pieceId }
 
     private fun getRookPosition(
-        origin: Position,
-        destination: Position,
+        path: Path,
         totalColumns: Int,
     ): Position {
-        val isKingSide = destination.col > origin.col
+        val isKingSide = path.destination.col > path.origin.col
         val rookCol = if (isKingSide) totalColumns else 1
-        return Position(origin.row, rookCol)
+        return Position(path.origin.row, rookCol)
     }
 
     private fun isRookAvailableAndNotMoved(

@@ -5,6 +5,7 @@ import edu.austral.dissis.common.game.condition.WinCondition
 import edu.austral.dissis.common.game.Game
 import edu.austral.dissis.common.game.GameStatus
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.movement.validator.AttackDetector
 import edu.austral.dissis.common.pieces.Color
 
@@ -38,13 +39,13 @@ class CheckmateCondition(
         val size = game.board.size
         for (row in 1..size.rows) {
             for (col in 1..size.columns) {
-                if (isMoveValidAndSafe(game, color, origin, Position(row, col))) return true
+                if (isMoveValidAndSafe(game, color, Path(origin, Position(row, col)))) return true
             }
         }
         return false
     }
 
-    private fun isMoveValidAndSafe(game: Game, color: Color, origin: Position, destination: Position): Boolean {
-        return moveValidator.canMove(game.board, color, origin, destination, game.moveHistory)
+    private fun isMoveValidAndSafe(game: Game, color: Color, path: Path): Boolean {
+        return moveValidator.canMove(game.board, color, path, game.moveHistory)
     }
 }

@@ -3,6 +3,7 @@ package edu.austral.dissis.chess.movement.effect
 import edu.austral.dissis.common.movement.effect.PostMoveEffect
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.Path
 
 class CastlingEffect(
     private val rookOrigin: Position,
@@ -11,8 +12,7 @@ class CastlingEffect(
     override fun apply(
         previousBoard: Board,
         currentBoard: Board,
-        origin: Position,
-        destination: Position,
+        path: Path,
     ): Board {
         if (!currentBoard.hasPieceAt(rookOrigin)) return currentBoard
         val rook = currentBoard.getPieceAt(rookOrigin)

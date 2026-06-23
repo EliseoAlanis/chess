@@ -1,6 +1,7 @@
 package edu.austral.dissis.common.board
 
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.pieces.Piece
 
 data class Board(
@@ -8,12 +9,11 @@ data class Board(
     val size: BoardSize,
 ) {
     fun movePiece(
-        origin: Position,
-        destination: Position,
+        path: Path,
     ): Board {
-        val pieceToMove = positions[origin] ?: return this
+        val pieceToMove = positions[path.origin] ?: return this
 
-        val nextPositions = positions - origin + (destination to pieceToMove)
+        val nextPositions = positions - path.origin + (path.destination to pieceToMove)
 
         return this.copy(positions = nextPositions)
     }

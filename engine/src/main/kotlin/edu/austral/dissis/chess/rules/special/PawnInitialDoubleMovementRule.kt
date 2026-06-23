@@ -6,27 +6,27 @@ import edu.austral.dissis.chess.pieces.PieceType
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.MoveRecord
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.pieces.Color
 
 class PawnInitialDoubleMovementRule : SpecialRule {
     override fun tryExecute(
         board: Board,
-        origin: Position,
-        destination: Position,
+        path: Path,
         moveHistory: List<MoveRecord>,
     ): RuleResult {
-        val piece = board.getPieceAt(origin)
+        val piece = board.getPieceAt(path.origin)
 
         if (piece.pieceType != PieceType.PAWN || moveHistory.any { it.piece.id == piece.id }) return RuleResult.Invalid
 
         val direction = if (piece.color == Color.WHITE) 1 else -1
-        val isDoubleStep = destination.row == origin.row + (2 * direction) && destination.col == origin.col
+        val isDoubleStep = path.destination.row == path.origin.row + (2 * direction) && path.destination.col == path.origin.col
 
         if (!isDoubleStep) return RuleResult.Invalid
 
-        val intermediatePos = Position(origin.row + direction, origin.col)
+        val intermediatePos = Position(path.origin.row + direction, path.origin.col)
         
-        val canMove = !board.hasPieceAt(destination) && !board.hasPieceAt(intermediatePos)
+        val canMove = !board.hasPieceAt(path.destination) && !board.hasPieceAt(intermediatePos)
         return if (canMove) RuleResult.Valid() else RuleResult.Invalid
     }
 }

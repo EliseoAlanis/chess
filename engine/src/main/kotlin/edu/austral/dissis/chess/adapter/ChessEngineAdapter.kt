@@ -32,8 +32,9 @@ class ChessEngineAdapter(
     private fun handleMove(move: Move): GameState {
         val origin = move.from.toDomainPosition()
         val dest = move.to.toDomainPosition()
+        val path = edu.austral.dissis.common.movement.Path(origin, dest)
 
-        return when (val result = moveApplier.executeMove(domainGame, origin, dest)) {
+        return when (val result = moveApplier.executeMove(domainGame, path)) {
             is MoveResult.Success -> handleSuccess(result)
             is MoveResult.Failure -> GameState.InvalidMove(result.reason)
         }

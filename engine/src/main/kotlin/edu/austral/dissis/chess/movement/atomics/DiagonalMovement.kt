@@ -1,17 +1,17 @@
 package edu.austral.dissis.chess.movement.atomics
 import edu.austral.dissis.common.movement.Movement
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.Path
 import kotlin.math.abs
 
 class DiagonalMovement(
     private val maxSteps: Int = Int.MAX_VALUE,
 ) : Movement {
     override fun checkTrajectory(
-        origin: Position,
-        destination: Position,
+        path: Path,
     ): Boolean {
-        val rowDiff = abs(origin.row - destination.row)
-        val colDiff = abs(origin.col - destination.col)
+        val rowDiff = abs(path.origin.row - path.destination.row)
+        val colDiff = abs(path.origin.col - path.destination.col)
 
         return rowDiff == colDiff && rowDiff > 0 && rowDiff <= maxSteps
     }

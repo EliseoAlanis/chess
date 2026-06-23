@@ -2,17 +2,17 @@ package edu.austral.dissis.chess.movement.atomics
 
 import edu.austral.dissis.common.movement.Movement
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.Path
 import kotlin.math.abs
 
 class ForwardDiagonalMovement(
     private val direction: Int,
 ) : Movement {
     override fun checkTrajectory(
-        origin: Position,
-        destination: Position,
+        path: Path,
     ): Boolean {
-        val rowDiff = destination.row - origin.row
-        val colDiff = abs(destination.col - origin.col)
+        val rowDiff = path.destination.row - path.origin.row
+        val colDiff = abs(path.destination.col - path.origin.col)
 
         return rowDiff == direction && colDiff == 1
     }

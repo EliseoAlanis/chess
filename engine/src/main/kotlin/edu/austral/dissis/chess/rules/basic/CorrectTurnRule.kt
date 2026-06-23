@@ -4,17 +4,16 @@ import edu.austral.dissis.common.rules.BasicRule
 
 
 import edu.austral.dissis.common.board.Board
-import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.pieces.Color
 
 class CorrectTurnRule : BasicRule {
     override fun isValid(
         board: Board,
-        origin: Position,
-        destination: Position,
+        path: Path,
         currentTurn: Color,
     ): Boolean {
-        val pieceToMove = board.getPieceAt(origin)
+        val pieceToMove = board.getPieceAt(path.origin)
 
         return pieceToMove.color == currentTurn
     }

@@ -13,6 +13,7 @@ class DefaultMoveValidator(
     private val basicRules: List<BasicRule>,
     private val specialRules: List<SpecialRule> = emptyList(),
 ) : MoveValidator {
+    
     override fun validateMove(
         board: Board,
         turn: Color,
@@ -20,25 +21,10 @@ class DefaultMoveValidator(
         destination: Position,
         history: List<MoveRecord>,
     ): RuleResult {
-        if (!board.hasPieceAt(origin) || !basicRules.all { rule -> rule.isValid(board, origin, destination, turn) }) {
-            return RuleResult.Invalid
-        }
-
-        val piece = board.getPieceAt(origin)
-        val targetPiece = board.positions[destination]
-
-        val isCapture = targetPiece != null
-        if (piece.isValidMovePattern(origin, destination, isCapture)) {
-            return RuleResult.Valid()
-        }
-
-        for (rule in specialRules) {
-            if (rule.canExecute(board, origin, destination, history)) {
-                return RuleResult.Valid()
-            }
-        }
-
-        return RuleResult.Invalid
+        if (!isBasicValidationPassed(board, origin, destination, turn)) return RuleResult.Invalid
+        if (isValidStandardMove(board, origin, destination)) return RuleResult.Valid()
+        
+        return trySpecialRules(board, origin, destination, history)
     }
 
     override fun canMove(
@@ -49,5 +35,27 @@ class DefaultMoveValidator(
         history: List<MoveRecord>,
     ): Boolean {
         return validateMove(board, turn, origin, destination, history) is RuleResult.Valid
+    }
+
+    private fun isBasicValidationPassed(board: Board, origin: Position, destination: Position, turn: Color): Boolean {
+        return board.hasPieceAt(origin) && basicRules.all { rule -> 
+            rule.isValid(board, origin, destination, turn) 
+        }
+    }
+
+    private fun isValidStandardMove(board: Board, origin: Position, destination: Position): Boolean {
+        val piece = board.getPieceAt(origin)
+        val isCapture = board.hasPieceAt(destination)
+        return piece.isValidMovePattern(origin, destination, isCapture)
+    }
+
+    private fun trySpecialRules(board: Board, origin: Position, destination: Position, history: List<MoveRecord>): RuleResult {
+        for (rule in specialRules) {
+            val result = rule.tryExecute(board, origin, destination, history)
+            if (result is RuleResult.Valid) {
+                return result
+            }
+        }
+        return RuleResult.Invalid
     }
 }

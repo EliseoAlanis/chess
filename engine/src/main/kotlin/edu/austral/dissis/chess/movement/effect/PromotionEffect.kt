@@ -25,7 +25,7 @@ class PromotionEffect : PostMoveEffect {
 
         if (destination.row == promotionRow) {
             val promotedPiece = PieceFactory.createQueen(piece.id, piece.color)
-            val newPositions = currentBoard.getPositions() + (destination to promotedPiece)
+            val newPositions = currentBoard.positions + (destination to promotedPiece)
             return currentBoard.copy(positions = newPositions)
         }
 

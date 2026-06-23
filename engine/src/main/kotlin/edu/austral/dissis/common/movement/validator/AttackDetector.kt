@@ -26,7 +26,7 @@ class AttackDetector (
         board: Board,
         color: Color,
     ): Position? =
-        board.getPositions().entries
+        board.positions.entries
             .find { (_, piece) ->
                 piece.pieceType == PieceType.KING && piece.color == color
             }?.key
@@ -36,7 +36,7 @@ class AttackDetector (
         targetPos: Position,
         myColor: Color,
     ): Boolean {
-        val enemyPositions = board.getPositions().filterValues { it.color != myColor }
+        val enemyPositions = board.positions.filterValues { it.color != myColor }
 
         for ((enemyPos, enemyPiece) in enemyPositions) {
             if (enemyPiece.isValidMovePattern(enemyPos, targetPos, isCapture = true)) {

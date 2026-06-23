@@ -13,7 +13,7 @@ class EnPassantCaptureEffect(
         origin: Position,
         destination: Position,
     ): Board {
-        val newPositions = currentBoard.getPositions() - capturedPawnPosition
+        val newPositions = currentBoard.positions - capturedPawnPosition
         return currentBoard.copy(positions = newPositions)
     }
 }

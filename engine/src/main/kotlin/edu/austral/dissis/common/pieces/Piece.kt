@@ -5,12 +5,12 @@ import edu.austral.dissis.common.movement.Movement
 import edu.austral.dissis.common.movement.Position
 
 data class Piece(
-    private val id: String,
-    private val color: Color,
-    private val pieceType: String,
-    private val movements: Movement,
-    private val captureMovements: Movement = movements,
-    private val canJump: Boolean = false, //mandar a la mierda
+    val id: String,
+    val color: Color,
+    val pieceType: String,
+    val movements: Movement,
+    val captureMovements: Movement = movements,
+    val canJump: Boolean = false, //mandar a la mierda
 ) {
     fun isValidMovePattern(
         origin: Position,

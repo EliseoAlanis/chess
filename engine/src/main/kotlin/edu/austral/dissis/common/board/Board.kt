@@ -4,8 +4,8 @@ import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Piece
 
 data class Board(
-    private val positions: Map<Position, Piece> = mapOf(),
-    private val size: BoardSize,
+    val positions: Map<Position, Piece> = mapOf(),
+    val size: BoardSize,
 ) {
     fun movePiece(
         origin: Position,
@@ -21,8 +21,4 @@ data class Board(
     fun hasPieceAt(position: Position): Boolean = positions.containsKey(position)
 
     fun getPieceAt(position: Position): Piece = positions.getValue(position)
-
-    fun getPositions(): Map<Position, Piece> = positions
-
-    fun getSize(): BoardSize = size
 }

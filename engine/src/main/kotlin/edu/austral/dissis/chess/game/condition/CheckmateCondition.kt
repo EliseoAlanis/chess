@@ -30,7 +30,7 @@ class CheckmateCondition(
     }
 
     private fun hasAnyValidMove(game: Game, color: Color): Boolean {
-        val myPiecesPositions = game.board.getPositions().filterValues { it.color == color }.keys
+        val myPiecesPositions = game.board.positions.filterValues { it.color == color }.keys
         return myPiecesPositions.any { origin -> canPieceMoveToAnySquare(game, color, origin) }
     }
 

@@ -16,7 +16,7 @@ class CastlingEffect(
     ): Board {
         if (!currentBoard.hasPieceAt(rookOrigin)) return currentBoard
         val rook = currentBoard.getPieceAt(rookOrigin)
-        val newPositions = currentBoard.getPositions() - rookOrigin + (rookDestination to rook)
+        val newPositions = currentBoard.positions - rookOrigin + (rookDestination to rook)
         return currentBoard.copy(positions = newPositions)
     }
 }

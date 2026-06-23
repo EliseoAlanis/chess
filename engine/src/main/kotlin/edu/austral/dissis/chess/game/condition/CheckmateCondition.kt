@@ -8,7 +8,7 @@ import edu.austral.dissis.common.movement.MoveRecord
 import edu.austral.dissis.common.game.GameStatus
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.Path
-import edu.austral.dissis.common.movement.validator.AttackDetector
+import edu.austral.dissis.chess.movement.validator.AttackDetector
 import edu.austral.dissis.common.pieces.Color
 
 import edu.austral.dissis.common.movement.validator.MoveValidator

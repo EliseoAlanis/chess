@@ -6,7 +6,7 @@ import edu.austral.dissis.chess.game.condition.CheckmateCondition
 import edu.austral.dissis.common.movement.applier.MoveApplier
 import edu.austral.dissis.chess.movement.applier.DefaultMoveApplier
 import edu.austral.dissis.chess.movement.effect.PromotionEffect
-import edu.austral.dissis.common.movement.validator.AttackDetector
+import edu.austral.dissis.chess.movement.validator.AttackDetector
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.chess.rules.basic.*
 import edu.austral.dissis.chess.rules.special.CanCastleRule

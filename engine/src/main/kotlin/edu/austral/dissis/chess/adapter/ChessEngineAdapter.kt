@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.core.Observable
 import edu.austral.dissis.chess.gui.BoardSize as UIBoardSize
 
 class ChessEngineAdapter(
-    private val engine: GameEngine
+    private var engine: GameEngine
 ) {
     // Transforma el flujo de eventos de la UI en un flujo de estados del juego
     fun process(inputs: Observable<GameInputEvent>): Observable<GameState> =
@@ -21,12 +21,12 @@ class ChessEngineAdapter(
                 is GameInputEvent.MoveEvent -> handleMove(event.move)
 
                 GameInputEvent.Undo -> {
-                    engine.undo()
+                    engine = engine.undo()
                     toPlayingState()
                 }
 
                 GameInputEvent.Redo -> {
-                    engine.redo()
+                    engine = engine.redo()
                     toPlayingState()
                 }
             }
@@ -37,7 +37,10 @@ class ChessEngineAdapter(
         val dest = move.to.toDomainPosition()
         val path = edu.austral.dissis.common.movement.Path(origin, dest)
 
-        return when (val result = engine.applyMove(path)) {
+        val (nextEngine, result) = engine.applyMove(path)
+        engine = nextEngine
+
+        return when (result) {
             is MoveResult.Success -> checkForGameOver(engine.currentGame.status) ?: toPlayingState()
             is MoveResult.Failure -> GameState.InvalidMove(result.reason)
         }

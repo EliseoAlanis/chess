@@ -3,33 +3,47 @@ package edu.austral.dissis.common.game
 import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.movement.applier.MoveApplier
 
-class GameEngine(
-    private val moveApplier: MoveApplier,
-    var currentGame: Game,
-    private val pastGames: MutableList<Game> = mutableListOf(),
-    private val futureGames: MutableList<Game> = mutableListOf()
+data class GameEngine(
+    val moveApplier: MoveApplier,
+    val currentGame: Game,
+    val pastGames: List<Game> = emptyList(),
+    val futureGames: List<Game> = emptyList()
 ) {
-    fun applyMove(path: Path): MoveResult {
+    fun applyMove(path: Path): Pair<GameEngine, MoveResult> {
         val result = moveApplier.executeMove(currentGame, path)
-        if (result is MoveResult.Success) {
-            pastGames.add(currentGame)
-            futureGames.clear()
-            currentGame = result.newGameState
-        }
-        return result
-    }
-
-    fun undo() {
-        if (pastGames.isNotEmpty()) {
-            futureGames.add(currentGame)
-            currentGame = pastGames.removeAt(pastGames.size - 1)
+        return if (result is MoveResult.Success) {
+            val nextEngine = this.copy(
+                currentGame = result.newGameState,
+                pastGames = pastGames + currentGame,
+                futureGames = emptyList()
+            )
+            Pair(nextEngine, result)
+        } else {
+            Pair(this, result)
         }
     }
 
-    fun redo() {
-        if (futureGames.isNotEmpty()) {
-            pastGames.add(currentGame)
-            currentGame = futureGames.removeAt(futureGames.size - 1)
+    fun undo(): GameEngine {
+        return if (canUndo()) {
+            this.copy(
+                currentGame = pastGames.last(),
+                pastGames = pastGames.dropLast(1),
+                futureGames = futureGames + currentGame
+            )
+        } else {
+            this
+        }
+    }
+
+    fun redo(): GameEngine {
+        return if (canRedo()) {
+            this.copy(
+                currentGame = futureGames.last(),
+                pastGames = pastGames + currentGame,
+                futureGames = futureGames.dropLast(1)
+            )
+        } else {
+            this
         }
     }
 

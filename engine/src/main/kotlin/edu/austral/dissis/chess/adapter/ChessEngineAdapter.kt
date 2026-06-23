@@ -11,7 +11,9 @@ import edu.austral.dissis.chess.gui.BoardSize as UIBoardSize
 
 class ChessEngineAdapter(
     private var domainGame: Game,
-    private val moveApplier: MoveApplier
+    private val moveApplier: MoveApplier,
+    private var pastGames: MutableList<Game> = mutableListOf(),
+    private var futureGames: MutableList<Game> = mutableListOf()
 ) {
     // Transforma el flujo de eventos de la UI en un flujo de estados del juego
     fun process(inputs: Observable<GameInputEvent>): Observable<GameState> =
@@ -21,10 +23,9 @@ class ChessEngineAdapter(
 
                 is GameInputEvent.MoveEvent -> handleMove(event.move)
 
-                GameInputEvent.Undo -> toPlayingState()
+                GameInputEvent.Undo -> handleUndo()
 
-                // Ignorado por ahora
-                GameInputEvent.Redo -> toPlayingState() // Ignorado por ahora
+                GameInputEvent.Redo -> handleRedo()
             }
         }
 
@@ -39,6 +40,8 @@ class ChessEngineAdapter(
     }
 
     private fun handleSuccess(result: MoveResult.Success): GameState {
+        pastGames.add(domainGame)
+        futureGames.clear()
         domainGame = result.newGameState
         return checkForGameOver(domainGame.status) ?: toPlayingState()
     }
@@ -51,12 +54,28 @@ class ChessEngineAdapter(
         }
     }
 
+    private fun handleUndo(): GameState {
+        if (pastGames.isNotEmpty()) {
+            futureGames.add(domainGame)
+            domainGame = pastGames.removeAt(pastGames.size - 1)
+        }
+        return toPlayingState()
+    }
+
+    private fun handleRedo(): GameState {
+        if (futureGames.isNotEmpty()) {
+            pastGames.add(domainGame)
+            domainGame = futureGames.removeAt(futureGames.size - 1)
+        }
+        return toPlayingState()
+    }
+
     private fun toPlayingState(): GameState.Playing =
         GameState.Playing(
             boardSize = UIBoardSize(domainGame.board.size.columns, domainGame.board.size.rows),
             pieces = domainGame.board.toUIPieces(),
             currentPlayer = domainGame.turnManager.currentTurn.toUIColor(),
-            canUndo = false, // Lo dejamos en false hasta que implementes el Undo en tu dominio
-            canRedo = false,
+            canUndo = pastGames.isNotEmpty(),
+            canRedo = futureGames.isNotEmpty(),
         )
 }

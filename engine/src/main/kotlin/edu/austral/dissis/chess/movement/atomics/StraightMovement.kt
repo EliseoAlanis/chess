@@ -1,16 +1,14 @@
 package edu.austral.dissis.chess.movement.atomics
 
 import edu.austral.dissis.common.movement.Movement
-import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.Position
 import kotlin.math.abs
 
 class StraightMovement(
     private val maxSteps: Int = Int.MAX_VALUE,
 ) : Movement {
-    override fun checkTrajectory(
-        path: Path,
-    ): Boolean {
+    override fun checkTrajectory(path: Path): Boolean {
         val movesInRow = path.origin.row == path.destination.row
         val movesInColumn = path.origin.col == path.destination.col
 

@@ -1,12 +1,12 @@
 package edu.austral.dissis.checkers.board
 
+import edu.austral.dissis.checkers.pieces.CheckersPieceFactory
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.board.BoardInitializer
 import edu.austral.dissis.common.board.BoardSize
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.pieces.Piece
-import edu.austral.dissis.checkers.pieces.CheckersPieceFactory
 
 class CheckersBoardInitializer : BoardInitializer {
     companion object {
@@ -25,16 +25,18 @@ class CheckersBoardInitializer : BoardInitializer {
             for (col in 1..BOARD_SIZE) {
                 if ((row + col) % EVEN_DIVISOR == 0) {
                     if (row <= WHITE_ROWS_LIMIT) {
-                        val piece = CheckersPieceFactory.createMan(
-                            id = "W_MAN_${pieceIdCounter++}",
-                            color = Color.WHITE
-                        )
+                        val piece =
+                            CheckersPieceFactory.createMan(
+                                id = "W_MAN_${pieceIdCounter++}",
+                                color = Color.WHITE,
+                            )
                         positions[Position(row, col)] = piece
                     } else if (row >= BLACK_ROWS_START) {
-                        val piece = CheckersPieceFactory.createMan(
-                            id = "B_MAN_${pieceIdCounter++}",
-                            color = Color.BLACK
-                        )
+                        val piece =
+                            CheckersPieceFactory.createMan(
+                                id = "B_MAN_${pieceIdCounter++}",
+                                color = Color.BLACK,
+                            )
                         positions[Position(row, col)] = piece
                     }
                 }

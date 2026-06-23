@@ -1,18 +1,13 @@
 package edu.austral.dissis.chess.movement.validator
 
 import edu.austral.dissis.chess.pieces.PieceType
-
-
-
-
+import edu.austral.dissis.chess.rules.basic.ClearPathRule
 import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Color
-import edu.austral.dissis.chess.rules.basic.ClearPathRule
-import edu.austral.dissis.common.movement.Path
 
-class AttackDetector (
-){
+class AttackDetector {
     private val clearPathRule = ClearPathRule()
 
     fun isKingAttacked(
@@ -49,6 +44,3 @@ class AttackDetector (
         return false
     }
 }
-
-
-

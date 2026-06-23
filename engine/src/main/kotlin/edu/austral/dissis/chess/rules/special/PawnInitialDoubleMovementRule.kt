@@ -1,13 +1,13 @@
 package edu.austral.dissis.chess.rules.special
 
-import edu.austral.dissis.common.rules.SpecialRule
-import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.chess.pieces.PieceType
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.MoveRecord
-import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Color
+import edu.austral.dissis.common.rules.RuleResult
+import edu.austral.dissis.common.rules.SpecialRule
 
 class PawnInitialDoubleMovementRule : SpecialRule {
     override fun tryExecute(
@@ -25,7 +25,7 @@ class PawnInitialDoubleMovementRule : SpecialRule {
         if (!isDoubleStep) return RuleResult.Invalid
 
         val intermediatePos = Position(path.origin.row + direction, path.origin.col)
-        
+
         val canMove = !board.hasPieceAt(path.destination) && !board.hasPieceAt(intermediatePos)
         return if (canMove) RuleResult.Valid() else RuleResult.Invalid
     }

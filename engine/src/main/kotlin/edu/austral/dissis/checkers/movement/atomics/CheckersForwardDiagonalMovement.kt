@@ -6,7 +6,7 @@ import kotlin.math.abs
 
 class CheckersForwardDiagonalMovement(
     private val direction: Int,
-    private val maxSteps: Int = 1
+    private val maxSteps: Int = 1,
 ) : Movement {
     override fun checkTrajectory(path: Path): Boolean {
         val rowDiff = path.destination.row - path.origin.row

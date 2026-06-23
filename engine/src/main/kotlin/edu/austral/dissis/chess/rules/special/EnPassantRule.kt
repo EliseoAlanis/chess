@@ -1,16 +1,15 @@
 package edu.austral.dissis.chess.rules.special
 
-import edu.austral.dissis.common.rules.SpecialRule
-import edu.austral.dissis.common.rules.RuleResult
-import edu.austral.dissis.chess.pieces.PieceType
 import edu.austral.dissis.chess.movement.effect.EnPassantCaptureEffect
-
+import edu.austral.dissis.chess.pieces.PieceType
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.MoveRecord
-import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.pieces.Piece
+import edu.austral.dissis.common.rules.RuleResult
+import edu.austral.dissis.common.rules.SpecialRule
 import kotlin.math.abs
 
 class EnPassantRule : SpecialRule {
@@ -25,9 +24,9 @@ class EnPassantRule : SpecialRule {
         if (!isValidDiagonalMove(piece, path)) return RuleResult.Invalid
 
         val isValid = isValidEnemyPawnMove(moveHistory.last(), piece, path)
-        
+
         if (!isValid) return RuleResult.Invalid
-        
+
         val capturedPawnPosition = Position(path.origin.row, path.destination.col)
         return RuleResult.Valid(listOf(EnPassantCaptureEffect(capturedPawnPosition)))
     }

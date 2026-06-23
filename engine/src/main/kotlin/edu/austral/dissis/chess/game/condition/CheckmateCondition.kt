@@ -1,27 +1,23 @@
 package edu.austral.dissis.chess.game.condition
 
-import edu.austral.dissis.common.game.condition.WinCondition
-
-import edu.austral.dissis.common.board.Board
-import edu.austral.dissis.common.movement.MoveRecord
-
-import edu.austral.dissis.common.game.GameStatus
-import edu.austral.dissis.common.movement.Position
-import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.chess.movement.validator.AttackDetector
-import edu.austral.dissis.common.pieces.Color
-
+import edu.austral.dissis.common.board.Board
+import edu.austral.dissis.common.game.GameStatus
+import edu.austral.dissis.common.game.condition.WinCondition
+import edu.austral.dissis.common.movement.MoveRecord
+import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.validator.MoveValidator
+import edu.austral.dissis.common.pieces.Color
 
 class CheckmateCondition(
     private val moveValidator: MoveValidator,
-    private val attackDetector: AttackDetector
+    private val attackDetector: AttackDetector,
 ) : WinCondition {
-
     override fun checkStatus(
         board: Board,
         currentTurn: Color,
-        moveHistory: List<MoveRecord>
+        moveHistory: List<MoveRecord>,
     ): GameStatus {
         if (hasAnyValidMove(board, currentTurn, moveHistory)) return GameStatus.IN_PROGRESS
 
@@ -34,12 +30,21 @@ class CheckmateCondition(
         }
     }
 
-    private fun hasAnyValidMove(board: Board, color: Color, moveHistory: List<MoveRecord>): Boolean {
+    private fun hasAnyValidMove(
+        board: Board,
+        color: Color,
+        moveHistory: List<MoveRecord>,
+    ): Boolean {
         val myPiecesPositions = board.positions.filterValues { it.color == color }.keys
         return myPiecesPositions.any { origin -> canPieceMoveToAnySquare(board, color, origin, moveHistory) }
     }
 
-    private fun canPieceMoveToAnySquare(board: Board, color: Color, origin: Position, moveHistory: List<MoveRecord>): Boolean {
+    private fun canPieceMoveToAnySquare(
+        board: Board,
+        color: Color,
+        origin: Position,
+        moveHistory: List<MoveRecord>,
+    ): Boolean {
         val size = board.size
         for (row in 1..size.rows) {
             for (col in 1..size.columns) {
@@ -49,7 +54,10 @@ class CheckmateCondition(
         return false
     }
 
-    private fun isMoveValidAndSafe(board: Board, color: Color, path: Path, moveHistory: List<MoveRecord>): Boolean {
-        return moveValidator.canMove(board, color, path, moveHistory)
-    }
+    private fun isMoveValidAndSafe(
+        board: Board,
+        color: Color,
+        path: Path,
+        moveHistory: List<MoveRecord>,
+    ): Boolean = moveValidator.canMove(board, color, path, moveHistory)
 }

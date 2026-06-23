@@ -1,13 +1,13 @@
 package edu.austral.dissis.chess.movement.effect
 
-import edu.austral.dissis.common.movement.effect.PostMoveEffect
 import edu.austral.dissis.common.board.Board
-import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.effect.PostMoveEffect
 
 class CastlingEffect(
     private val rookOrigin: Position,
-    private val rookDestination: Position
+    private val rookDestination: Position,
 ) : PostMoveEffect {
     override fun apply(
         previousBoard: Board,

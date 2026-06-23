@@ -4,7 +4,7 @@ data class MovePayload(
     var fromRow: Int = 0,
     var fromCol: Int = 0,
     var toRow: Int = 0,
-    var toCol: Int = 0
+    var toCol: Int = 0,
 )
 
 data class PiecePayload(
@@ -12,17 +12,17 @@ data class PiecePayload(
     var color: String = "",
     var row: Int = 0,
     var col: Int = 0,
-    var pieceId: String = ""
+    var pieceId: String = "",
 )
 
 data class GameStatePayload(
     var pieces: List<PiecePayload> = emptyList(),
     var currentPlayer: String = "",
     var isGameOver: Boolean = false,
-    var winnerColor: String? = null
+    var winnerColor: String? = null,
 )
 
 data class InitialConnectionPayload(
     var assignedColor: String = "SPECTATOR", // "WHITE", "BLACK", "SPECTATOR"
-    var gameState: GameStatePayload = GameStatePayload()
+    var gameState: GameStatePayload = GameStatePayload(),
 )

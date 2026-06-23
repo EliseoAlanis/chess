@@ -10,7 +10,7 @@ class CheckersExtinctionCondition : WinCondition {
     override fun checkStatus(
         board: Board,
         currentTurn: Color,
-        moveHistory: List<MoveRecord>
+        moveHistory: List<MoveRecord>,
     ): GameStatus {
         val alivePiecesCount = board.positions.values.count { it.color == currentTurn }
 

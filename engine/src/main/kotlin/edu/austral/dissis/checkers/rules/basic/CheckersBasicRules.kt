@@ -1,9 +1,9 @@
 package edu.austral.dissis.checkers.rules.basic
 
-import edu.austral.dissis.common.rules.BasicRule
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.pieces.Color
+import edu.austral.dissis.common.rules.BasicRule
 
 class CorrectTurnRule : BasicRule {
     override fun isValid(
@@ -31,7 +31,5 @@ class EmptyDestinationRule : BasicRule {
         board: Board,
         path: Path,
         currentTurn: Color,
-    ): Boolean {
-        return !board.hasPieceAt(path.destination)
-    }
+    ): Boolean = !board.hasPieceAt(path.destination)
 }

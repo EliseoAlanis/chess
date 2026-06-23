@@ -1,13 +1,13 @@
 package edu.austral.dissis.chess.rules.special
 
-import edu.austral.dissis.common.rules.SpecialRule
-import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.chess.movement.effect.CastlingEffect
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.MoveRecord
-import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Piece
+import edu.austral.dissis.common.rules.RuleResult
+import edu.austral.dissis.common.rules.SpecialRule
 
 class CanCastleRule : SpecialRule {
     override fun tryExecute(
@@ -20,7 +20,7 @@ class CanCastleRule : SpecialRule {
         val isValidKing = isCastlingAttempt(piece, path) && !hasPieceMoved(piece.id, moveHistory)
 
         val rookOrigin = getRookPosition(path, board.size.columns)
-        
+
         val canCastle = isValidKing && isRookAvailableAndNotMoved(board, rookOrigin, moveHistory)
 
         if (!canCastle) return RuleResult.Invalid

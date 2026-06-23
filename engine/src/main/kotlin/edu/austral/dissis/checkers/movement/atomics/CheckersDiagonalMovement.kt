@@ -5,7 +5,7 @@ import edu.austral.dissis.common.movement.Path
 import kotlin.math.abs
 
 class CheckersDiagonalMovement(
-    private val maxSteps: Int = 1
+    private val maxSteps: Int = 1,
 ) : Movement {
     override fun checkTrajectory(path: Path): Boolean {
         val rowDiff = abs(path.origin.row - path.destination.row)

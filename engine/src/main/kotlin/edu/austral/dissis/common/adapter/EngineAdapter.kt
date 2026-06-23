@@ -1,37 +1,42 @@
 package edu.austral.dissis.common.adapter
 
-import edu.austral.dissis.common.game.GameEngine
-import edu.austral.dissis.common.game.MoveResult
-import edu.austral.dissis.common.pieces.Color
-import edu.austral.dissis.common.movement.Position as DomainPosition
-
+import edu.austral.dissis.chess.gui.ChessPiece
 import edu.austral.dissis.chess.gui.GameInputEvent
 import edu.austral.dissis.chess.gui.GameState
 import edu.austral.dissis.chess.gui.Move
-import edu.austral.dissis.chess.gui.ChessPiece
 import edu.austral.dissis.chess.gui.PlayerColor
-import edu.austral.dissis.chess.gui.Position as UIPosition
-import edu.austral.dissis.chess.gui.BoardSize as UIBoardSize
+import edu.austral.dissis.common.game.GameEngine
+import edu.austral.dissis.common.game.MoveResult
+import edu.austral.dissis.common.pieces.Color
 import io.reactivex.rxjava3.core.Observable
+import edu.austral.dissis.chess.gui.BoardSize as UIBoardSize
+import edu.austral.dissis.chess.gui.Position as UIPosition
+import edu.austral.dissis.common.movement.Position as DomainPosition
 
-fun Color.toUIColor(): PlayerColor = when (this) {
-    Color.WHITE -> PlayerColor.WHITE
-    Color.BLACK -> PlayerColor.BLACK
-}
+fun Color.toUIColor(): PlayerColor =
+    when (this) {
+        Color.WHITE -> PlayerColor.WHITE
+        Color.BLACK -> PlayerColor.BLACK
+    }
 
 fun DomainPosition.toUIPosition(): UIPosition = UIPosition(this.row, this.col)
+
 fun UIPosition.toDomainPosition(): DomainPosition = DomainPosition(this.row, this.column)
 
 class EngineAdapter(
     private var engine: GameEngine,
-    private val pieceNameMapper: (String) -> String
+    private val pieceNameMapper: (String) -> String,
 ) {
     fun process(inputs: Observable<GameInputEvent>): Observable<GameState> =
         inputs.map { event ->
             when (event) {
-                GameInputEvent.Init -> toPlayingState()
+                GameInputEvent.Init -> {
+                    toPlayingState()
+                }
 
-                is GameInputEvent.MoveEvent -> handleMove(event.move)
+                is GameInputEvent.MoveEvent -> {
+                    handleMove(event.move)
+                }
 
                 GameInputEvent.Undo -> {
                     engine = engine.undo()
@@ -48,7 +53,9 @@ class EngineAdapter(
     private fun handleMove(move: Move): GameState {
         val origin = move.from.toDomainPosition()
         val dest = move.to.toDomainPosition()
-        val path = edu.austral.dissis.common.movement.Path(origin, dest)
+        val path =
+            edu.austral.dissis.common.movement
+                .Path(origin, dest)
 
         val (nextEngine, result) = engine.applyMove(path)
         engine = nextEngine
@@ -74,14 +81,15 @@ class EngineAdapter(
         val board = game.board
         return GameState.Playing(
             boardSize = UIBoardSize(board.size.columns, board.size.rows),
-            pieces = board.positions.map { (domainPos, piece) ->
-                ChessPiece(
-                    id = piece.id,
-                    color = piece.color.toUIColor(),
-                    position = domainPos.toUIPosition(),
-                    pieceId = pieceNameMapper(piece.pieceType.lowercase())
-                )
-            },
+            pieces =
+                board.positions.map { (domainPos, piece) ->
+                    ChessPiece(
+                        id = piece.id,
+                        color = piece.color.toUIColor(),
+                        position = domainPos.toUIPosition(),
+                        pieceId = pieceNameMapper(piece.pieceType.lowercase()),
+                    )
+                },
             currentPlayer = game.turnManager.currentTurn.toUIColor(),
             canUndo = engine.canUndo(),
             canRedo = engine.canRedo(),

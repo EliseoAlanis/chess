@@ -7,47 +7,46 @@ data class GameEngine(
     val moveApplier: MoveApplier,
     val currentGame: Game,
     val pastGames: List<Game> = emptyList(),
-    val futureGames: List<Game> = emptyList()
+    val futureGames: List<Game> = emptyList(),
 ) {
     fun applyMove(path: Path): Pair<GameEngine, MoveResult> {
         val result = moveApplier.executeMove(currentGame, path)
         return if (result is MoveResult.Success) {
-            val nextEngine = this.copy(
-                currentGame = result.newGameState,
-                pastGames = pastGames + currentGame,
-                futureGames = emptyList()
-            )
+            val nextEngine =
+                this.copy(
+                    currentGame = result.newGameState,
+                    pastGames = pastGames + currentGame,
+                    futureGames = emptyList(),
+                )
             Pair(nextEngine, result)
         } else {
             Pair(this, result)
         }
     }
 
-    fun undo(): GameEngine {
-        return if (canUndo()) {
+    fun undo(): GameEngine =
+        if (canUndo()) {
             this.copy(
                 currentGame = pastGames.last(),
                 pastGames = pastGames.dropLast(1),
-                futureGames = futureGames + currentGame
+                futureGames = futureGames + currentGame,
             )
         } else {
             this
         }
-    }
 
-    fun redo(): GameEngine {
-        return if (canRedo()) {
+    fun redo(): GameEngine =
+        if (canRedo()) {
             this.copy(
                 currentGame = futureGames.last(),
                 pastGames = pastGames + currentGame,
-                futureGames = futureGames.dropLast(1)
+                futureGames = futureGames.dropLast(1),
             )
         } else {
             this
         }
-    }
 
     fun canUndo(): Boolean = pastGames.isNotEmpty()
-    
+
     fun canRedo(): Boolean = futureGames.isNotEmpty()
 }

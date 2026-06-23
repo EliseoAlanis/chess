@@ -1,12 +1,12 @@
 package edu.austral.dissis.chess.movement.effect
 
-import edu.austral.dissis.common.movement.effect.PostMoveEffect
 import edu.austral.dissis.common.board.Board
-import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.effect.PostMoveEffect
 
 class EnPassantCaptureEffect(
-    private val capturedPawnPosition: Position
+    private val capturedPawnPosition: Position,
 ) : PostMoveEffect {
     override fun apply(
         previousBoard: Board,

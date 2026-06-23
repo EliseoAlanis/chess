@@ -5,9 +5,7 @@ import kotlin.math.max
 import kotlin.math.sign
 
 interface Movement {
-    fun checkTrajectory(
-        path: Path,
-    ): Boolean
+    fun checkTrajectory(path: Path): Boolean
 
     fun getIntermediatePositions(path: Path): List<Position> {
         val rowStep = (path.destination.row - path.origin.row).sign

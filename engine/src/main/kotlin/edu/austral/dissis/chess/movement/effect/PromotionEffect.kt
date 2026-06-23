@@ -2,12 +2,10 @@ package edu.austral.dissis.chess.movement.effect
 
 import edu.austral.dissis.chess.pieces.PieceFactory
 import edu.austral.dissis.chess.pieces.PieceType
-
-import edu.austral.dissis.common.movement.effect.PostMoveEffect
-
 import edu.austral.dissis.common.board.Board
-import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.movement.effect.PostMoveEffect
 import edu.austral.dissis.common.pieces.Color
 
 class PromotionEffect : PostMoveEffect {
@@ -32,4 +30,3 @@ class PromotionEffect : PostMoveEffect {
         return currentBoard
     }
 }
-

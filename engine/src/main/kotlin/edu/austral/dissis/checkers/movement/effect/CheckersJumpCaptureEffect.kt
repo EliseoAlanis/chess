@@ -6,12 +6,12 @@ import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.effect.PostMoveEffect
 
 class CheckersJumpCaptureEffect(
-    private val capturedPiecePosition: Position
+    private val capturedPiecePosition: Position,
 ) : PostMoveEffect {
     override fun apply(
         previousBoard: Board,
         currentBoard: Board,
-        path: Path
+        path: Path,
     ): Board {
         val newPositions = currentBoard.positions - capturedPiecePosition
         return currentBoard.copy(positions = newPositions)

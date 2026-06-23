@@ -1,11 +1,10 @@
 package edu.austral.dissis.chess.pieces
 
-import edu.austral.dissis.common.pieces.Piece
-import edu.austral.dissis.common.pieces.Color
-
 import edu.austral.dissis.chess.movement.atomics.ForwardDiagonalMovement
 import edu.austral.dissis.chess.movement.atomics.ForwardMovement
 import edu.austral.dissis.chess.movement.factory.MovementFactory
+import edu.austral.dissis.common.pieces.Color
+import edu.austral.dissis.common.pieces.Piece
 
 object PieceFactory {
     fun createRook(
@@ -56,5 +55,5 @@ object PieceFactory {
     fun createArchbishop(
         id: String,
         color: Color,
-    ): Piece = Piece(id,color, PieceType.ARCHBISHOP, movements = MovementFactory.createArchbishopMovement())
+    ): Piece = Piece(id, color, PieceType.ARCHBISHOP, movements = MovementFactory.createArchbishopMovement())
 }

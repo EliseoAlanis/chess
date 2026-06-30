@@ -22,7 +22,12 @@ data class GameStatePayload(
     var winnerColor: String? = null,
     var boardCols: Int = 8,
     var boardRows: Int = 8,
+    var canUndo: Boolean = false,
+    var canRedo: Boolean = false,
 )
+
+class UndoPayload
+class RedoPayload
 
 data class InitialConnectionPayload(
     var assignedColor: String = "SPECTATOR", // "WHITE", "BLACK", "SPECTATOR"

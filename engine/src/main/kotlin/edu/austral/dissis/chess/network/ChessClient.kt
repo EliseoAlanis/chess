@@ -59,4 +59,12 @@ class ChessClient(
     fun sendMove(move: MovePayload) {
         client.send(Message("move", move))
     }
+
+    fun sendUndo() {
+        client.send(Message("undo", UndoPayload()))
+    }
+
+    fun sendRedo() {
+        client.send(Message("redo", RedoPayload()))
+    }
 }

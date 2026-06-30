@@ -21,12 +21,20 @@ class ChessServer(
         server =
             NettyServerBuilder
                 .createDefault()
-                .withPort(8080)
+                .withPort(SERVER_PORT)
                 .withConnectionListener(
                     object : ServerConnectionListener {
                         override fun handleClientConnection(clientId: String) {
                             println("Cliente conectado al server: \$clientId")
+                            val assignedColor = when (clients.size) {
+                                0 -> "WHITE"
+                                1 -> "BLACK"
+                                else -> "SPECTATOR"
+                            }
                             clients.add(clientId)
+
+                            val initialPayload = InitialConnectionPayload(assignedColor, buildGameStatePayload(engine))
+                            server.sendMessage(clientId, Message("initial_state", initialPayload))
 
                             broadcastState()
                         }
@@ -38,12 +46,16 @@ class ChessServer(
                     },
                 ).addMessageListener("move",
                     object : TypeReference<Message<MovePayload>>() {}, MoveListener())
+                .addMessageListener("undo",
+                    object : TypeReference<Message<UndoPayload>>() {}, UndoListener())
+                .addMessageListener("redo",
+                    object : TypeReference<Message<RedoPayload>>() {}, RedoListener())
                 .build()
     }
 
     fun start() {
         server.start()
-        println("Servidor Netty iniciado en puerto 8080")
+        println("Servidor Netty iniciado en puerto \$SERVER_PORT")
     }
 
     fun broadcastState() {
@@ -63,11 +75,22 @@ class ChessServer(
                     pieceId = piece.pieceType.lowercase(),
                 )
             }
+        val status = engine.currentGame.status
+        val isGameOver = status != edu.austral.dissis.common.game.GameStatus.IN_PROGRESS
+        val winnerColor = when (status) {
+            edu.austral.dissis.common.game.GameStatus.WHITE_WINS -> "WHITE"
+            edu.austral.dissis.common.game.GameStatus.BLACK_WINS -> "BLACK"
+            else -> null
+        }
         return GameStatePayload(
             pieces = pieces,
             currentPlayer = engine.currentGame.turnManager.currentTurn.name,
             boardCols = engine.currentGame.board.size.columns,
             boardRows = engine.currentGame.board.size.rows,
+            isGameOver = isGameOver,
+            winnerColor = winnerColor,
+            canUndo = engine.canUndo(),
+            canRedo = engine.canRedo()
         )
     }
 
@@ -87,7 +110,30 @@ class ChessServer(
             } else if (result is MoveResult.Failure) {
                 // Se podría notificar al cliente del fallo
                 println("Movimiento inválido: \${result.reason}")
+                broadcastState()
             }
         }
+    }
+
+    private inner class UndoListener : MessageListener<UndoPayload> {
+        override fun handleMessage(message: Message<UndoPayload>) {
+            if (engine.canUndo()) {
+                engine = engine.undo()
+                broadcastState()
+            }
+        }
+    }
+
+    private inner class RedoListener : MessageListener<RedoPayload> {
+        override fun handleMessage(message: Message<RedoPayload>) {
+            if (engine.canRedo()) {
+                engine = engine.redo()
+                broadcastState()
+            }
+        }
+    }
+
+    companion object {
+        private const val SERVER_PORT = 8080
     }
 }

@@ -16,8 +16,8 @@ object CheckersPieceFactory {
             id = id,
             color = color,
             pieceType = CheckersPieceTypes.MAN,
-            movements = CheckersForwardDiagonalMovement(direction, maxSteps = 1),
-            captureMovements = CheckersForwardDiagonalMovement(direction, maxSteps = 2),
+            rules = listOf(CheckersForwardDiagonalMovement(direction, maxSteps = 1)),
+            captureRules = listOf(CheckersForwardDiagonalMovement(direction, maxSteps = 2)),
         )
     }
 
@@ -29,7 +29,7 @@ object CheckersPieceFactory {
             id = id,
             color = color,
             pieceType = CheckersPieceTypes.KING,
-            movements = CheckersDiagonalMovement(maxSteps = 1),
-            captureMovements = CheckersDiagonalMovement(maxSteps = 2),
+            rules = listOf(CheckersDiagonalMovement(maxSteps = 1)),
+            captureRules = listOf(CheckersDiagonalMovement(maxSteps = 2)),
         )
 }

@@ -13,7 +13,8 @@ import edu.austral.dissis.common.rules.RuleResult
 class ClearPathRule : Rule {
     override fun evaluate(context: MoveContext): RuleResult {
         val piece = context.board.getPieceAt(context.path.origin)
-        val intermediate = piece.movements.getIntermediatePositions(context.path)
+        val movementRule = piece.rules.filterIsInstance<edu.austral.dissis.common.movement.Movement>().firstOrNull()
+        val intermediate = movementRule?.getIntermediatePositions(context.path) ?: emptyList()
         val isValid = intermediate.none { pos -> context.board.hasPieceAt(pos) }
         return if (isValid) RuleResult.Valid() else RuleResult.Invalid
     }

@@ -11,8 +11,7 @@ import edu.austral.dissis.common.rules.MoveContext
 import edu.austral.dissis.common.rules.RuleResult
 
 class DefaultMoveValidator(
-    private val mandatoryRules: List<Rule>,
-    private val specialMoveRules: List<Rule> = emptyList(),
+    private val mandatoryRules: List<Rule>
 ) : MoveValidator {
     override fun validateMove(
         board: Board,
@@ -22,9 +21,8 @@ class DefaultMoveValidator(
     ): RuleResult {
         val context = MoveContext(board, path, turn, history)
         if (!isBasicValidationPassed(context)) return RuleResult.Invalid
-        if (isValidStandardMove(context)) return RuleResult.Valid()
-
-        return trySpecialRules(context)
+        
+        return getStandardMoveResult(context)
     }
 
     override fun canMove(
@@ -40,19 +38,9 @@ class DefaultMoveValidator(
                 rule.evaluate(context) is RuleResult.Valid
             }
 
-    private fun isValidStandardMove(context: MoveContext): Boolean {
+    private fun getStandardMoveResult(context: MoveContext): RuleResult {
         val piece = context.board.getPieceAt(context.path.origin)
         val isCapture = context.board.hasPieceAt(context.path.destination)
-        return piece.evaluateMove(context, isCapture) is RuleResult.Valid
-    }
-
-    private fun trySpecialRules(context: MoveContext): RuleResult {
-        for (rule in specialMoveRules) {
-            val result = rule.evaluate(context)
-            if (result is RuleResult.Valid) {
-                return result
-            }
-        }
-        return RuleResult.Invalid
+        return piece.evaluateMove(context, isCapture)
     }
 }

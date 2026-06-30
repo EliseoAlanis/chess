@@ -36,12 +36,7 @@ class CapablancaChessFactory(
             FriendlyFireRule(),
             NoSelfCheckRule(attackDetector)
         )
-        val specialMoveRules = listOf(
-            PawnInitialDoubleMovementRule(),
-            CanCastleRule(),
-            EnPassantRule()
-        )
-        val validator = edu.austral.dissis.chess.movement.validator.DefaultMoveValidator(mandatoryRules, specialMoveRules)
+        val validator = edu.austral.dissis.chess.movement.validator.DefaultMoveValidator(mandatoryRules)
 
         val globalPostMoveEffects = listOf(PromotionEffect())
         val winConditions = listOf(CheckmateCondition(validator, attackDetector))

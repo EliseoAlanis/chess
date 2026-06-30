@@ -10,22 +10,22 @@ object PieceFactory {
     fun createRook(
         id: String,
         color: Color,
-    ): Piece = Piece(id, color, PieceType.ROOK, movements = MovementFactory.createRookMovement())
+    ): Piece = Piece(id, color, PieceType.ROOK, rules = listOf(MovementFactory.createRookMovement()))
 
     fun createBishop(
         id: String,
         color: Color,
-    ): Piece = Piece(id, color, PieceType.BISHOP, movements = MovementFactory.createBishopMovement())
+    ): Piece = Piece(id, color, PieceType.BISHOP, rules = listOf(MovementFactory.createBishopMovement()))
 
     fun createQueen(
         id: String,
         color: Color,
-    ): Piece = Piece(id, color, PieceType.QUEEN, movements = MovementFactory.createQueenMovement())
+    ): Piece = Piece(id, color, PieceType.QUEEN, rules = listOf(MovementFactory.createQueenMovement()))
 
     fun createKnight(
         id: String,
         color: Color,
-    ): Piece = Piece(id, color, PieceType.KNIGHT, movements = MovementFactory.createKnightMovement())
+    ): Piece = Piece(id, color, PieceType.KNIGHT, rules = listOf(MovementFactory.createKnightMovement()))
 
     fun createPawn(
         id: String,
@@ -37,23 +37,36 @@ object PieceFactory {
             id = id,
             color = color,
             pieceType = PieceType.PAWN,
-            movements = ForwardMovement(direction),
-            captureMovements = ForwardDiagonalMovement(direction),
+            rules = listOf(
+                edu.austral.dissis.chess.rules.special.PawnInitialDoubleMovementRule(),
+                edu.austral.dissis.chess.rules.special.EnPassantRule(),
+                ForwardMovement(direction)
+            ),
+            captureRules = listOf(
+                edu.austral.dissis.chess.rules.special.EnPassantRule(),
+                ForwardDiagonalMovement(direction)
+            ),
         )
     }
 
     fun createKing(
         id: String,
         color: Color,
-    ): Piece = Piece(id, color, PieceType.KING, movements = MovementFactory.createKingMovement())
+    ): Piece = Piece(
+        id, color, PieceType.KING, 
+        rules = listOf(
+            edu.austral.dissis.chess.rules.special.CanCastleRule(),
+            MovementFactory.createKingMovement()
+        )
+    )
 
     fun createChancellor(
         id: String,
         color: Color,
-    ): Piece = Piece(id, color, PieceType.CHANCELLOR, movements = MovementFactory.createChancellorMovement())
+    ): Piece = Piece(id, color, PieceType.CHANCELLOR, rules = listOf(MovementFactory.createChancellorMovement()))
 
     fun createArchbishop(
         id: String,
         color: Color,
-    ): Piece = Piece(id, color, PieceType.ARCHBISHOP, movements = MovementFactory.createArchbishopMovement())
+    ): Piece = Piece(id, color, PieceType.ARCHBISHOP, rules = listOf(MovementFactory.createArchbishopMovement()))
 }

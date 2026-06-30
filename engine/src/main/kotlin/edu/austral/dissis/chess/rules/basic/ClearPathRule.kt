@@ -4,13 +4,13 @@ import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Color
-import edu.austral.dissis.common.rules.BasicRule
+import edu.austral.dissis.common.rules.Rule
 import kotlin.math.sign
 
 import edu.austral.dissis.common.rules.MoveContext
 import edu.austral.dissis.common.rules.RuleResult
 
-class ClearPathRule : BasicRule {
+class ClearPathRule : Rule {
     override fun evaluate(context: MoveContext): RuleResult {
         val piece = context.board.getPieceAt(context.path.origin)
         val intermediate = piece.movements.getIntermediatePositions(context.path)

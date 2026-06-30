@@ -5,13 +5,13 @@ import edu.austral.dissis.common.movement.MoveRecord
 import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.movement.validator.MoveValidator
 import edu.austral.dissis.common.pieces.Color
-import edu.austral.dissis.common.rules.BasicRule
+import edu.austral.dissis.common.rules.Rule
 import edu.austral.dissis.common.rules.MoveContext
 import edu.austral.dissis.common.rules.RuleResult
 import kotlin.math.abs
 
 class CheckersMoveValidator(
-    private val basicRules: List<BasicRule>
+    private val mandatoryRules: List<Rule>
 ) : MoveValidator {
 
     override fun validateMove(
@@ -64,7 +64,7 @@ class CheckersMoveValidator(
     }
 
     private fun isBasicValidationPassed(context: MoveContext): Boolean {
-        return context.board.hasPieceAt(context.path.origin) && basicRules.all { rule ->
+        return context.board.hasPieceAt(context.path.origin) && mandatoryRules.all { rule ->
             rule.evaluate(context) is RuleResult.Valid
         }
     }

@@ -5,7 +5,7 @@ import edu.austral.dissis.common.game.condition.WinCondition
 import edu.austral.dissis.common.movement.MoveRecord
 import edu.austral.dissis.common.movement.effect.PostMoveEffect
 import edu.austral.dissis.common.movement.validator.MoveValidator
-import edu.austral.dissis.common.rules.BasicRule
+import edu.austral.dissis.common.rules.Rule
 import edu.austral.dissis.common.turn.TurnManager
 
 data class Game(

@@ -9,12 +9,12 @@ import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.pieces.Piece
 import edu.austral.dissis.common.rules.RuleResult
-import edu.austral.dissis.common.rules.SpecialRule
+import edu.austral.dissis.common.rules.Rule
 import kotlin.math.abs
 
 import edu.austral.dissis.common.rules.MoveContext
 
-class EnPassantRule : SpecialRule {
+class EnPassantRule : Rule {
     override fun evaluate(context: MoveContext): RuleResult {
         val board = context.board
         val path = context.path

@@ -7,11 +7,11 @@ import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.rules.RuleResult
-import edu.austral.dissis.common.rules.SpecialRule
+import edu.austral.dissis.common.rules.Rule
 
 import edu.austral.dissis.common.rules.MoveContext
 
-class PawnInitialDoubleMovementRule : SpecialRule {
+class PawnInitialDoubleMovementRule : Rule {
     override fun evaluate(context: MoveContext): RuleResult {
         val board = context.board
         val path = context.path

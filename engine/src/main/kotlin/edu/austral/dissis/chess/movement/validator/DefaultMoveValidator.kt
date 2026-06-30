@@ -6,14 +6,13 @@ import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.validator.MoveValidator
 import edu.austral.dissis.common.pieces.Color
-import edu.austral.dissis.common.rules.BasicRule
+import edu.austral.dissis.common.rules.Rule
 import edu.austral.dissis.common.rules.MoveContext
 import edu.austral.dissis.common.rules.RuleResult
-import edu.austral.dissis.common.rules.SpecialRule
 
 class DefaultMoveValidator(
-    private val basicRules: List<BasicRule>,
-    private val specialRules: List<SpecialRule> = emptyList(),
+    private val mandatoryRules: List<Rule>,
+    private val specialMoveRules: List<Rule> = emptyList(),
 ) : MoveValidator {
     override fun validateMove(
         board: Board,
@@ -37,7 +36,7 @@ class DefaultMoveValidator(
 
     private fun isBasicValidationPassed(context: MoveContext): Boolean =
         context.board.hasPieceAt(context.path.origin) &&
-            basicRules.all { rule ->
+            mandatoryRules.all { rule ->
                 rule.evaluate(context) is RuleResult.Valid
             }
 
@@ -48,7 +47,7 @@ class DefaultMoveValidator(
     }
 
     private fun trySpecialRules(context: MoveContext): RuleResult {
-        for (rule in specialRules) {
+        for (rule in specialMoveRules) {
             val result = rule.evaluate(context)
             if (result is RuleResult.Valid) {
                 return result

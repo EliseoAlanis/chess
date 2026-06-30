@@ -21,14 +21,14 @@ class CheckersGameFactory : GameFactory {
         val board = boardFactory.createBoard()
         val turnManager = CheckersTurnManager()
 
-        val basicRules =
+        val mandatoryRules =
             listOf(
                 CorrectTurnRule(),
                 BoardLimitsRule(),
                 EmptyDestinationRule(),
             )
 
-        val moveValidator = CheckersMoveValidator(basicRules)
+        val moveValidator = CheckersMoveValidator(mandatoryRules)
 
         val postMoveEffects =
             listOf(

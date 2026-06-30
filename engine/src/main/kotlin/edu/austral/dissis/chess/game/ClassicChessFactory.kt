@@ -28,11 +28,11 @@ class ClassicChessFactory(
         val initialBoard = boardFactory.createBoard()
         val attackDetector = AttackDetector()
 
-        val basicRules = listOf(BoardLimitsRule(), CorrectTurnRule(),
+        val mandatoryRules = listOf(BoardLimitsRule(), CorrectTurnRule(),
             ClearPathRule(), FriendlyFireRule(), NoSelfCheckRule(attackDetector)
         )
-        val specialRules = listOf(PawnInitialDoubleMovementRule(), CanCastleRule(), EnPassantRule())
-        val validator = edu.austral.dissis.chess.movement.validator.DefaultMoveValidator(basicRules, specialRules)
+        val specialMoveRules = listOf(PawnInitialDoubleMovementRule(), CanCastleRule(), EnPassantRule())
+        val validator = edu.austral.dissis.chess.movement.validator.DefaultMoveValidator(mandatoryRules, specialMoveRules)
 
         val globalPostMoveEffects = listOf(PromotionEffect())
         val winConditions = listOf(CheckmateCondition(validator, attackDetector))

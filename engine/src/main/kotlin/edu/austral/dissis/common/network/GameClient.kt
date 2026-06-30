@@ -1,4 +1,4 @@
-package edu.austral.dissis.chess.network
+package edu.austral.dissis.common.network
 
 import com.fasterxml.jackson.core.type.TypeReference
 import edu.austral.ingsis.clientserver.Client
@@ -8,7 +8,7 @@ import edu.austral.ingsis.clientserver.MessageListener
 import edu.austral.ingsis.clientserver.netty.client.NettyClientBuilder
 import java.net.InetSocketAddress
 
-class ChessClient(
+class GameClient(
     private val serverAddress: String = "localhost",
     private val serverPort: Int = 8080,
 ) {

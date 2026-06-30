@@ -21,7 +21,7 @@ height = 8
 1- a1-a2
 
 # Result
-`INVALID_MOVE`
+`LAST_MOVE_INVALID`
 
 # Final board
 ```

@@ -1,4 +1,4 @@
-﻿package edu.austral.dissis.chess.network
+package edu.austral.dissis.common.network
 
 import com.fasterxml.jackson.core.type.TypeReference
 import edu.austral.dissis.common.game.GameEngine
@@ -11,7 +11,7 @@ import edu.austral.ingsis.clientserver.Server
 import edu.austral.ingsis.clientserver.ServerConnectionListener
 import edu.austral.ingsis.clientserver.netty.server.NettyServerBuilder
 
-class ChessServer(
+class GameServer(
     private var engine: GameEngine,
 ) {
     private val server: Server

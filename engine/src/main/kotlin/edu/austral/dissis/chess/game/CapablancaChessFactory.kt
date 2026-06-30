@@ -4,7 +4,7 @@ import edu.austral.dissis.chess.board.CapablancaBoardFactory
 import edu.austral.dissis.common.game.Game
 import edu.austral.dissis.chess.game.condition.CheckmateCondition
 import edu.austral.dissis.common.movement.applier.MoveApplier
-import edu.austral.dissis.chess.movement.applier.DefaultMoveApplier
+import edu.austral.dissis.common.movement.applier.DefaultMoveApplier
 import edu.austral.dissis.chess.movement.effect.PromotionEffect
 import edu.austral.dissis.chess.movement.validator.AttackDetector
 import edu.austral.dissis.common.pieces.Color

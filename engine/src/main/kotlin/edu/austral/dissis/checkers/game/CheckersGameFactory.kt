@@ -2,7 +2,7 @@ package edu.austral.dissis.checkers.game
 
 import edu.austral.dissis.checkers.board.CheckersBoardInitializer
 import edu.austral.dissis.checkers.game.condition.CheckersExtinctionCondition
-import edu.austral.dissis.checkers.movement.applier.CheckersMoveApplier
+import edu.austral.dissis.common.movement.applier.DefaultMoveApplier
 import edu.austral.dissis.checkers.movement.effect.CheckersPromotionEffect
 import edu.austral.dissis.checkers.movement.validator.CheckersMoveValidator
 import edu.austral.dissis.checkers.rules.basic.BoardLimitsRule
@@ -41,7 +41,7 @@ class CheckersGameFactory : GameFactory {
             )
 
         val moveApplier =
-            CheckersMoveApplier(
+            DefaultMoveApplier(
                 moveValidator = moveValidator,
                 postMoveEffects = postMoveEffects,
                 winConditions = winConditions,

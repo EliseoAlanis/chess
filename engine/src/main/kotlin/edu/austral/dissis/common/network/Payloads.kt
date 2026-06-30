@@ -1,4 +1,4 @@
-package edu.austral.dissis.chess.network
+package edu.austral.dissis.common.network
 
 data class MovePayload(
     var fromRow: Int = 0,

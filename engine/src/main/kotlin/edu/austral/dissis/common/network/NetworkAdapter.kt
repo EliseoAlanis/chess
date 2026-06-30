@@ -1,4 +1,4 @@
-package edu.austral.dissis.chess.network
+package edu.austral.dissis.common.network
 
 import edu.austral.dissis.chess.gui.BoardSize
 import edu.austral.dissis.chess.gui.ChessPiece
@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 
 class NetworkAdapter(
-    private val client: ChessClient,
+    private val client: GameClient,
     private val pieceNameMapper: (String) -> String
 ) {
     private val stateSubject = PublishSubject.create<GameState>()

@@ -12,10 +12,10 @@ import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.common.turn.TurnManager
 import edu.austral.dissis.common.rules.MoveContext
 
-abstract class BaseMoveApplier(
-    protected val moveValidator: MoveValidator,
-    protected val postMoveEffects: List<PostMoveEffect>,
-    protected val winConditions: List<WinCondition>,
+class DefaultMoveApplier(
+    private val moveValidator: MoveValidator,
+    private val postMoveEffects: List<PostMoveEffect>,
+    private val winConditions: List<WinCondition>,
 ) : MoveApplier {
     override fun executeMove(
         game: Game,

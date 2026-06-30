@@ -1,9 +1,9 @@
-package edu.austral.dissis.chess.movement.applier
+﻿package edu.austral.dissis.chess.movement.applier
 
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.game.Game
 import edu.austral.dissis.common.game.condition.WinCondition
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.applier.BaseMoveApplier
 import edu.austral.dissis.common.movement.effect.PostMoveEffect
 import edu.austral.dissis.common.movement.validator.MoveValidator
@@ -17,6 +17,6 @@ class DefaultMoveApplier(
     override fun advanceTurnManager(
         game: Game,
         finalBoard: Board,
-        path: Path,
+        vector: MovementVector,
     ): TurnManager = game.turnManager.advance()
 }

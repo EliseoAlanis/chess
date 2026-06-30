@@ -1,9 +1,9 @@
-package edu.austral.dissis.chess.rules.special
+﻿package edu.austral.dissis.chess.rules.special
 
 import edu.austral.dissis.chess.movement.effect.CastlingEffect
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.MoveRecord
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Piece
 import edu.austral.dissis.common.rules.RuleResult
@@ -14,32 +14,32 @@ import edu.austral.dissis.common.rules.MoveContext
 class CanCastleRule : Rule {
     override fun evaluate(context: MoveContext): RuleResult {
         val board = context.board
-        val path = context.path
+        val vector = context.vector
         val moveHistory = context.history
-        val piece = board.getPieceAt(path.origin)
+        val piece = board.getPieceAt(vector.origin)
 
-        val isValidKing = isCastlingAttempt(piece, path) && !hasPieceMoved(piece.id, moveHistory)
+        val isValidKing = isCastlingAttempt(piece, vector) && !hasPieceMoved(piece.id, moveHistory)
 
-        val rookOrigin = getRookPosition(path, board.size.columns)
+        val rookOrigin = getRookPosition(vector, board.size.columns)
 
         val canCastle = isValidKing && isRookAvailableAndNotMoved(board, rookOrigin, moveHistory)
 
         if (!canCastle) return RuleResult.Invalid
 
-        val isKingSide = path.destination.col > path.origin.col
-        val rookDestinationCol = if (isKingSide) path.destination.col - 1 else path.destination.col + 1
-        val rookDestination = Position(path.origin.row, rookDestinationCol)
+        val isKingSide = vector.destination.col > vector.origin.col
+        val rookDestinationCol = if (isKingSide) vector.destination.col - 1 else vector.destination.col + 1
+        val rookDestination = Position(vector.origin.row, rookDestinationCol)
 
         return RuleResult.Valid(listOf(CastlingEffect(rookOrigin, rookDestination)))
     }
 
     private fun isCastlingAttempt(
         piece: Piece,
-        path: Path,
+        vector: MovementVector,
     ): Boolean {
         val isKing = piece.pieceType == edu.austral.dissis.chess.pieces.PieceType.KING
-        val isHorizontalTwoSteps = path.origin.row == path.destination.row
-                && Math.abs(path.destination.col - path.origin.col) == 2
+        val isHorizontalTwoSteps = vector.origin.row == vector.destination.row
+                && Math.abs(vector.destination.col - vector.origin.col) == 2
 
         return isKing && isHorizontalTwoSteps
     }
@@ -50,12 +50,12 @@ class CanCastleRule : Rule {
     ): Boolean = moveHistory.any { it.piece.id == pieceId }
 
     private fun getRookPosition(
-        path: Path,
+        vector: MovementVector,
         totalColumns: Int,
     ): Position {
-        val isKingSide = path.destination.col > path.origin.col
+        val isKingSide = vector.destination.col > vector.origin.col
         val rookCol = if (isKingSide) totalColumns else 1
-        return Position(path.origin.row, rookCol)
+        return Position(vector.origin.row, rookCol)
     }
 
     private fun isRookAvailableAndNotMoved(

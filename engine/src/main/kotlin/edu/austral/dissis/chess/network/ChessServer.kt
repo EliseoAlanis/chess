@@ -1,9 +1,9 @@
-package edu.austral.dissis.chess.network
+﻿package edu.austral.dissis.chess.network
 
 import com.fasterxml.jackson.core.type.TypeReference
 import edu.austral.dissis.common.game.GameEngine
 import edu.austral.dissis.common.game.MoveResult
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.ingsis.clientserver.Message
 import edu.austral.ingsis.clientserver.MessageListener
@@ -59,7 +59,7 @@ class ChessServer(
     }
 
     fun broadcastState() {
-        // Acá se envía el estado de todo el tablero a los clientes conectados
+        // AcÃ¡ se envÃ­a el estado de todo el tablero a los clientes conectados
         val payload = buildGameStatePayload(engine)
         server.broadcast(Message("new_state", payload))
     }
@@ -97,19 +97,19 @@ class ChessServer(
     private inner class MoveListener : MessageListener<MovePayload> {
         override fun handleMessage(message: Message<MovePayload>) {
             val payload = message.payload
-            val path =
-                Path(
+            val vector =
+                MovementVector(
                     Position(payload.fromRow, payload.fromCol),
                     Position(payload.toRow, payload.toCol),
                 )
 
-            val (nextEngine, result) = engine.applyMove(path)
+            val (nextEngine, result) = engine.applyMove(vector)
             if (result is MoveResult.Success) {
                 engine = nextEngine
                 broadcastState()
             } else if (result is MoveResult.Failure) {
-                // Se podría notificar al cliente del fallo
-                println("Movimiento inválido: \${result.reason}")
+                // Se podrÃ­a notificar al cliente del fallo
+                println("Movimiento invÃ¡lido: \${result.reason}")
                 broadcastState()
             }
         }

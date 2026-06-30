@@ -1,11 +1,11 @@
-package edu.austral.dissis.chess.game.condition
+﻿package edu.austral.dissis.chess.game.condition
 
 import edu.austral.dissis.chess.movement.validator.AttackDetector
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.game.GameStatus
 import edu.austral.dissis.common.game.condition.WinCondition
 import edu.austral.dissis.common.movement.MoveRecord
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.validator.MoveValidator
 import edu.austral.dissis.common.pieces.Color
@@ -49,7 +49,7 @@ class CheckmateCondition(
         val size = board.size
         for (row in 1..size.rows) {
             for (col in 1..size.columns) {
-                if (isMoveValidAndSafe(board, color, Path(origin, Position(row, col)), moveHistory)) return true
+                if (isMoveValidAndSafe(board, color, MovementVector(origin, Position(row, col)), moveHistory)) return true
             }
         }
         return false
@@ -58,7 +58,7 @@ class CheckmateCondition(
     private fun isMoveValidAndSafe(
         board: Board,
         color: Color,
-        path: Path,
+        vector: MovementVector,
         moveHistory: List<MoveRecord>,
-    ): Boolean = moveValidator.canMove(board, color, path, moveHistory)
+    ): Boolean = moveValidator.canMove(board, color, vector, moveHistory)
 }

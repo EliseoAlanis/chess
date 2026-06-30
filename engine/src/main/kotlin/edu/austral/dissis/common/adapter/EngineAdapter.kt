@@ -1,4 +1,4 @@
-package edu.austral.dissis.common.adapter
+﻿package edu.austral.dissis.common.adapter
 
 import edu.austral.dissis.chess.gui.ChessPiece
 import edu.austral.dissis.chess.gui.GameInputEvent
@@ -53,11 +53,11 @@ class EngineAdapter(
     private fun handleMove(move: Move): GameState {
         val origin = move.from.toDomainPosition()
         val dest = move.to.toDomainPosition()
-        val path =
+        val vector =
             edu.austral.dissis.common.movement
-                .Path(origin, dest)
+                .MovementVector(origin, dest)
 
-        val (nextEngine, result) = engine.applyMove(path)
+        val (nextEngine, result) = engine.applyMove(vector)
         engine = nextEngine
 
         return when (result) {

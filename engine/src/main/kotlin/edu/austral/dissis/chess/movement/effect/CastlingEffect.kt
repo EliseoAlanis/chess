@@ -1,7 +1,7 @@
-package edu.austral.dissis.chess.movement.effect
+﻿package edu.austral.dissis.chess.movement.effect
 
 import edu.austral.dissis.common.board.Board
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.effect.PostMoveEffect
 
@@ -12,7 +12,7 @@ class CastlingEffect(
     override fun apply(
         previousBoard: Board,
         currentBoard: Board,
-        path: Path,
+        vector: MovementVector,
     ): Board {
         if (!currentBoard.hasPieceAt(rookOrigin)) return currentBoard
         val rook = currentBoard.getPieceAt(rookOrigin)

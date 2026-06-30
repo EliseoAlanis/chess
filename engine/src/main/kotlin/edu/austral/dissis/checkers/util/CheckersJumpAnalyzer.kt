@@ -1,7 +1,7 @@
-package edu.austral.dissis.checkers.util
+﻿package edu.austral.dissis.checkers.util
 
 import edu.austral.dissis.common.board.Board
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Color
 
@@ -43,11 +43,11 @@ object CheckersJumpAnalyzer {
 
             if (destRow !in 1..board.size.rows || destCol !in 1..board.size.columns) continue
 
-            val path = Path(origin, destPos)
+            val vector = MovementVector(origin, destPos)
 
             if (board.hasPieceAt(destPos)) continue
 
-            val context = edu.austral.dissis.common.rules.MoveContext(board, path, piece.color)
+            val context = edu.austral.dissis.common.rules.MoveContext(board, vector, piece.color)
             if (piece.evaluateMove(context, isCapture = true) !is edu.austral.dissis.common.rules.RuleResult.Valid) continue
 
             val intermediateRow = origin.row + (rowStep / 2)

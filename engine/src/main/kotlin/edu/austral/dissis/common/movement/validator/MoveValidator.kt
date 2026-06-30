@@ -1,8 +1,8 @@
-package edu.austral.dissis.common.movement.validator
+﻿package edu.austral.dissis.common.movement.validator
 
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.MoveRecord
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.rules.RuleResult
@@ -12,13 +12,13 @@ interface MoveValidator {
         board: Board,
         turn: Color,
         history: List<MoveRecord>,
-        path: Path,
+        vector: MovementVector,
     ): RuleResult
 
     fun canMove(
         board: Board,
         turn: Color,
-        path: Path,
+        vector: MovementVector,
         history: List<MoveRecord>,
     ): Boolean
 }

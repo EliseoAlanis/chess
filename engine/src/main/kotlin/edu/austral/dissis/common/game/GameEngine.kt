@@ -1,6 +1,6 @@
-package edu.austral.dissis.common.game
+﻿package edu.austral.dissis.common.game
 
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.applier.MoveApplier
 
 data class GameEngine(
@@ -9,8 +9,8 @@ data class GameEngine(
     val pastGames: List<Game> = emptyList(),
     val futureGames: List<Game> = emptyList(),
 ) {
-    fun applyMove(path: Path): Pair<GameEngine, MoveResult> {
-        val result = moveApplier.executeMove(currentGame, path)
+    fun applyMove(vector: MovementVector): Pair<GameEngine, MoveResult> {
+        val result = moveApplier.executeMove(currentGame, vector)
         return if (result is MoveResult.Success) {
             val nextEngine =
                 this.copy(

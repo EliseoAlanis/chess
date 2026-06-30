@@ -1,8 +1,8 @@
-package edu.austral.dissis.checkers.movement.validator
+﻿package edu.austral.dissis.checkers.movement.validator
 
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.MoveRecord
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.validator.MoveValidator
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.rules.Rule
@@ -18,16 +18,16 @@ class CheckersMoveValidator(
         board: Board,
         turn: Color,
         history: List<MoveRecord>,
-        path: Path
+        vector: MovementVector
     ): RuleResult {
         var result: RuleResult = RuleResult.Invalid
-        val context = MoveContext(board, path, turn, history)
+        val context = MoveContext(board, vector, turn, history)
 
         if (isBasicValidationPassed(context)) {
-            val piece = board.getPieceAt(path.origin)
+            val piece = board.getPieceAt(vector.origin)
             val isMultiJumpSequence = isMultiJumpState(history, turn)
             
-            if (isMultiJumpSequence && path.origin != history.last().destination) {
+            if (isMultiJumpSequence && vector.origin != history.last().destination) {
                 return RuleResult.Invalid
             }
 
@@ -40,7 +40,7 @@ class CheckersMoveValidator(
             }
             // 2. Jump move (2 steps)
             else if (piece.evaluateMove(context, isCapture = true) is RuleResult.Valid) {
-                val intermediatePos = getIntermediatePosition(path)
+                val intermediatePos = getIntermediatePosition(vector)
                 if (board.hasPieceAt(intermediatePos)) {
                     val enemyPiece = board.getPieceAt(intermediatePos)
                     if (enemyPiece.color != piece.color) {
@@ -59,22 +59,22 @@ class CheckersMoveValidator(
         return lastMove.piece.color == currentTurn
     }
 
-    override fun canMove(board: Board, turn: Color, path: Path, history: List<MoveRecord>): Boolean {
-        return validateMove(board, turn, history, path) is RuleResult.Valid
+    override fun canMove(board: Board, turn: Color, vector: MovementVector, history: List<MoveRecord>): Boolean {
+        return validateMove(board, turn, history, vector) is RuleResult.Valid
     }
 
     private fun isBasicValidationPassed(context: MoveContext): Boolean {
-        return context.board.hasPieceAt(context.path.origin) && mandatoryRules.all { rule ->
+        return context.board.hasPieceAt(context.vector.origin) && mandatoryRules.all { rule ->
             rule.evaluate(context) is RuleResult.Valid
         }
     }
 
-    private fun getIntermediatePosition(path: Path): edu.austral.dissis.common.movement.Position {
-        val rowDir = if (path.destination.row > path.origin.row) 1 else -1
-        val colDir = if (path.destination.col > path.origin.col) 1 else -1
+    private fun getIntermediatePosition(vector: MovementVector): edu.austral.dissis.common.movement.Position {
+        val rowDir = if (vector.destination.row > vector.origin.row) 1 else -1
+        val colDir = if (vector.destination.col > vector.origin.col) 1 else -1
         return edu.austral.dissis.common.movement.Position(
-            path.origin.row + rowDir,
-            path.origin.col + colDir
+            vector.origin.row + rowDir,
+            vector.origin.col + colDir
         )
     }
 }

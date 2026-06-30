@@ -1,7 +1,7 @@
-package edu.austral.dissis.chess.movement.effect
+﻿package edu.austral.dissis.chess.movement.effect
 
 import edu.austral.dissis.common.board.Board
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.effect.PostMoveEffect
 
@@ -11,7 +11,7 @@ class EnPassantCaptureEffect(
     override fun apply(
         previousBoard: Board,
         currentBoard: Board,
-        path: Path,
+        vector: MovementVector,
     ): Board {
         val newPositions = currentBoard.positions - capturedPawnPosition
         return currentBoard.copy(positions = newPositions)

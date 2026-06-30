@@ -1,4 +1,4 @@
-package edu.austral.dissis.chess.game.condition
+﻿package edu.austral.dissis.chess.game.condition
 
 import edu.austral.dissis.chess.pieces.PieceType
 import edu.austral.dissis.common.game.condition.WinCondition
@@ -8,7 +8,7 @@ import edu.austral.dissis.common.movement.MoveRecord
 
 import edu.austral.dissis.common.game.GameStatus
 import edu.austral.dissis.common.movement.Position
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.chess.movement.validator.AttackDetector
 import edu.austral.dissis.common.pieces.Color
 

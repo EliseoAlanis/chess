@@ -47,7 +47,8 @@ object CheckersJumpAnalyzer {
 
             if (board.hasPieceAt(destPos)) continue
 
-            if (!piece.isValidMovePattern(path, isCapture = true)) continue
+            val context = edu.austral.dissis.common.rules.MoveContext(board, path, piece.color)
+            if (piece.evaluateMove(context, isCapture = true) !is edu.austral.dissis.common.rules.RuleResult.Valid) continue
 
             val intermediateRow = origin.row + (rowStep / 2)
             val intermediateCol = origin.col + (colStep / 2)

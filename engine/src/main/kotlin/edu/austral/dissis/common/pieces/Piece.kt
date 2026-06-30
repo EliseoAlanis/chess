@@ -3,6 +3,8 @@ package edu.austral.dissis.common.pieces
 import edu.austral.dissis.common.movement.Movement
 import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.RuleResult
 
 data class Piece(
     val id: String,
@@ -11,11 +13,11 @@ data class Piece(
     val movements: Movement,
     val captureMovements: Movement = movements,
 ) {
-    fun isValidMovePattern(
-        path: Path,
+    fun evaluateMove(
+        context: MoveContext,
         isCapture: Boolean = false,
-    ): Boolean {
+    ): RuleResult {
         val movementToUse = if (isCapture) captureMovements else movements
-        return movementToUse.checkTrajectory(path)
+        return movementToUse.evaluate(context)
     }
 }

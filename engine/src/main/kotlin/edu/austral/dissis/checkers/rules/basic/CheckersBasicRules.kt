@@ -4,32 +4,28 @@ import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.rules.BasicRule
+import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.RuleResult
 
 class CorrectTurnRule : BasicRule {
-    override fun isValid(
-        board: Board,
-        path: Path,
-        currentTurn: Color,
-    ): Boolean {
-        val pieceToMove = board.getPieceAt(path.origin)
-        return pieceToMove.color == currentTurn
+    override fun evaluate(context: MoveContext): RuleResult {
+        val pieceToMove = context.board.getPieceAt(context.path.origin)
+        val isValid = pieceToMove.color == context.turn
+        return if (isValid) RuleResult.Valid() else RuleResult.Invalid
     }
 }
 
 class BoardLimitsRule : BasicRule {
-    override fun isValid(
-        board: Board,
-        path: Path,
-        currentTurn: Color,
-    ): Boolean =
-        path.destination.row in 1..board.size.rows &&
-            path.destination.col in 1..board.size.columns
+    override fun evaluate(context: MoveContext): RuleResult {
+        val isValid = context.path.destination.row in 1..context.board.size.rows &&
+                      context.path.destination.col in 1..context.board.size.columns
+        return if (isValid) RuleResult.Valid() else RuleResult.Invalid
+    }
 }
 
 class EmptyDestinationRule : BasicRule {
-    override fun isValid(
-        board: Board,
-        path: Path,
-        currentTurn: Color,
-    ): Boolean = !board.hasPieceAt(path.destination)
+    override fun evaluate(context: MoveContext): RuleResult {
+        val isValid = !context.board.hasPieceAt(context.path.destination)
+        return if (isValid) RuleResult.Valid() else RuleResult.Invalid
+    }
 }

@@ -7,6 +7,7 @@ import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.validator.MoveValidator
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.rules.BasicRule
+import edu.austral.dissis.common.rules.MoveContext
 import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.common.rules.SpecialRule
 
@@ -20,10 +21,11 @@ class DefaultMoveValidator(
         history: List<MoveRecord>,
         path: Path,
     ): RuleResult {
-        if (!isBasicValidationPassed(board, path, turn)) return RuleResult.Invalid
-        if (isValidStandardMove(board, path)) return RuleResult.Valid()
+        val context = MoveContext(board, path, turn, history)
+        if (!isBasicValidationPassed(context)) return RuleResult.Invalid
+        if (isValidStandardMove(context)) return RuleResult.Valid()
 
-        return trySpecialRules(board, path, history)
+        return trySpecialRules(context)
     }
 
     override fun canMove(
@@ -33,32 +35,21 @@ class DefaultMoveValidator(
         history: List<MoveRecord>,
     ): Boolean = validateMove(board, turn, history, path) is RuleResult.Valid
 
-    private fun isBasicValidationPassed(
-        board: Board,
-        path: Path,
-        turn: Color,
-    ): Boolean =
-        board.hasPieceAt(path.origin) &&
+    private fun isBasicValidationPassed(context: MoveContext): Boolean =
+        context.board.hasPieceAt(context.path.origin) &&
             basicRules.all { rule ->
-                rule.isValid(board, path, turn)
+                rule.evaluate(context) is RuleResult.Valid
             }
 
-    private fun isValidStandardMove(
-        board: Board,
-        path: Path,
-    ): Boolean {
-        val piece = board.getPieceAt(path.origin)
-        val isCapture = board.hasPieceAt(path.destination)
-        return piece.isValidMovePattern(path, isCapture)
+    private fun isValidStandardMove(context: MoveContext): Boolean {
+        val piece = context.board.getPieceAt(context.path.origin)
+        val isCapture = context.board.hasPieceAt(context.path.destination)
+        return piece.evaluateMove(context, isCapture) is RuleResult.Valid
     }
 
-    private fun trySpecialRules(
-        board: Board,
-        path: Path,
-        history: List<MoveRecord>,
-    ): RuleResult {
+    private fun trySpecialRules(context: MoveContext): RuleResult {
         for (rule in specialRules) {
-            val result = rule.tryExecute(board, path, history)
+            val result = rule.evaluate(context)
             if (result is RuleResult.Valid) {
                 return result
             }

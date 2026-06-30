@@ -9,12 +9,13 @@ import edu.austral.dissis.common.pieces.Piece
 import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.common.rules.SpecialRule
 
+import edu.austral.dissis.common.rules.MoveContext
+
 class CanCastleRule : SpecialRule {
-    override fun tryExecute(
-        board: Board,
-        path: Path,
-        moveHistory: List<MoveRecord>,
-    ): RuleResult {
+    override fun evaluate(context: MoveContext): RuleResult {
+        val board = context.board
+        val path = context.path
+        val moveHistory = context.history
         val piece = board.getPieceAt(path.origin)
 
         val isValidKing = isCastlingAttempt(piece, path) && !hasPieceMoved(piece.id, moveHistory)

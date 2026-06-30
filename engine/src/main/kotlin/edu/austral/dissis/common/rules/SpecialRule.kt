@@ -5,10 +5,5 @@ import edu.austral.dissis.common.movement.MoveRecord
 import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.movement.Position
 
-interface SpecialRule {
-    fun tryExecute(
-        board: Board,
-        path: Path,
-        moveHistory: List<MoveRecord>,
-    ): RuleResult
+interface SpecialRule : Rule {
 }

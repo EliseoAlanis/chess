@@ -6,6 +6,7 @@ import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.movement.validator.MoveValidator
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.rules.BasicRule
+import edu.austral.dissis.common.rules.MoveContext
 import edu.austral.dissis.common.rules.RuleResult
 import kotlin.math.abs
 
@@ -20,8 +21,9 @@ class CheckersMoveValidator(
         path: Path
     ): RuleResult {
         var result: RuleResult = RuleResult.Invalid
+        val context = MoveContext(board, path, turn, history)
 
-        if (isBasicValidationPassed(board, path, turn)) {
+        if (isBasicValidationPassed(context)) {
             val piece = board.getPieceAt(path.origin)
             val isMultiJumpSequence = isMultiJumpState(history, turn)
             
@@ -30,14 +32,14 @@ class CheckersMoveValidator(
             }
 
             // 1. Regular 1-step move
-            if (piece.isValidMovePattern(path, isCapture = false)) {
+            if (piece.evaluateMove(context, isCapture = false) is RuleResult.Valid) {
                 val hasJumps = edu.austral.dissis.checkers.util.CheckersJumpAnalyzer.hasAnyJumpAvailable(board, turn)
                 if (!isMultiJumpSequence && !hasJumps) {
                     result = RuleResult.Valid()
                 }
             }
             // 2. Jump move (2 steps)
-            else if (piece.isValidMovePattern(path, isCapture = true)) {
+            else if (piece.evaluateMove(context, isCapture = true) is RuleResult.Valid) {
                 val intermediatePos = getIntermediatePosition(path)
                 if (board.hasPieceAt(intermediatePos)) {
                     val enemyPiece = board.getPieceAt(intermediatePos)
@@ -61,9 +63,9 @@ class CheckersMoveValidator(
         return validateMove(board, turn, history, path) is RuleResult.Valid
     }
 
-    private fun isBasicValidationPassed(board: Board, path: Path, turn: Color): Boolean {
-        return board.hasPieceAt(path.origin) && basicRules.all { rule ->
-            rule.isValid(board, path, turn)
+    private fun isBasicValidationPassed(context: MoveContext): Boolean {
+        return context.board.hasPieceAt(context.path.origin) && basicRules.all { rule ->
+            rule.evaluate(context) is RuleResult.Valid
         }
     }
 

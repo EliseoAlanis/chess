@@ -36,8 +36,10 @@ class AttackDetector {
         val enemyPositions = board.positions.filterValues { it.color != myColor }
 
         for ((enemyPos, enemyPiece) in enemyPositions) {
-            if (enemyPiece.isValidMovePattern(Path(enemyPos, targetPos), isCapture = true)) {
-                if (clearPathRule.isValid(board, Path(enemyPos, targetPos), myColor)) {
+            val path = Path(enemyPos, targetPos)
+            val context = edu.austral.dissis.common.rules.MoveContext(board, path, enemyPiece.color)
+            if (enemyPiece.evaluateMove(context, isCapture = true) is edu.austral.dissis.common.rules.RuleResult.Valid) {
+                if (clearPathRule.evaluate(context) is edu.austral.dissis.common.rules.RuleResult.Valid) {
                     return true
                 }
             }

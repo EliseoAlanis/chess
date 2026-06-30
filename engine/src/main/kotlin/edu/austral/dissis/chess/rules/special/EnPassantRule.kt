@@ -12,14 +12,15 @@ import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.common.rules.SpecialRule
 import kotlin.math.abs
 
-class EnPassantRule : SpecialRule {
-    override fun tryExecute(
-        board: Board,
-        path: Path,
-        moveHistory: List<MoveRecord>,
-    ): RuleResult {
-        if (moveHistory.isEmpty() || !isPawnAndEmptyDestination(board, path)) return RuleResult.Invalid
+import edu.austral.dissis.common.rules.MoveContext
 
+class EnPassantRule : SpecialRule {
+    override fun evaluate(context: MoveContext): RuleResult {
+        val board = context.board
+        val path = context.path
+        val moveHistory = context.history
+        if (moveHistory.isEmpty() || !isPawnAndEmptyDestination(board, path)) return RuleResult.Invalid
+        
         val piece = board.getPieceAt(path.origin)
         if (!isValidDiagonalMove(piece, path)) return RuleResult.Invalid
 

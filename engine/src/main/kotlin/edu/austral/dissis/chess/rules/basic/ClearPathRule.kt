@@ -7,16 +7,14 @@ import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.rules.BasicRule
 import kotlin.math.sign
 
+import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.RuleResult
+
 class ClearPathRule : BasicRule {
-    override fun isValid(
-        board: Board,
-        path: Path,
-        currentTurn: Color,
-    ): Boolean {
-        val piece = board.getPieceAt(path.origin)
-
-        val intermediate = piece.movements.getIntermediatePositions(path)
-
-        return intermediate.none { pos -> board.hasPieceAt(pos) }
+    override fun evaluate(context: MoveContext): RuleResult {
+        val piece = context.board.getPieceAt(context.path.origin)
+        val intermediate = piece.movements.getIntermediatePositions(context.path)
+        val isValid = intermediate.none { pos -> context.board.hasPieceAt(pos) }
+        return if (isValid) RuleResult.Valid() else RuleResult.Invalid
     }
 }

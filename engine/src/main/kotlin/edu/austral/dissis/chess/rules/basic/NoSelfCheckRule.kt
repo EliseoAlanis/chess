@@ -7,18 +7,16 @@ import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.rules.BasicRule
 import edu.austral.dissis.chess.pieces.PieceType
 
+import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.RuleResult
+
 class NoSelfCheckRule(
     private val attackDetector: AttackDetector,
 ) : BasicRule {
-    override fun isValid(
-        board: Board,
-        path: Path,
-        currentTurn: Color,
-    ): Boolean {
-        val simulatedBoard = board.movePiece(path)
-
-        val myKingPos = attackDetector.findPiecePosition(simulatedBoard, PieceType.KING, currentTurn) ?: return true
-
-        return !attackDetector.isSquareAttackedByEnemy(simulatedBoard, myKingPos, currentTurn)
+    override fun evaluate(context: MoveContext): RuleResult {
+        val simulatedBoard = context.board.movePiece(context.path)
+        val myKingPos = attackDetector.findPiecePosition(simulatedBoard, PieceType.KING, context.turn) ?: return RuleResult.Valid()
+        val isValid = !attackDetector.isSquareAttackedByEnemy(simulatedBoard, myKingPos, context.turn)
+        return if (isValid) RuleResult.Valid() else RuleResult.Invalid
     }
 }

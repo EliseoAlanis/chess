@@ -4,13 +4,18 @@ import edu.austral.dissis.common.movement.Path
 import edu.austral.dissis.common.movement.Position
 import kotlin.math.abs
 
+import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.RuleResult
+
 class DiagonalMovement(
     private val maxSteps: Int = Int.MAX_VALUE,
 ) : Movement {
-    override fun checkTrajectory(path: Path): Boolean {
+    override fun evaluate(context: MoveContext): RuleResult {
+        val path = context.path
         val rowDiff = abs(path.origin.row - path.destination.row)
         val colDiff = abs(path.origin.col - path.destination.col)
-
-        return rowDiff == colDiff && rowDiff > 0 && rowDiff <= maxSteps
+        
+        val isValid = rowDiff == colDiff && path.origin != path.destination && rowDiff <= maxSteps
+        return if (isValid) RuleResult.Valid() else RuleResult.Invalid
     }
 }

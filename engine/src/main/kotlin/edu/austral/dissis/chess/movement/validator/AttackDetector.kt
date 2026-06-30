@@ -1,14 +1,12 @@
-﻿package edu.austral.dissis.chess.movement.validator
+package edu.austral.dissis.chess.movement.validator
 
-import edu.austral.dissis.chess.rules.basic.ClearPathRule
+
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Color
 
 class AttackDetector {
-    private val clearPathRule = ClearPathRule()
-
     fun isPieceAttacked(
         board: Board,
         pieceType: String,
@@ -39,9 +37,7 @@ class AttackDetector {
             val vector = MovementVector(enemyPos, targetPos)
             val context = edu.austral.dissis.common.rules.MoveContext(board, vector, enemyPiece.color)
             if (enemyPiece.evaluateMove(context, isCapture = true) is edu.austral.dissis.common.rules.RuleResult.Valid) {
-                if (clearPathRule.evaluate(context) is edu.austral.dissis.common.rules.RuleResult.Valid) {
-                    return true
-                }
+                return true
             }
         }
         return false

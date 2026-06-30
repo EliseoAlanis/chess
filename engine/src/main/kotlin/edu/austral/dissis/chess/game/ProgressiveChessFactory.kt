@@ -14,7 +14,6 @@ import edu.austral.dissis.common.game.GameFactory
 import edu.austral.dissis.common.board.BoardFactory
 import edu.austral.dissis.chess.board.ClassicBoardFactory
 import edu.austral.dissis.chess.rules.basic.BoardLimitsRule
-import edu.austral.dissis.chess.rules.basic.ClearPathRule
 import edu.austral.dissis.chess.rules.basic.CorrectTurnRule
 import edu.austral.dissis.chess.rules.basic.FriendlyFireRule
 import edu.austral.dissis.chess.rules.basic.NoSelfCheckRule

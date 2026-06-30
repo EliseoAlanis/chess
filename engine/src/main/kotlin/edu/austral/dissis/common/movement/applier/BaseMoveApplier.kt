@@ -1,4 +1,4 @@
-﻿package edu.austral.dissis.common.movement.applier
+package edu.austral.dissis.common.movement.applier
 
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.game.Game
@@ -10,6 +10,7 @@ import edu.austral.dissis.common.movement.effect.PostMoveEffect
 import edu.austral.dissis.common.movement.validator.MoveValidator
 import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.common.turn.TurnManager
+import edu.austral.dissis.common.rules.MoveContext
 
 abstract class BaseMoveApplier(
     protected val moveValidator: MoveValidator,
@@ -56,7 +57,8 @@ abstract class BaseMoveApplier(
         vector: MovementVector,
     ): Game {
         val pieceToMove = game.board.getPieceAt(vector.origin)
-        val nextTurnManager = advanceTurnManager(game, finalBoard, vector)
+        val moveContext = MoveContext(finalBoard, vector, game.turnManager.currentTurn, game.moveHistory)
+        val nextTurnManager = game.turnManager.advance(moveContext)
         val moveRecord = MoveRecord(pieceToMove, vector.origin, vector.destination)
         val nextHistory = game.moveHistory + moveRecord
 
@@ -66,12 +68,6 @@ abstract class BaseMoveApplier(
             moveHistory = nextHistory,
         )
     }
-
-    protected abstract fun advanceTurnManager(
-        game: Game,
-        finalBoard: Board,
-        vector: MovementVector,
-    ): TurnManager
 
     private fun evaluateWinConditions(gameState: Game): Game {
         for (winCondition in winConditions) {

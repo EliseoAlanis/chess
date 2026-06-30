@@ -4,8 +4,10 @@ import edu.austral.dissis.chess.movement.validator.AttackDetector
 import edu.austral.dissis.chess.pieces.PieceFactory
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.board.BoardSize
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.pieces.Piece
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -33,9 +35,9 @@ class NoSelfCheckRuleTest {
             Position(1, 8) to blackRook
         ))
         
-        val path = Path(Position(1, 2), Position(2, 2)) // pawn moves away
+        val vector = MovementVector(Position(1, 2), Position(2, 2)) // pawn moves away
         
-        assertFalse(rule.isValid(board, path, Color.WHITE))
+        assertFalse(rule.evaluate(MoveContext(board, vector, Color.WHITE)) is RuleResult.Valid)
     }
 
     @Test
@@ -51,8 +53,8 @@ class NoSelfCheckRuleTest {
             Position(2, 2) to whitePawn
         ))
         
-        val path = Path(Position(2, 2), Position(2, 3)) // pawn moves forward
+        val vector = MovementVector(Position(2, 2), Position(2, 3)) // pawn moves forward
         
-        assertTrue(rule.isValid(board, path, Color.WHITE))
+        assertTrue(rule.evaluate(MoveContext(board, vector, Color.WHITE)) is RuleResult.Valid)
     }
 }

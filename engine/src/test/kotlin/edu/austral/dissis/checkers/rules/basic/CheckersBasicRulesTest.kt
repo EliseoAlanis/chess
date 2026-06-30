@@ -2,8 +2,10 @@ package edu.austral.dissis.checkers.rules.basic
 
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.board.BoardSize
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.pieces.Piece
 import edu.austral.dissis.checkers.pieces.CheckersPieceFactory
@@ -20,7 +22,7 @@ class CheckersBasicRulesTest {
         val whitePiece = CheckersPieceFactory.createMan("1", Color.WHITE)
         val board = createBoard(mapOf(Position(1, 1) to whitePiece))
         
-        assertTrue(rule.isValid(board, Path(Position(1, 1), Position(2, 2)), Color.WHITE))
+        assertTrue(rule.evaluate(MoveContext(board, MovementVector(Position(1, 1), Position(2, 2)), Color.WHITE)) is RuleResult.Valid)
     }
 
     @Test
@@ -29,7 +31,7 @@ class CheckersBasicRulesTest {
         val blackPiece = CheckersPieceFactory.createMan("1", Color.BLACK)
         val board = createBoard(mapOf(Position(1, 1) to blackPiece))
         
-        assertFalse(rule.isValid(board, Path(Position(1, 1), Position(2, 2)), Color.WHITE))
+        assertFalse(rule.evaluate(MoveContext(board, MovementVector(Position(1, 1), Position(2, 2)), Color.WHITE)) is RuleResult.Valid)
     }
 
     @Test
@@ -37,9 +39,9 @@ class CheckersBasicRulesTest {
         val rule = BoardLimitsRule()
         val board = createBoard(emptyMap())
         
-        assertFalse(rule.isValid(board, Path(Position(1, 1), Position(9, 1)), Color.WHITE))
-        assertFalse(rule.isValid(board, Path(Position(1, 1), Position(1, 9)), Color.WHITE))
-        assertFalse(rule.isValid(board, Path(Position(1, 1), Position(0, 1)), Color.WHITE))
+        assertFalse(rule.evaluate(MoveContext(board, MovementVector(Position(1, 1), Position(9, 1)), Color.WHITE)) is RuleResult.Valid)
+        assertFalse(rule.evaluate(MoveContext(board, MovementVector(Position(1, 1), Position(1, 9)), Color.WHITE)) is RuleResult.Valid)
+        assertFalse(rule.evaluate(MoveContext(board, MovementVector(Position(1, 1), Position(0, 1)), Color.WHITE)) is RuleResult.Valid)
     }
 
     @Test
@@ -47,7 +49,7 @@ class CheckersBasicRulesTest {
         val rule = BoardLimitsRule()
         val board = createBoard(emptyMap())
         
-        assertTrue(rule.isValid(board, Path(Position(1, 1), Position(8, 8)), Color.WHITE))
+        assertTrue(rule.evaluate(MoveContext(board, MovementVector(Position(1, 1), Position(8, 8)), Color.WHITE)) is RuleResult.Valid)
     }
 
     @Test
@@ -56,7 +58,7 @@ class CheckersBasicRulesTest {
         val whitePiece = CheckersPieceFactory.createMan("1", Color.WHITE)
         val board = createBoard(mapOf(Position(2, 2) to whitePiece))
         
-        assertFalse(rule.isValid(board, Path(Position(1, 1), Position(2, 2)), Color.WHITE))
+        assertFalse(rule.evaluate(MoveContext(board, MovementVector(Position(1, 1), Position(2, 2)), Color.WHITE)) is RuleResult.Valid)
     }
 
     @Test
@@ -64,6 +66,6 @@ class CheckersBasicRulesTest {
         val rule = EmptyDestinationRule()
         val board = createBoard(emptyMap())
         
-        assertTrue(rule.isValid(board, Path(Position(1, 1), Position(2, 2)), Color.WHITE))
+        assertTrue(rule.evaluate(MoveContext(board, MovementVector(Position(1, 1), Position(2, 2)), Color.WHITE)) is RuleResult.Valid)
     }
 }

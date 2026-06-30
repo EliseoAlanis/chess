@@ -52,7 +52,7 @@ class DummyTestGameRunner(
             currentApplier.executeMove(
                 currentGame,
                 edu.austral.dissis.common.movement
-                    .Path(Position(from.row, from.col), Position(to.row, to.col)),
+                    .MovementVector(Position(from.row, from.col), Position(to.row, to.col)),
             )
         return if (result is MoveResult.Success) handleMoveSuccess(result) else TestMoveFailure(getBoard())
     }

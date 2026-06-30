@@ -2,10 +2,11 @@ package edu.austral.dissis.common.game
 
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.board.BoardSize
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.applier.MoveApplier
 import edu.austral.dissis.common.pieces.Color
+import edu.austral.dissis.common.rules.MoveContext
 import edu.austral.dissis.common.turn.TurnManager
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -16,7 +17,7 @@ class GameEngineTest {
     private class MockTurnManager(
         override val currentTurn: Color = Color.WHITE,
     ) : TurnManager {
-        override fun advance(): TurnManager = MockTurnManager(if (currentTurn == Color.WHITE) Color.BLACK else Color.WHITE)
+        override fun advance(context: MoveContext): TurnManager = MockTurnManager(if (currentTurn == Color.WHITE) Color.BLACK else Color.WHITE)
     }
 
     private class MockMoveApplier(
@@ -24,12 +25,13 @@ class GameEngineTest {
     ) : MoveApplier {
         override fun executeMove(
             game: Game,
-            path: Path,
+            vector: MovementVector,
         ): MoveResult =
             if (shouldSucceed) {
                 // In a successful move, we would return a new Game state.
                 // For testing, just return a copy of the game to simulate state change.
-                val nextGame = game.copy(turnManager = game.turnManager.advance())
+                val context = MoveContext(game.board, vector, game.turnManager.currentTurn)
+                val nextGame = game.copy(turnManager = game.turnManager.advance(context))
                 MoveResult.Success(nextGame)
             } else {
                 MoveResult.Failure("Mock failure", game)
@@ -45,9 +47,9 @@ class GameEngineTest {
     @Test
     fun `applyMove returns new GameEngine and Success when move is valid`() {
         val engine = createEngine(shouldSucceed = true)
-        val path = Path(Position(1, 1), Position(2, 2))
+        val vector = MovementVector(Position(1, 1), Position(2, 2))
 
-        val (nextEngine, result) = engine.applyMove(path)
+        val (nextEngine, result) = engine.applyMove(vector)
 
         assertTrue(result is MoveResult.Success)
         assertEquals(Color.BLACK, nextEngine.currentGame.turnManager.currentTurn)
@@ -62,9 +64,9 @@ class GameEngineTest {
     @Test
     fun `applyMove returns same GameEngine and Failure when move is invalid`() {
         val engine = createEngine(shouldSucceed = false)
-        val path = Path(Position(1, 1), Position(2, 2))
+        val vector = MovementVector(Position(1, 1), Position(2, 2))
 
-        val (nextEngine, result) = engine.applyMove(path)
+        val (nextEngine, result) = engine.applyMove(vector)
 
         assertTrue(result is MoveResult.Failure)
         assertEquals(Color.WHITE, nextEngine.currentGame.turnManager.currentTurn)
@@ -74,9 +76,9 @@ class GameEngineTest {
     @Test
     fun `undo restores previous state`() {
         val engine = createEngine(shouldSucceed = true)
-        val path = Path(Position(1, 1), Position(2, 2))
+        val vector = MovementVector(Position(1, 1), Position(2, 2))
 
-        val (engineAfterMove, _) = engine.applyMove(path)
+        val (engineAfterMove, _) = engine.applyMove(vector)
         assertTrue(engineAfterMove.canUndo())
         assertEquals(Color.BLACK, engineAfterMove.currentGame.turnManager.currentTurn)
 
@@ -90,9 +92,9 @@ class GameEngineTest {
     @Test
     fun `redo reapplies next state`() {
         val engine = createEngine(shouldSucceed = true)
-        val path = Path(Position(1, 1), Position(2, 2))
+        val vector = MovementVector(Position(1, 1), Position(2, 2))
 
-        val (engineAfterMove, _) = engine.applyMove(path)
+        val (engineAfterMove, _) = engine.applyMove(vector)
         val undoneEngine = engineAfterMove.undo()
 
         val redoneEngine = undoneEngine.redo()

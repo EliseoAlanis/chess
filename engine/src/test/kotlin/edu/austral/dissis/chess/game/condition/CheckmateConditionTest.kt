@@ -6,7 +6,7 @@ import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.board.BoardSize
 import edu.austral.dissis.common.game.GameStatus
 import edu.austral.dissis.common.movement.MoveRecord
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.validator.MoveValidator
 import edu.austral.dissis.common.pieces.Color
@@ -23,8 +23,8 @@ class CheckmateConditionTest {
         val attackDetector = AttackDetector()
         // Mocking MoveValidator to always return true (moves are valid)
         val alwaysValidValidator = object : MoveValidator {
-            override fun validateMove(board: Board, turn: Color, history: List<MoveRecord>, path: Path) = edu.austral.dissis.common.rules.RuleResult.Valid()
-            override fun canMove(board: Board, color: Color, path: Path, moveHistory: List<MoveRecord>) = true
+            override fun validateMove(board: Board, turn: Color, history: List<MoveRecord>, vector: MovementVector) = edu.austral.dissis.common.rules.RuleResult.Valid()
+            override fun canMove(board: Board, color: Color, vector: MovementVector, moveHistory: List<MoveRecord>) = true
         }
         
         val condition = CheckmateCondition(alwaysValidValidator, attackDetector)
@@ -39,8 +39,8 @@ class CheckmateConditionTest {
         val attackDetector = AttackDetector()
         // Mocking MoveValidator to always return false (no valid moves)
         val noValidValidator = object : MoveValidator {
-            override fun validateMove(board: Board, turn: Color, history: List<MoveRecord>, path: Path) = edu.austral.dissis.common.rules.RuleResult.Invalid
-            override fun canMove(board: Board, color: Color, path: Path, moveHistory: List<MoveRecord>) = false
+            override fun validateMove(board: Board, turn: Color, history: List<MoveRecord>, vector: MovementVector) = edu.austral.dissis.common.rules.RuleResult.Invalid
+            override fun canMove(board: Board, color: Color, vector: MovementVector, moveHistory: List<MoveRecord>) = false
         }
         
         val condition = CheckmateCondition(noValidValidator, attackDetector)
@@ -60,8 +60,8 @@ class CheckmateConditionTest {
         val attackDetector = AttackDetector()
         // Mocking MoveValidator to always return false (no valid moves)
         val noValidValidator = object : MoveValidator {
-            override fun validateMove(board: Board, turn: Color, history: List<MoveRecord>, path: Path) = edu.austral.dissis.common.rules.RuleResult.Invalid
-            override fun canMove(board: Board, color: Color, path: Path, moveHistory: List<MoveRecord>) = false
+            override fun validateMove(board: Board, turn: Color, history: List<MoveRecord>, vector: MovementVector) = edu.austral.dissis.common.rules.RuleResult.Invalid
+            override fun canMove(board: Board, color: Color, vector: MovementVector, moveHistory: List<MoveRecord>) = false
         }
         
         val condition = CheckmateCondition(noValidValidator, attackDetector)

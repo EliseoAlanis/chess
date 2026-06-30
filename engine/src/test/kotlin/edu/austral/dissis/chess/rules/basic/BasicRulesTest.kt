@@ -4,8 +4,10 @@ import edu.austral.dissis.chess.movement.atomics.ForwardMovement
 import edu.austral.dissis.chess.pieces.PieceType
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.board.BoardSize
-import edu.austral.dissis.common.movement.Path
+import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.pieces.Piece
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -18,8 +20,8 @@ class BasicRulesTest {
             id = "test-piece",
             color = color,
             pieceType = PieceType.PAWN,
-            movements = ForwardMovement(1),
-            captureMovements = ForwardMovement(1),
+            rules = listOf(ForwardMovement(1)),
+            captureRules = listOf(ForwardMovement(1)),
         )
 
     private fun createBoard(positions: Map<Position, Piece>): Board = Board(positions, BoardSize(8, 8))
@@ -29,13 +31,13 @@ class BasicRulesTest {
         val rule = BoardLimitsRule()
         val board = createBoard(emptyMap())
 
-        val pathOutsideCols = Path(Position(1, 1), Position(1, 9))
-        val pathOutsideRows = Path(Position(1, 1), Position(9, 1))
-        val pathNegative = Path(Position(1, 1), Position(0, 1))
+        val vectorOutsideCols = MovementVector(Position(1, 1), Position(1, 9))
+        val vectorOutsideRows = MovementVector(Position(1, 1), Position(9, 1))
+        val vectorNegative = MovementVector(Position(1, 1), Position(0, 1))
 
-        assertFalse(rule.isValid(board, pathOutsideCols, Color.WHITE))
-        assertFalse(rule.isValid(board, pathOutsideRows, Color.WHITE))
-        assertFalse(rule.isValid(board, pathNegative, Color.WHITE))
+        assertFalse(rule.evaluate(MoveContext(board, vectorOutsideCols, Color.WHITE)) is RuleResult.Valid)
+        assertFalse(rule.evaluate(MoveContext(board, vectorOutsideRows, Color.WHITE)) is RuleResult.Valid)
+        assertFalse(rule.evaluate(MoveContext(board, vectorNegative, Color.WHITE)) is RuleResult.Valid)
     }
 
     @Test
@@ -43,9 +45,9 @@ class BasicRulesTest {
         val rule = BoardLimitsRule()
         val board = createBoard(emptyMap())
 
-        val validPath = Path(Position(1, 1), Position(8, 8))
+        val validVector = MovementVector(Position(1, 1), Position(8, 8))
 
-        assertTrue(rule.isValid(board, validPath, Color.WHITE))
+        assertTrue(rule.evaluate(MoveContext(board, validVector, Color.WHITE)) is RuleResult.Valid)
     }
 
     @Test
@@ -66,9 +68,9 @@ class BasicRulesTest {
                 ),
             )
 
-        val path = Path(originPos, destPos)
+        val vector = MovementVector(originPos, destPos)
 
-        assertFalse(rule.isValid(board, path, Color.WHITE))
+        assertFalse(rule.evaluate(MoveContext(board, vector, Color.WHITE)) is RuleResult.Valid)
     }
 
     @Test
@@ -87,9 +89,9 @@ class BasicRulesTest {
                 ),
             )
 
-        val path = Path(originPos, destPos)
+        val vector = MovementVector(originPos, destPos)
 
-        assertTrue(rule.isValid(board, path, Color.WHITE))
+        assertTrue(rule.evaluate(MoveContext(board, vector, Color.WHITE)) is RuleResult.Valid)
     }
 
     @Test
@@ -106,9 +108,9 @@ class BasicRulesTest {
                 ),
             )
 
-        val path = Path(originPos, Position(2, 1))
+        val vector = MovementVector(originPos, Position(2, 1))
 
-        assertTrue(rule.isValid(board, path, Color.WHITE))
+        assertTrue(rule.evaluate(MoveContext(board, vector, Color.WHITE)) is RuleResult.Valid)
     }
 
     @Test
@@ -125,8 +127,8 @@ class BasicRulesTest {
                 ),
             )
 
-        val path = Path(originPos, Position(2, 1))
+        val vector = MovementVector(originPos, Position(2, 1))
 
-        assertFalse(rule.isValid(board, path, Color.WHITE))
+        assertFalse(rule.evaluate(MoveContext(board, vector, Color.WHITE)) is RuleResult.Valid)
     }
 }

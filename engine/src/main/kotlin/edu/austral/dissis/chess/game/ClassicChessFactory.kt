@@ -29,7 +29,7 @@ class ClassicChessFactory(
         val attackDetector = AttackDetector()
 
         val mandatoryRules = listOf(BoardLimitsRule(), CorrectTurnRule(),
-            ClearPathRule(), FriendlyFireRule(), NoSelfCheckRule(attackDetector)
+            FriendlyFireRule(), NoSelfCheckRule(attackDetector)
         )
         val validator = edu.austral.dissis.chess.movement.validator.DefaultMoveValidator(mandatoryRules)
 

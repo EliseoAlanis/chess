@@ -29,7 +29,6 @@ class ExtinctChessFactory(
         val mandatoryRules = listOf(
             BoardLimitsRule(),
             CorrectTurnRule(),
-            ClearPathRule(),
             FriendlyFireRule()
         )
         val validator = edu.austral.dissis.chess.movement.validator.DefaultMoveValidator(mandatoryRules)

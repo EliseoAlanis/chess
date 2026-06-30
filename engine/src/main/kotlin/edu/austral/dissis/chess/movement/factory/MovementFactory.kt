@@ -6,21 +6,20 @@ import edu.austral.dissis.chess.movement.atomics.StraightMovement
 import edu.austral.dissis.chess.movement.composite.CompositeMovement
 import edu.austral.dissis.common.movement.Movement
 
+import edu.austral.dissis.common.movement.ClearPathMovement
+
 object MovementFactory {
-    fun createRookMovement(): Movement = StraightMovement()
+    fun createRookMovement(): Movement = ClearPathMovement(StraightMovement())
 
-    fun createBishopMovement(): Movement = DiagonalMovement()
+    fun createBishopMovement(): Movement = ClearPathMovement(DiagonalMovement())
 
-    fun createQueenMovement(): Movement =
-        CompositeMovement(
-            listOf(StraightMovement(), DiagonalMovement()),
-        )
+    fun createQueenMovement(): Movement = ClearPathMovement(CompositeMovement(listOf(StraightMovement(), DiagonalMovement())))
 
-    fun createKnightMovement(): Movement = LShapeMovement(2, 1)
+    fun createKnightMovement(): Movement = LShapeMovement(2, 1) // NO ClearPathMovement so it can jump!
 
-    fun createKingMovement(): Movement = CompositeMovement(listOf(StraightMovement(1), DiagonalMovement(1)))
+    fun createKingMovement(): Movement = ClearPathMovement(CompositeMovement(listOf(StraightMovement(1), DiagonalMovement(1))))
 
-    fun createChancellorMovement(): Movement = CompositeMovement(listOf(StraightMovement(), LShapeMovement(2, 1)))
+    fun createChancellorMovement(): Movement = CompositeMovement(listOf(ClearPathMovement(StraightMovement()), LShapeMovement(2, 1)))
 
-    fun createArchbishopMovement(): Movement = CompositeMovement(listOf(DiagonalMovement(), LShapeMovement(2, 1)))
+    fun createArchbishopMovement(): Movement = CompositeMovement(listOf(ClearPathMovement(DiagonalMovement()), LShapeMovement(2, 1)))
 }

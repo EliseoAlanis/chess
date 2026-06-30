@@ -32,7 +32,6 @@ class CapablancaChessFactory(
         val mandatoryRules = listOf(
             BoardLimitsRule(),
             CorrectTurnRule(),
-            ClearPathRule(),
             FriendlyFireRule(),
             NoSelfCheckRule(attackDetector)
         )

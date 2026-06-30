@@ -40,7 +40,7 @@ object PieceFactory {
             rules = listOf(
                 edu.austral.dissis.chess.rules.special.PawnInitialDoubleMovementRule(),
                 edu.austral.dissis.chess.rules.special.EnPassantRule(),
-                ForwardMovement(direction)
+                edu.austral.dissis.common.movement.ClearPathMovement(ForwardMovement(direction))
             ),
             captureRules = listOf(
                 edu.austral.dissis.chess.rules.special.EnPassantRule(),

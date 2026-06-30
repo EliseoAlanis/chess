@@ -1,4 +1,4 @@
-﻿package edu.austral.dissis.chess.movement.atomics
+package edu.austral.dissis.chess.movement.atomics
 
 import edu.austral.dissis.common.movement.Movement
 import edu.austral.dissis.common.movement.MovementVector
@@ -17,6 +17,4 @@ class LShapeMovement(
         val isValid = vector.isLShaped(longEdge, shortEdge)
         return if (isValid) RuleResult.Valid() else RuleResult.Invalid
     }
-
-    override fun getIntermediatePositions(vector: MovementVector): List<Position> = emptyList()
 }

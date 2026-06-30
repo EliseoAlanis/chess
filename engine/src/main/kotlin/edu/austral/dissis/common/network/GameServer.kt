@@ -26,11 +26,12 @@ class GameServer(
                     object : ServerConnectionListener {
                         override fun handleClientConnection(clientId: String) {
                             println("Cliente conectado al server: \$clientId")
-                            val assignedColor = when (clients.size) {
-                                0 -> "WHITE"
-                                1 -> "BLACK"
-                                else -> "SPECTATOR"
-                            }
+                            val assignedColor =
+                                when (clients.size) {
+                                    0 -> "WHITE"
+                                    1 -> "BLACK"
+                                    else -> "SPECTATOR"
+                                }
                             clients.add(clientId)
 
                             val initialPayload = InitialConnectionPayload(assignedColor, buildGameStatePayload(engine))
@@ -44,13 +45,19 @@ class GameServer(
                             clients.remove(clientId)
                         }
                     },
-                ).addMessageListener("move",
-                    object : TypeReference<Message<MovePayload>>() {}, MoveListener())
-                .addMessageListener("undo",
-                    object : TypeReference<Message<UndoPayload>>() {}, UndoListener())
-                .addMessageListener("redo",
-                    object : TypeReference<Message<RedoPayload>>() {}, RedoListener())
-                .build()
+                ).addMessageListener(
+                    "move",
+                    object : TypeReference<Message<MovePayload>>() {},
+                    MoveListener(),
+                ).addMessageListener(
+                    "undo",
+                    object : TypeReference<Message<UndoPayload>>() {},
+                    UndoListener(),
+                ).addMessageListener(
+                    "redo",
+                    object : TypeReference<Message<RedoPayload>>() {},
+                    RedoListener(),
+                ).build()
     }
 
     fun start() {
@@ -77,11 +84,12 @@ class GameServer(
             }
         val status = engine.currentGame.status
         val isGameOver = status != edu.austral.dissis.common.game.GameStatus.IN_PROGRESS
-        val winnerColor = when (status) {
-            edu.austral.dissis.common.game.GameStatus.WHITE_WINS -> "WHITE"
-            edu.austral.dissis.common.game.GameStatus.BLACK_WINS -> "BLACK"
-            else -> null
-        }
+        val winnerColor =
+            when (status) {
+                edu.austral.dissis.common.game.GameStatus.WHITE_WINS -> "WHITE"
+                edu.austral.dissis.common.game.GameStatus.BLACK_WINS -> "BLACK"
+                else -> null
+            }
         return GameStatePayload(
             pieces = pieces,
             currentPlayer = engine.currentGame.turnManager.currentTurn.name,
@@ -90,7 +98,7 @@ class GameServer(
             isGameOver = isGameOver,
             winnerColor = winnerColor,
             canUndo = engine.canUndo(),
-            canRedo = engine.canRedo()
+            canRedo = engine.canRedo(),
         )
     }
 

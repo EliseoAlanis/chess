@@ -2,7 +2,6 @@ package edu.austral.dissis.checkers.game
 
 import edu.austral.dissis.checkers.board.CheckersBoardInitializer
 import edu.austral.dissis.checkers.game.condition.CheckersExtinctionCondition
-import edu.austral.dissis.common.movement.applier.DefaultMoveApplier
 import edu.austral.dissis.checkers.movement.effect.CheckersPromotionEffect
 import edu.austral.dissis.checkers.movement.validator.CheckersMoveValidator
 import edu.austral.dissis.checkers.rules.basic.BoardLimitsRule
@@ -11,6 +10,7 @@ import edu.austral.dissis.checkers.rules.basic.EmptyDestinationRule
 import edu.austral.dissis.checkers.turn.CheckersTurnManager
 import edu.austral.dissis.common.game.Game
 import edu.austral.dissis.common.game.GameFactory
+import edu.austral.dissis.common.movement.applier.DefaultMoveApplier
 import edu.austral.dissis.common.movement.applier.MoveApplier
 
 class CheckersGameFactory : GameFactory {

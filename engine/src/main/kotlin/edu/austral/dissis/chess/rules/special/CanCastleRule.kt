@@ -6,10 +6,9 @@ import edu.austral.dissis.common.movement.MoveRecord
 import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Piece
-import edu.austral.dissis.common.rules.RuleResult
-import edu.austral.dissis.common.rules.Rule
-
 import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.Rule
+import edu.austral.dissis.common.rules.RuleResult
 
 class CanCastleRule : Rule {
     override fun evaluate(context: MoveContext): RuleResult {
@@ -38,8 +37,9 @@ class CanCastleRule : Rule {
         vector: MovementVector,
     ): Boolean {
         val isKing = piece.pieceType == edu.austral.dissis.chess.pieces.PieceType.KING
-        val isHorizontalTwoSteps = vector.origin.row == vector.destination.row
-                && Math.abs(vector.destination.col - vector.origin.col) == 2
+        val isHorizontalTwoSteps =
+            vector.origin.row == vector.destination.row &&
+                Math.abs(vector.destination.col - vector.origin.col) == 2
 
         return isKing && isHorizontalTwoSteps
     }

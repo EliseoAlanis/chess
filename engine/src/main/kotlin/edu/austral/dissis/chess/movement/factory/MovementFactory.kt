@@ -4,9 +4,8 @@ import edu.austral.dissis.chess.movement.atomics.DiagonalMovement
 import edu.austral.dissis.chess.movement.atomics.LShapeMovement
 import edu.austral.dissis.chess.movement.atomics.StraightMovement
 import edu.austral.dissis.chess.movement.composite.CompositeMovement
-import edu.austral.dissis.common.movement.Movement
-
 import edu.austral.dissis.common.movement.ClearPathMovement
+import edu.austral.dissis.common.movement.Movement
 
 object MovementFactory {
     fun createRookMovement(): Movement = ClearPathMovement(StraightMovement())
@@ -15,7 +14,7 @@ object MovementFactory {
 
     fun createQueenMovement(): Movement = ClearPathMovement(CompositeMovement(listOf(StraightMovement(), DiagonalMovement())))
 
-    fun createKnightMovement(): Movement = LShapeMovement(2, 1) // NO ClearPathMovement so it can jump!
+    fun createKnightMovement(): Movement = LShapeMovement(2, 1)
 
     fun createKingMovement(): Movement = ClearPathMovement(CompositeMovement(listOf(StraightMovement(1), DiagonalMovement(1))))
 

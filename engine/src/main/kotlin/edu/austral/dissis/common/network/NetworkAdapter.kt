@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 
 class NetworkAdapter(
     private val client: GameClient,
-    private val pieceNameMapper: (String) -> String
+    private val pieceNameMapper: (String) -> String,
 ) {
     private val stateSubject = PublishSubject.create<GameState>()
     private var myColor: String = "SPECTATOR"
@@ -48,16 +48,20 @@ class NetworkAdapter(
                     }
 
                     val move = event.move
-                    client.sendMove(MovePayload(
-                        fromRow = move.from.row,
-                        fromCol = move.from.column,
-                        toRow = move.to.row,
-                        toCol = move.to.column
-                    ))
+                    client.sendMove(
+                        MovePayload(
+                            fromRow = move.from.row,
+                            fromCol = move.from.column,
+                            toRow = move.to.row,
+                            toCol = move.to.column,
+                        ),
+                    )
                 }
+
                 GameInputEvent.Init -> {
                     // El servidor nos envía el estado inicial automáticamente al conectarnos
                 }
+
                 GameInputEvent.Undo -> {
                     if (myColor != "SPECTATOR" && myColor != currentTurn) {
                         client.sendUndo()
@@ -66,6 +70,7 @@ class NetworkAdapter(
                         lastGameStatePayload?.let { stateSubject.onNext(mapToGameState(it)) }
                     }
                 }
+
                 GameInputEvent.Redo -> {
                     if (myColor != "SPECTATOR" && myColor == currentTurn) {
                         client.sendRedo()
@@ -86,24 +91,25 @@ class NetworkAdapter(
         }
 
         val boardSize = BoardSize(payload.boardCols, payload.boardRows)
-        val pieces = payload.pieces.map { p ->
-            ChessPiece(
-                id = p.id,
-                color = if (p.color == "WHITE") PlayerColor.WHITE else PlayerColor.BLACK,
-                position = Position(p.row, p.col),
-                pieceId = pieceNameMapper(p.pieceId)
-            )
-        }
+        val pieces =
+            payload.pieces.map { p ->
+                ChessPiece(
+                    id = p.id,
+                    color = if (p.color == "WHITE") PlayerColor.WHITE else PlayerColor.BLACK,
+                    position = Position(p.row, p.col),
+                    pieceId = pieceNameMapper(p.pieceId),
+                )
+            }
         val currentPlayer = if (payload.currentPlayer == "WHITE") PlayerColor.WHITE else PlayerColor.BLACK
         val allowUndo = payload.canUndo && myColor != "SPECTATOR" && myColor != currentTurn
         val allowRedo = payload.canRedo && myColor != "SPECTATOR" && myColor == currentTurn
-        
+
         return GameState.Playing(
             boardSize = boardSize,
             pieces = pieces,
             currentPlayer = currentPlayer,
             canUndo = allowUndo,
-            canRedo = allowRedo
+            canRedo = allowRedo,
         )
     }
 }

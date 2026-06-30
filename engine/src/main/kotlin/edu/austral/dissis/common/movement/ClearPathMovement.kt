@@ -1,13 +1,13 @@
 package edu.austral.dissis.common.movement
 
-import edu.austral.dissis.common.rules.MoveContext
-import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.common.movement.Movement
 import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
+import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.RuleResult
 
 class ClearPathMovement(
-    private val movement: Movement
+    private val movement: Movement,
 ) : Movement {
     override fun evaluate(context: MoveContext): RuleResult {
         val baseResult = movement.evaluate(context)
@@ -18,7 +18,5 @@ class ClearPathMovement(
         return if (isValid) RuleResult.Valid() else RuleResult.Invalid
     }
 
-    override fun getIntermediatePositions(vector: MovementVector): List<Position> {
-        return movement.getIntermediatePositions(vector)
-    }
+    override fun getIntermediatePositions(vector: MovementVector): List<Position> = movement.getIntermediatePositions(vector)
 }

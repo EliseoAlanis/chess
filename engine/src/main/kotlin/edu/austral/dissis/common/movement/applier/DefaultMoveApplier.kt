@@ -8,9 +8,9 @@ import edu.austral.dissis.common.movement.MoveRecord
 import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.effect.PostMoveEffect
 import edu.austral.dissis.common.movement.validator.MoveValidator
+import edu.austral.dissis.common.rules.MoveContext
 import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.common.turn.TurnManager
-import edu.austral.dissis.common.rules.MoveContext
 
 class DefaultMoveApplier(
     private val moveValidator: MoveValidator,

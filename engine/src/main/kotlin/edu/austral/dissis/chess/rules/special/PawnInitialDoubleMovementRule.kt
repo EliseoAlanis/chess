@@ -6,17 +6,16 @@ import edu.austral.dissis.common.movement.MoveRecord
 import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Color
-import edu.austral.dissis.common.rules.RuleResult
-import edu.austral.dissis.common.rules.Rule
-
 import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.Rule
+import edu.austral.dissis.common.rules.RuleResult
 
 class PawnInitialDoubleMovementRule : Rule {
     override fun evaluate(context: MoveContext): RuleResult {
         val board = context.board
         val vector = context.vector
         val moveHistory = context.history
-        
+
         val piece = board.getPieceAt(vector.origin)
 
         if (piece.pieceType != PieceType.PAWN || moveHistory.any { it.piece.id == piece.id }) return RuleResult.Invalid

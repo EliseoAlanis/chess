@@ -6,10 +6,10 @@ import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.board.BoardSize
 import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
-import edu.austral.dissis.common.rules.MoveContext
-import edu.austral.dissis.common.rules.RuleResult
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.pieces.Piece
+import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.RuleResult
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

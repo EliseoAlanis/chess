@@ -17,7 +17,16 @@ class GameEngineTest {
     private class MockTurnManager(
         override val currentTurn: Color = Color.WHITE,
     ) : TurnManager {
-        override fun advance(context: MoveContext): TurnManager = MockTurnManager(if (currentTurn == Color.WHITE) Color.BLACK else Color.WHITE)
+        override fun advance(context: MoveContext): TurnManager =
+            MockTurnManager(
+                if (currentTurn ==
+                    Color.WHITE
+                ) {
+                    Color.BLACK
+                } else {
+                    Color.WHITE
+                },
+            )
     }
 
     private class MockMoveApplier(

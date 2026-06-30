@@ -6,12 +6,11 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 
 class CheckersGameFactoryTest {
-
     @Test
     fun `CheckersGameFactory creates a valid game`() {
         val factory = CheckersGameFactory()
         val (game, moveApplier) = factory.createGame()
-        
+
         assertNotNull(game)
         assertNotNull(moveApplier)
         assertEquals(Color.WHITE, game.turnManager.currentTurn)

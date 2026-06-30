@@ -6,12 +6,11 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 
 class GameFactoriesTest {
-
     @Test
     fun `ClassicChessFactory creates a valid game`() {
         val factory = ClassicChessFactory()
         val (game, moveApplier) = factory.createGame()
-        
+
         assertNotNull(game)
         assertNotNull(moveApplier)
         assertEquals(Color.WHITE, game.turnManager.currentTurn)
@@ -23,7 +22,7 @@ class GameFactoriesTest {
     fun `CapablancaChessFactory creates a valid game`() {
         val factory = CapablancaChessFactory()
         val (game, moveApplier) = factory.createGame()
-        
+
         assertNotNull(game)
         assertNotNull(moveApplier)
         assertEquals(Color.WHITE, game.turnManager.currentTurn)
@@ -35,7 +34,7 @@ class GameFactoriesTest {
     fun `ExtinctChessFactory creates a valid game`() {
         val factory = ExtinctChessFactory()
         val (game, moveApplier) = factory.createGame()
-        
+
         assertNotNull(game)
         assertNotNull(moveApplier)
         assertEquals(Color.WHITE, game.turnManager.currentTurn)
@@ -47,7 +46,7 @@ class GameFactoriesTest {
     fun `ProgressiveChessFactory creates a valid game`() {
         val factory = ProgressiveChessFactory()
         val (game, moveApplier) = factory.createGame()
-        
+
         assertNotNull(game)
         assertNotNull(moveApplier)
         assertEquals(Color.WHITE, game.turnManager.currentTurn)

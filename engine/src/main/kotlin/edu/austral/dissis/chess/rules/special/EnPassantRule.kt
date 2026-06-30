@@ -8,11 +8,10 @@ import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.pieces.Color
 import edu.austral.dissis.common.pieces.Piece
-import edu.austral.dissis.common.rules.RuleResult
-import edu.austral.dissis.common.rules.Rule
-import kotlin.math.abs
-
 import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.Rule
+import edu.austral.dissis.common.rules.RuleResult
+import kotlin.math.abs
 
 class EnPassantRule : Rule {
     override fun evaluate(context: MoveContext): RuleResult {
@@ -20,7 +19,7 @@ class EnPassantRule : Rule {
         val vector = context.vector
         val moveHistory = context.history
         if (moveHistory.isEmpty() || !isPawnAndEmptyDestination(board, vector)) return RuleResult.Invalid
-        
+
         val piece = board.getPieceAt(vector.origin)
         if (!isValidDiagonalMove(piece, vector)) return RuleResult.Invalid
 

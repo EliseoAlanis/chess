@@ -37,28 +37,39 @@ object PieceFactory {
             id = id,
             color = color,
             pieceType = PieceType.PAWN,
-            rules = listOf(
-                edu.austral.dissis.chess.rules.special.PawnInitialDoubleMovementRule(),
-                edu.austral.dissis.chess.rules.special.EnPassantRule(),
-                edu.austral.dissis.common.movement.ClearPathMovement(ForwardMovement(direction))
-            ),
-            captureRules = listOf(
-                edu.austral.dissis.chess.rules.special.EnPassantRule(),
-                ForwardDiagonalMovement(direction)
-            ),
+            rules =
+                listOf(
+                    edu.austral.dissis.chess.rules.special
+                        .PawnInitialDoubleMovementRule(),
+                    edu.austral.dissis.chess.rules.special
+                        .EnPassantRule(),
+                    edu.austral.dissis.common.movement
+                        .ClearPathMovement(ForwardMovement(direction)),
+                ),
+            captureRules =
+                listOf(
+                    edu.austral.dissis.chess.rules.special
+                        .EnPassantRule(),
+                    ForwardDiagonalMovement(direction),
+                ),
         )
     }
 
     fun createKing(
         id: String,
         color: Color,
-    ): Piece = Piece(
-        id, color, PieceType.KING, 
-        rules = listOf(
-            edu.austral.dissis.chess.rules.special.CanCastleRule(),
-            MovementFactory.createKingMovement()
+    ): Piece =
+        Piece(
+            id,
+            color,
+            PieceType.KING,
+            rules =
+                listOf(
+                    edu.austral.dissis.chess.rules.special
+                        .CanCastleRule(),
+                    MovementFactory.createKingMovement(),
+                ),
         )
-    )
 
     fun createChancellor(
         id: String,

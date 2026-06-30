@@ -21,8 +21,10 @@ data class MovementVector(
     val isStraight: Boolean get() = rowDiff == 0 || colDiff == 0
     val isLShaped: Boolean get() = isLShaped(2, 1)
 
-    fun isLShaped(longEdge: Int, shortEdge: Int): Boolean = 
-        (rowDiff == longEdge && colDiff == shortEdge) || (rowDiff == shortEdge && colDiff == longEdge)
+    fun isLShaped(
+        longEdge: Int,
+        shortEdge: Int,
+    ): Boolean = (rowDiff == longEdge && colDiff == shortEdge) || (rowDiff == shortEdge && colDiff == longEdge)
 
     val distance: Int get() = max(rowDiff, colDiff)
 
@@ -33,7 +35,7 @@ data class MovementVector(
         return (1..steps).map { i ->
             Position(
                 origin.row + (rowDirection * i),
-                origin.col + (colDirection * i)
+                origin.col + (colDirection * i),
             )
         }
     }

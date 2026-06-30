@@ -27,6 +27,7 @@ data class GameStatePayload(
 )
 
 class UndoPayload
+
 class RedoPayload
 
 data class InitialConnectionPayload(

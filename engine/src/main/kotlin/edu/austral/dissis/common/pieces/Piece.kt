@@ -3,8 +3,8 @@
 import edu.austral.dissis.common.movement.Movement
 import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
-import edu.austral.dissis.common.rules.Rule
 import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.Rule
 import edu.austral.dissis.common.rules.RuleResult
 
 data class Piece(

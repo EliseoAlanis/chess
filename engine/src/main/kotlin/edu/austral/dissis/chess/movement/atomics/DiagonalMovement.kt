@@ -2,10 +2,9 @@ package edu.austral.dissis.chess.movement.atomics
 import edu.austral.dissis.common.movement.Movement
 import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
-import kotlin.math.abs
-
 import edu.austral.dissis.common.rules.MoveContext
 import edu.austral.dissis.common.rules.RuleResult
+import kotlin.math.abs
 
 class DiagonalMovement(
     private val maxSteps: Int = Int.MAX_VALUE,

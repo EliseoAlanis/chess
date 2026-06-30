@@ -1,8 +1,8 @@
 package edu.austral.dissis.checkers.turn
 
 import edu.austral.dissis.common.pieces.Color
-import edu.austral.dissis.common.turn.TurnManager
 import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.turn.TurnManager
 import kotlin.math.abs
 
 class CheckersTurnManager(

@@ -9,5 +9,5 @@ data class MoveContext(
     val board: Board,
     val vector: MovementVector,
     val turn: Color,
-    val history: List<MoveRecord> = emptyList()
+    val history: List<MoveRecord> = emptyList(),
 )

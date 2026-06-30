@@ -2,13 +2,13 @@
 
 import edu.austral.dissis.common.movement.Movement
 import edu.austral.dissis.common.movement.MovementVector
-import kotlin.math.abs
 import edu.austral.dissis.common.rules.MoveContext
 import edu.austral.dissis.common.rules.RuleResult
+import kotlin.math.abs
 
 class CheckersForwardDiagonalMovement(
     private val direction: Int,
-    private val maxSteps: Int = 1
+    private val maxSteps: Int = 1,
 ) : Movement {
     override fun evaluate(context: MoveContext): RuleResult {
         val vector = context.vector

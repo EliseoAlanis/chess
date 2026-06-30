@@ -4,11 +4,11 @@ import edu.austral.dissis.chess.gui.CachedImageResolver
 import edu.austral.dissis.chess.gui.DefaultImageResolver
 import edu.austral.dissis.chess.gui.GameView
 import edu.austral.dissis.chess.gui.GameViewFactory
+import edu.austral.dissis.common.game.Game
+import edu.austral.dissis.common.game.GameEngine
 import edu.austral.dissis.common.network.GameClient
 import edu.austral.dissis.common.network.GameServer
 import edu.austral.dissis.common.network.NetworkAdapter
-import edu.austral.dissis.common.game.Game
-import edu.austral.dissis.common.game.GameEngine
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.stage.Stage

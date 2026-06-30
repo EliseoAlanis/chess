@@ -6,12 +6,12 @@ import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
 import edu.austral.dissis.common.movement.validator.MoveValidator
 import edu.austral.dissis.common.pieces.Color
-import edu.austral.dissis.common.rules.Rule
 import edu.austral.dissis.common.rules.MoveContext
+import edu.austral.dissis.common.rules.Rule
 import edu.austral.dissis.common.rules.RuleResult
 
 class DefaultMoveValidator(
-    private val mandatoryRules: List<Rule>
+    private val mandatoryRules: List<Rule>,
 ) : MoveValidator {
     override fun validateMove(
         board: Board,
@@ -21,7 +21,7 @@ class DefaultMoveValidator(
     ): RuleResult {
         val context = MoveContext(board, vector, turn, history)
         if (!isBasicValidationPassed(context)) return RuleResult.Invalid
-        
+
         return getStandardMoveResult(context)
     }
 

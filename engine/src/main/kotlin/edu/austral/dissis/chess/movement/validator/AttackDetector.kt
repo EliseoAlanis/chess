@@ -1,6 +1,5 @@
 package edu.austral.dissis.chess.movement.validator
 
-
 import edu.austral.dissis.common.board.Board
 import edu.austral.dissis.common.movement.MovementVector
 import edu.austral.dissis.common.movement.Position
@@ -35,7 +34,9 @@ class AttackDetector {
 
         for ((enemyPos, enemyPiece) in enemyPositions) {
             val vector = MovementVector(enemyPos, targetPos)
-            val context = edu.austral.dissis.common.rules.MoveContext(board, vector, enemyPiece.color)
+            val context =
+                edu.austral.dissis.common.rules
+                    .MoveContext(board, vector, enemyPiece.color)
             if (enemyPiece.evaluateMove(context, isCapture = true) is edu.austral.dissis.common.rules.RuleResult.Valid) {
                 return true
             }
